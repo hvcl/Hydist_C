@@ -50,19 +50,30 @@ pair<int, int> load_inputs(string dir,
 
 	cout << size.first << " " << size.second << endl;
 	load_file<DOUBLE> (dir + "hsnhotroiA.txt", VISCOINDX);
-	// cout << size.first << " " << size.second << endl;
 
 	// load_file<DOUBLE> (dir + "bientren.txt", bc_up);
 	load_file<DOUBLE> (dir + "bienduoi.txt", bc_down);
-	// cout << size.first << " " << size.second << endl;
 	// load_file<DOUBLE> (dir + "bientrai.txt", bc_left);
 	load_file<DOUBLE> (dir + "bienphai.txt", bc_right);
-	// cout << size.first << " " << size.second << endl;
 	// load_file<DOUBLE> (dir + "FSbientren.txt", CC_u);
 	// load_file<DOUBLE> (dir + "FSbienduoi.txt", CC_d);
 	// load_file<DOUBLE> (dir + "FSbientrai.txt", CC_l);
 	// load_file<DOUBLE> (dir + "FSbienphai.txt", CC_r);
 	load_file<int> (dir + "boundary_type.txt", bienQ);
-	// cout << size.first << " " << size.second << endl;
 	return size;
+}
+
+void load_initial_condition(string dir, 
+							vector<DOUBLE> &u, 
+							vector<DOUBLE> &v,
+							vector<DOUBLE> &z,
+							vector<DOUBLE> &FS,
+							vector<int> &khouot)
+{
+
+	load_file<DOUBLE> (dir + "u.txt", u);
+	load_file<DOUBLE> (dir + "v.txt", v);
+	load_file<DOUBLE> (dir + "z.txt", z);
+	load_file<DOUBLE> (dir + "FS.txt", FS);
+	load_file<int> (dir + "khouot.txt", khouot);
 }

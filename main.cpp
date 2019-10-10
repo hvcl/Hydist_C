@@ -108,10 +108,6 @@ int main (int argc, char ** argv){
 
 	// // 3. Call initialize functions
 	// // a. load inputs
-	// // load_inputs(h, hsnham, VISCOINDX, bc_up, bc_down, bc_left, bc_right,
-	// // 			CC_u, CC_d, CC_l, CC_r, , bienQ);
-	// pair<int, int> mesh_size;
-
 
 	// // test this first
 	// pair<int, int> mesh_size = load_file<DOUBLE>("dosausongLUY.txt", h);
@@ -122,12 +118,8 @@ int main (int argc, char ** argv){
 	pair <int, int> mesh_size =  load_inputs(dir, h, hsnham, VISCOINDX, bc_up, bc_down, bc_left, bc_right,
 				CC_u, CC_d, CC_l, CC_r,  bienQ);
 	cout << mesh_size.first << " " << mesh_size.second << endl;
-	
-
-
-
-	// M = mesh_size.first;
-	// N = mesh_size.second;
+	M = mesh_size.first;
+	N = mesh_size.second;
 
 	// // b. alocate memory on GPU and transfer data to GPU
 	// // argument pointers struct's pointer on device

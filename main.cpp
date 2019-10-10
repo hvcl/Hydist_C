@@ -4,7 +4,8 @@
 #include <vector>
 // #include "Engine.h"
 #include <unistd.h>
-
+#include <string>
+#define DOUBLE double 
 
 using namespace std;
 
@@ -16,7 +17,7 @@ using namespace std;
 // launch kernel
 
 
-int main (int* argc, char** argv[]){
+int main (int argc, char ** argv){
 	int bienQ[4];
 	int M, N, total_time;
 	vector<DOUBLE> h, hsnham, VISCOINDX, Fw, FS, dH;
@@ -40,55 +41,70 @@ int main (int* argc, char** argv[]){
 	   -E: bedchange end
 	   -i : save interval - in minute
 	*/
-	string f;
+	string dir;
 	int hour(1), min(0), sec(0), sediment_start(20), bed_change_start(500), bed_change_end(1000);
 	int save_interval(60), sediment_end(40);
 	bool plot(true), visualize(true), debug(false), load_initial_condition(false);
-
-	switch (getopt(argc, argv, "f:h:m:s::p::d::v::b::B::e::E::i::c"))
-	{
-		case(f):
-			dir = optarg;
-			continue;
-		case (h):
-			hour = atoi(optarg);
-			continue;
-		case (m):
-			min = atoi(optarg);
-			continue;
-		case (s): 
-			sec = atoi(optarg);
-			continue;
-		case (p):
-			plot = (bool) atoi(optarg);
-			continue;
-		case (d):
-			debug = (bool) atoi(optarg);
-			continue;
-		case (v):
-			visualize = (bool) atoi(optarg);
-			continue;
-		case (b):
-			sediment_start = atoi(optarg);
-			continue;
-		case (B):
-			bed_change_start = atoi(optarg);
-			continue;
-		case (e):
-			sediment_end = atoi(optarg);
-			continue;
-		case (E):
-			bed_change_end = atoi(optarg);
-			continue;
-		case (i):
-			save_interval = atoi(optarg);
-			continue;
-		case (c):
-			load_initial_condition = atoi(optarg);
-			continue;
+	int c;
 
 
+	while ((c = getopt(argc, argv, "f:h:m:s::p::d::v::b::B::e::E::i::c::")) != -1){
+		switch (c)
+		{
+			case('f'):
+				dir = optarg;
+				continue;
+			case ('h'):
+				hour = atoi(optarg);
+				continue;
+			case ('m'):
+				min = atoi(optarg);
+				continue;
+			case ('s'): 
+				sec = atoi(optarg);
+				continue;
+			case ('p'):
+				plot = (bool) atoi(optarg);
+				continue;
+			case ('d'):
+				debug = (bool) atoi(optarg);
+				continue;
+			case ('v'):
+				visualize = (bool) atoi(optarg);
+				continue;
+			case ('b'):
+				sediment_start = atoi(optarg);
+				continue;
+			case ('B'):
+				bed_change_start = atoi(optarg);
+				continue;
+			case ('e'):
+				sediment_end = atoi(optarg);
+				continue;
+			case ('E'):
+				bed_change_end = atoi(optarg);
+				continue;
+			case ('i'):
+				save_interval = atoi(optarg);
+				continue;
+			case ('c'):
+				load_initial_condition = atoi(optarg);
+				continue;
+		}
 	}
+
+	cout << "dir " << dir << endl
+		<< "hour " << hour << endl
+		<< "min " << min << endl
+		<< "sec " << sec << endl
+		<< "plot " << plot << endl
+		<< "debug " << debug << endl
+		<< "visualize " << visualize << endl
+		<< "sediment start " << sediment_start << endl
+		<< "bed_change_start " << bed_change_start << endl
+		<< "sediment_end " << sediment_end << endl
+		<< "save_interval " << save_interval << endl 
+		<< "load initial condition " << load_initial_condition << endl; 
 	// 2. initialize cuda
 
 	// // 3. Call initialize functions
@@ -147,5 +163,5 @@ int main (int* argc, char** argv[]){
 
 
 
-	retun 0;
+	return 0;
 }

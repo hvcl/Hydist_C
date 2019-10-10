@@ -34,7 +34,7 @@ template <typename T>
 pair<int, int> load_file(string filename, vector<T> arr);
 
 
-// void load_input(string dir);
+void load_input(string dir);
 
 // cudaError_t initialize(int device);
 

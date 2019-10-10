@@ -1,0 +1,92 @@
+1. load files: need to declare variales holders
+- need to consider which variable holders do we really need to declare
+- only variables that are loaded from inputs are needed 
+- other can be inferred from mesh size
+- so Pointer class need to change the way a Pointer instant is constructed 
+
+
+-----------
+Pointer class:
+- allocate memory arrays on GPU
+	- those that store attributes (htdv, htdv, khouot, u, v, z, etc)
+	- those that are used for deriving tridiagonal matrix coefficients
+	- if cublas is used, many of those are not neccessary 
+- save them in a list of pair: pointer to the array, size of the array
+- copy data from host to device
+- extract data from device to host
+
+PointerStruct Class: 
+- use to parse struct from host to device (might not neccessary here )
+
+------------
+Visualizor class
+
+
+
+-------------
+Engine class:
+launch kernels, but there's a problem organizing this into a class, since kernels must be global functions
+how many kernels are needed?
+can we declare class function that wrap the kernels?
+or maybe we don't really need them at all 
+engine.h is just a header file that contain function declaration
+and engine.cpp is just a file that contain functions' implemenation 
+Pointer and Visualizor can still be classes 
+
+
+---------------
+IMPLEMENTATION: 1. simulation function
+				2. update boundary function
+
+
+
+4 major modules: 
+- visualizor
+- pointer
+- main 
+- engine
+
+monday: pointer + test 
+Tues: main 
+Wed : visualizor + test
+Thurs: Engine : implementation 
+Fri: Engine test
+Sat: ensemble everythings + test the first version 
+Sun: make change in tridiag solver by using cublas lib
+test the changes
+-----------
+
+Monday: 
+ - Ensemble Bed change and Sediment Transport to new code
+Tuesday: test the ensemble
+Wed: test the ensemble, debug and potential bugs
+Thurs: code the auto bed change update, run the bed change to see potential errors
+Fri: hopefully finish up this fucking code
+
+By the end of this month: submit the fucking paper to MPDI water, if rejected, submit it to iccs
+
+python2 env:
+- pycuda
+- np
+- plt
+- os, sys
+- timeit
+- argparse
+- copy
+
+
+Main: 
+1.	Parse arguments: 
+a.	Inputs directory: Folder that includes all input files; files have to be put in correct name formats
+b.	Arguments: hour, mins, sec, tmax, plot, debug, sediment _start, sediment _end, bed_change_start, bed_changes_end, result saving interval, visualize options
+2.	Initialize cuda
+3.	Call initialize functions: 
+a.	Load data
+b.	Transfer data to GPU
+c.	Call initialize functions on GPUs
+4.	Enter main loops: 
+a.	Call kernels as described in the above structures
+5.	End loops and exits
+
+
+

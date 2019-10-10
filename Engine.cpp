@@ -29,7 +29,7 @@ template pair<int, int> load_file<double>(string filename, std::vector<double> a
 template pair<int, int> load_file<float>(string filename, std::vector<float> arr);
 
 
-pair<int, int> load_input(string dir,
+pair<int, int> load_inputs(string dir,
 				vector<DOUBLE> &h,
 				vector<DOUBLE> &hsnham,
 				vector<DOUBLE> &VISCOINDX, 
@@ -45,16 +45,24 @@ pair<int, int> load_input(string dir,
 {
 	pair<int, int > size;
 	size = load_file<DOUBLE> (dir + "bandodosau.txt", h);
+	// cout << size.first << " " << size.second << endl;
 	load_file<DOUBLE> (dir + "hsnham.txt", hsnham);
+
+	cout << size.first << " " << size.second << endl;
 	load_file<DOUBLE> (dir + "hsnhotroiA.txt", VISCOINDX);
-	load_file<DOUBLE> (dir + "bientren.txt", bc_up);
+	// cout << size.first << " " << size.second << endl;
+
+	// load_file<DOUBLE> (dir + "bientren.txt", bc_up);
 	load_file<DOUBLE> (dir + "bienduoi.txt", bc_down);
-	load_file<DOUBLE> (dir + "bientrai.txt", bc_left);
+	// cout << size.first << " " << size.second << endl;
+	// load_file<DOUBLE> (dir + "bientrai.txt", bc_left);
 	load_file<DOUBLE> (dir + "bienphai.txt", bc_right);
-	load_file<DOUBLE> (dir + "FSbientren.txt", CC_u);
-	load_file<DOUBLE> (dir + "FSbienduoi.txt", CC_d);
-	load_file<DOUBLE> (dir + "FSbientrai.txt", CC_l);
-	load_file<DOUBLE> (dir + "FSbienphai.txt", CC_r);
+	// cout << size.first << " " << size.second << endl;
+	// load_file<DOUBLE> (dir + "FSbientren.txt", CC_u);
+	// load_file<DOUBLE> (dir + "FSbienduoi.txt", CC_d);
+	// load_file<DOUBLE> (dir + "FSbientrai.txt", CC_l);
+	// load_file<DOUBLE> (dir + "FSbienphai.txt", CC_r);
 	load_file<int> (dir + "boundary_type.txt", bienQ);
+	// cout << size.first << " " << size.second << endl;
 	return size;
 }

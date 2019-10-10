@@ -19,13 +19,12 @@ using namespace std;
 
 
 int main (int argc, char ** argv){
-	int bienQ[4];
 	int M, N, total_time;
 	vector<DOUBLE> h, hsnham, VISCOINDX, Fw, FS, dH;
 	vector<DOUBLE> bc_up, bc_down, bc_left, bc_right;
 	vector<DOUBLE> CC_u, CC_d, CC_l, CC_r;
 	vector<DOUBLE> u, v, z;
-	vector<int> khouot;
+	vector<int> khouot, bienQ;
 
 	// 1. parse arguments 
 	// a. input directory 
@@ -112,15 +111,17 @@ int main (int argc, char ** argv){
 	// // load_inputs(h, hsnham, VISCOINDX, bc_up, bc_down, bc_left, bc_right,
 	// // 			CC_u, CC_d, CC_l, CC_r, , bienQ);
 	// pair<int, int> mesh_size;
+
+
 	// // test this first
-	pair<int, int> mesh_size = load_file<DOUBLE>("dosausongLUY.txt", h);
-	cout << mesh_size.first << " " << mesh_size.second << endl;
-	// // if okay then 
-	// dummie();
-	
-	// mesh_size = // load_inputs(dir, h, hsnham, VISCOINDX, bc_up, bc_down, bc_left, bc_right,
-	// // 			CC_u, CC_d, CC_l, CC_r,  bienQ);
+	// pair<int, int> mesh_size = load_file<DOUBLE>("dosausongLUY.txt", h);
 	// cout << mesh_size.first << " " << mesh_size.second << endl;
+	// // if okay then 
+
+	
+	pair <int, int> mesh_size =  load_inputs(dir, h, hsnham, VISCOINDX, bc_up, bc_down, bc_left, bc_right,
+				CC_u, CC_d, CC_l, CC_r,  bienQ);
+	cout << mesh_size.first << " " << mesh_size.second << endl;
 	
 
 

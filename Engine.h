@@ -34,7 +34,18 @@ template <typename T>
 pair<int, int> load_file(string filename, vector<T> arr);
 
 
-void load_input(string dir);
+pair<int, int> load_inputs(string dir, vector<DOUBLE> &h,
+				vector<DOUBLE> &hsnham,
+				vector<DOUBLE> &VISCOINDX, 
+				vector<DOUBLE> &bc_up,
+				vector<DOUBLE> &bc_right,
+				vector<DOUBLE> &bc_left, 
+				vector<DOUBLE> &bc_down, 
+				vector<DOUBLE> &CC_u, 
+				vector<DOUBLE> &CC_d,
+				vector<DOUBLE> &CC_l,
+				vector<DOUBLE> &CC_r,
+				vector<int> &bienQ);
 
 // cudaError_t initialize(int device);
 

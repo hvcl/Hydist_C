@@ -100,6 +100,9 @@ void device_copy(vector<T> &source, T* des)
 	// assert success here
 }
 
+// this function allocate memory on GPU, store those pointers values on a local variables
+// then copy those value to device, save arguemnt pointer struct's pointer on device to device_arg_ptr
+// and return the argument pointer struct that store address of pointers on device
 Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Argument_Pointers** device_arg_ptr)
 {
 	// cuda mem alloc corresponding arrays

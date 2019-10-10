@@ -76,9 +76,12 @@ python2 env:
 
 
 Main: 
-1.	Parse arguments: 
+1.	Parse arguments: done 
 a.	Inputs directory: Folder that includes all input files; files have to be put in correct name formats
 b.	Arguments: hour, mins, sec, tmax, plot, debug, sediment _start, sediment _end, bed_change_start, bed_changes_end, result saving interval, visualize options
+
+
+
 2.	Initialize cuda
 3.	Call initialize functions: 
 a.	Load data

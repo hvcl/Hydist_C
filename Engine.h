@@ -3,6 +3,8 @@
 #include <utility>
 #include <vector>
 #include <iostream>
+#include <sstream>
+#define DOUBLE double
 // #include "cuda.h"
 // #include "cuda_runtime.h"
 using namespace std;
@@ -29,7 +31,7 @@ struct Options{
 	}
 };
 template <typename T>
-pair<int, int> load_file(char* filename, vector<T> arr);
+pair<int, int> load_file(string filename, vector<T> arr);
 
 
 // void load_input(string dir);

@@ -1,10 +1,11 @@
 // #include <cuda.h>
 // #include <cuda_runtime.h>
-#include <iostream>
 #include <vector>
-// #include "Engine.h"
+#include "Engine.h"
 #include <unistd.h>
+#include <utility>
 #include <string>
+#include <iostream>
 #define DOUBLE double 
 
 using namespace std;
@@ -105,7 +106,6 @@ int main (int argc, char ** argv){
 		<< "sediment_end " << sediment_end << endl
 		<< "save_interval " << save_interval << endl 
 		<< "load initial condition " << load_initial_condition << endl; 
-	// 2. initialize cuda
 
 	// // 3. Call initialize functions
 	// // a. load inputs
@@ -113,9 +113,10 @@ int main (int argc, char ** argv){
 	// // 			CC_u, CC_d, CC_l, CC_r, , bienQ);
 	// pair<int, int> mesh_size;
 	// // test this first
-	// mesh_size = load_file("dosausongLUY.txt");
-	// cout << mesh_size.first << " " << mesh_size.second << endl;
+	pair<int, int> mesh_size = load_file<DOUBLE>("dosausongLUY.txt", h);
+	cout << mesh_size.first << " " << mesh_size.second << endl;
 	// // if okay then 
+	// dummie();
 	
 	// mesh_size = // load_inputs(dir, h, hsnham, VISCOINDX, bc_up, bc_down, bc_left, bc_right,
 	// // 			CC_u, CC_d, CC_l, CC_r,  bienQ);

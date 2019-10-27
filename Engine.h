@@ -56,13 +56,13 @@ void load_initial_condition(string dir,
 							vector<int> &khouot);
 
 template <typename T>
-void device_copy(vector<T> &source, T* des)
+void device_copy(vector<T> &source, T* des);
 
 template <typename T>
-T* device_alloc(int nBytes)
+T* device_alloc(int nBytes);
 
 template <typename T>
-T* device_alloc_and_copy(vector<T> &h_array)
+T* device_alloc_and_copy(vector<T> &h_array);
 // void update_boundary()
 
 // void simulate(Options ops);

@@ -126,6 +126,7 @@ int main (int argc, char ** argv){
 	// Argument_Pointers* argument_pointer_struct_on_device;
 	// Argument_Pointers argument_pointer;
 	// // host pointers here 
+	
 
 
 	// // allocate memory and transfer here
@@ -145,7 +146,7 @@ int main (int argc, char ** argv){
 	// call initial function here 
 
 	// 4. enter main loop
-
+	// todo : write kernels on engine.h 
 
 
 

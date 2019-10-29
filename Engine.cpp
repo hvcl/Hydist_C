@@ -1,7 +1,7 @@
 #include "Engine.h"
 using namespace std;
 template <typename T>
-pair<int, int> load_file(string filename, vector<T> &arr){
+pair<int, int> load_file(const char* filename, vector<T> &arr){
 
 	ifstream ifs;
 	ifs.open(filename);
@@ -25,8 +25,8 @@ pair<int, int> load_file(string filename, vector<T> &arr){
 	return pair<int, int>(N, M);
 }
 
-template pair<int, int> load_file<double>(string filename, std::vector<double> &arr);
-template pair<int, int> load_file<float>(string filename, std::vector<float> &arr);
+template pair<int, int> load_file<double>(const char* filename, std::vector<double> &arr);
+template pair<int, int> load_file<float>(const char* filename, std::vector<float> &arr);
 
 
 // pair<int, int> load_inputs(string dir,

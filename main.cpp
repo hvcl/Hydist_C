@@ -49,80 +49,74 @@ int main (int argc, char ** argv){
 	int c;
 
 
-	// while ((c = getopt(argc, argv, "f:h:m:s::p::d::v::b::B::e::E::i::c::")) != -1){
-	// 	switch (c)
-	// 	{
-	// 		case('f'):
-	// 			dir = optarg;
-	// 			continue;
-	// 		case ('h'):
-	// 			hour = atoi(optarg);
-	// 			continue;
-	// 		case ('m'):
-	// 			min = atoi(optarg);
-	// 			continue;
-	// 		case ('s'): 
-	// 			sec = atoi(optarg);
-	// 			continue;
-	// 		case ('p'):
-	// 			plot = (bool) atoi(optarg);
-	// 			continue;
-	// 		case ('d'):
-	// 			debug = (bool) atoi(optarg);
-	// 			continue;
-	// 		case ('v'):
-	// 			visualize = (bool) atoi(optarg);
-	// 			continue;
-	// 		case ('b'):
-	// 			sediment_start = atoi(optarg);
-	// 			continue;
-	// 		case ('B'):
-	// 			bed_change_start = atoi(optarg);
-	// 			continue;
-	// 		case ('e'):
-	// 			sediment_end = atoi(optarg);
-	// 			continue;
-	// 		case ('E'):
-	// 			bed_change_end = atoi(optarg);
-	// 			continue;
-	// 		case ('i'):
-	// 			save_interval = atoi(optarg);
-	// 			continue;
-	// 		case ('c'):
-	// 			load_initial_condition = atoi(optarg);
-	// 			continue;
-	// 	}
-	// }
+	while ((c = getopt(argc, argv, "f:h:m:s::p::d::v::b::B::e::E::i::c::")) != -1){
+		switch (c)
+		{
+			case('f'):
+				dir = optarg;
+				continue;
+			case ('h'):
+				hour = atoi(optarg);
+				continue;
+			case ('m'):
+				min = atoi(optarg);
+				continue;
+			case ('s'): 
+				sec = atoi(optarg);
+				continue;
+			case ('p'):
+				plot = (bool) atoi(optarg);
+				continue;
+			case ('d'):
+				debug = (bool) atoi(optarg);
+				continue;
+			case ('v'):
+				visualize = (bool) atoi(optarg);
+				continue;
+			case ('b'):
+				sediment_start = atoi(optarg);
+				continue;
+			case ('B'):
+				bed_change_start = atoi(optarg);
+				continue;
+			case ('e'):
+				sediment_end = atoi(optarg);
+				continue;
+			case ('E'):
+				bed_change_end = atoi(optarg);
+				continue;
+			case ('i'):
+				save_interval = atoi(optarg);
+				continue;
+			case ('c'):
+				load_initial_condition = atoi(optarg);
+				continue;
+		}
+	}
 
-	// cout << "dir " << dir << endl
-	// 	<< "hour " << hour << endl
-	// 	<< "min " << min << endl
-	// 	<< "sec " << sec << endl
-	// 	<< "plot " << plot << endl
-	// 	<< "debug " << debug << endl
-	// 	<< "visualize " << visualize << endl
-	// 	<< "sediment start " << sediment_start << endl
-	// 	<< "bed_change_start " << bed_change_start << endl
-	// 	<< "sediment_end " << sediment_end << endl
-	// 	<< "save_interval " << save_interval << endl 
-	// 	<< "load initial condition " << load_initial_condition << endl; 
+	cout << "dir " << dir << endl
+		<< "hour " << hour << endl
+		<< "min " << min << endl
+		<< "sec " << sec << endl
+		<< "plot " << plot << endl
+		<< "debug " << debug << endl
+		<< "visualize " << visualize << endl
+		<< "sediment start " << sediment_start << endl
+		<< "bed_change_start " << bed_change_start << endl
+		<< "sediment_end " << sediment_end << endl
+		<< "save_interval " << save_interval << endl 
+		<< "load initial condition " << load_initial_condition << endl; 
 
 	// // 3. Call initialize functions
 	// // a. load inputs
 
 	// // test this first
-	pair<int, int> mesh_size = load_file<DOUBLE>("dosausongLUY.txt", h);
+	// pair<int, int> mesh_size = load_file<DOUBLE>("dosausongLUY.txt", h);
 	// cout << mesh_size.first << " " << mesh_size.second << endl;
-	// // if okay then 
-
-	// cout << h.size() << endl;
-	for (int i = 0; i < h.size(); i++)
-		if (h[i] != 0)
-			cout << "load input okay " << i << endl;
 
 	
-	// pair <int, int> mesh_size =  load_inputs(dir, h, hsnham, VISCOINDX, bc_up, bc_down, bc_left, bc_right,
-	// 			CC_u, CC_d, CC_l, CC_r,  bienQ);
+	pair <int, int> mesh_size =  load_inputs(dir, h, hsnham, VISCOINDX, bc_up, bc_down, bc_left, bc_right,
+				CC_u, CC_d, CC_l, CC_r,  bienQ);
 	cout << mesh_size.first << " " << mesh_size.second << endl;
 	M = mesh_size.first;
 	N = mesh_size.second;

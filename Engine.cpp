@@ -45,21 +45,21 @@ pair<int, int> load_inputs(string dir,
 {
 	pair<int, int > size;
 	size = load_file<DOUBLE> ((dir + "bandodosau.txt").c_str(), h);
-	// cout << size.first << " " << size.second << endl;
-	// load_file<DOUBLE> (dir + "hsnham.txt", hsnham);
+	cout << size.first << " " << size.second << endl;
+	load_file<DOUBLE> ((dir + "hsnham.txt").c_str(), hsnham);
 
-	// cout << size.first << " " << size.second << endl;
-	// load_file<DOUBLE> (dir + "hsnhotroiA.txt", VISCOINDX);
+	cout << size.first << " " << size.second << endl;
+	load_file<DOUBLE> ((dir + "hsnhotroiA.txt").c_str(), VISCOINDX);
 
-	// // load_file<DOUBLE> (dir + "bientren.txt", bc_up);
-	// load_file<DOUBLE> (dir + "bienduoi.txt", bc_down);
-	// // load_file<DOUBLE> (dir + "bientrai.txt", bc_left);
-	// load_file<DOUBLE> (dir + "bienphai.txt", bc_right);
-	// // load_file<DOUBLE> (dir + "FSbientren.txt", CC_u);
-	// // load_file<DOUBLE> (dir + "FSbienduoi.txt", CC_d);
-	// // load_file<DOUBLE> (dir + "FSbientrai.txt", CC_l);
-	// // load_file<DOUBLE> (dir + "FSbienphai.txt", CC_r);
-	// load_file<int> (dir + "boundary_type.txt", bienQ);
+	// load_file<DOUBLE> (dir + "bientren.txt", bc_up);
+	load_file<DOUBLE> ((dir + "bienduoi.txt").c_str(), bc_down);
+	// load_file<DOUBLE> (dir + "bientrai.txt", bc_left);
+	load_file<DOUBLE> ((dir + "bienphai.txt").c_str(), bc_right);
+	// load_file<DOUBLE> (dir + "FSbientren.txt", CC_u);
+	// load_file<DOUBLE> (dir + "FSbienduoi.txt", CC_d);
+	// load_file<DOUBLE> (dir + "FSbientrai.txt", CC_l);
+	// load_file<DOUBLE> (dir + "FSbienphai.txt", CC_r);
+	load_file<int> ((dir + "boundary_type.txt").c_str(), bienQ);
 	return size;
 }
 

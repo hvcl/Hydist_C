@@ -115,7 +115,10 @@ int main (int argc, char ** argv){
 	// cout << mesh_size.first << " " << mesh_size.second << endl;
 	// // if okay then 
 
-	cout << h.size() << endl;
+	// cout << h.size() << endl;
+	for (int i = 0; i < h.size(); i++)
+		if (h[i] != 0)
+			cout << "load input okay" << endl;
 
 	
 	// pair <int, int> mesh_size =  load_inputs(dir, h, hsnham, VISCOINDX, bc_up, bc_down, bc_left, bc_right,

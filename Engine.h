@@ -31,7 +31,7 @@ struct Options{
 	}
 };
 template <typename T>
-pair<int, int> load_file(string filename, vector<T> arr);
+pair<int, int> load_file(string filename, vector<T> &arr);
 
 
 // pair<int, int> load_inputs(string dir, vector<DOUBLE> &h,

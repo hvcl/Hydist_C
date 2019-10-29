@@ -74,7 +74,7 @@ void load_initial_condition(string dir,
 	load_file<DOUBLE> ((dir + "u.txt").c_str(), u);
 	load_file<DOUBLE> ((dir + "v.txt").c_str(), v);
 	load_file<DOUBLE> ((dir + "z.txt").c_str(), z);
-	load_file<DOUBLE> (dir + "FS.txt", FS);
+	load_file<DOUBLE> ((dir + "FS.txt").c_str(), FS);
 	load_file<int> ((dir + "khouot.txt").c_str(), khouot);
 }
 

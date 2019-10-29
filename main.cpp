@@ -110,13 +110,13 @@ int main (int argc, char ** argv){
 	// // a. load inputs
 
 	// // test this first
-	// pair<int, int> mesh_size = load_file<DOUBLE>("dosausongLUY.txt", h);
+	pair<int, int> mesh_size = load_file<DOUBLE>("dosausongLUY.txt", h);
 	// cout << mesh_size.first << " " << mesh_size.second << endl;
 	// // if okay then 
 
 	
-	pair <int, int> mesh_size =  load_inputs(dir, h, hsnham, VISCOINDX, bc_up, bc_down, bc_left, bc_right,
-				CC_u, CC_d, CC_l, CC_r,  bienQ);
+	// pair <int, int> mesh_size =  load_inputs(dir, h, hsnham, VISCOINDX, bc_up, bc_down, bc_left, bc_right,
+	// 			CC_u, CC_d, CC_l, CC_r,  bienQ);
 	cout << mesh_size.first << " " << mesh_size.second << endl;
 	M = mesh_size.first;
 	N = mesh_size.second;

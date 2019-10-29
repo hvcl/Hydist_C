@@ -1,7 +1,7 @@
 #include "Engine.h"
 using namespace std;
 template <typename T>
-pair<int, int> load_file(string filename, vector<T> &arr){
+pair<int, int> load_file(string filename, vector<T> arr){
 
 	ifstream ifs;
 	ifs.open(filename);

@@ -63,20 +63,20 @@ pair<int, int> load_inputs(string dir,
 	return size;
 }
 
-// void load_initial_condition(string dir, 
-// 							vector<DOUBLE> &u, 
-// 							vector<DOUBLE> &v,
-// 							vector<DOUBLE> &z,
-// 							vector<DOUBLE> &FS,
-// 							vector<int> &khouot)
-// {
+void load_initial_condition(string dir, 
+							vector<DOUBLE> &u, 
+							vector<DOUBLE> &v,
+							vector<DOUBLE> &z,
+							vector<DOUBLE> &FS,
+							vector<int> &khouot)
+{
 
-// 	load_file<DOUBLE> (dir + "u.txt", u);
-// 	load_file<DOUBLE> (dir + "v.txt", v);
-// 	load_file<DOUBLE> (dir + "z.txt", z);
-// 	load_file<DOUBLE> (dir + "FS.txt", FS);
-// 	load_file<int> (dir + "khouot.txt", khouot);
-// }
+	load_file<DOUBLE> ((dir + "u.txt").c_str(), u);
+	load_file<DOUBLE> ((dir + "v.txt").c_str(), v);
+	load_file<DOUBLE> ((dir + "z.txt").c_str(), z);
+	load_file<DOUBLE> (dir + "FS.txt", FS);
+	load_file<int> ((dir + "khouot.txt").c_str(), khouot);
+}
 
 
 // template <typename T>

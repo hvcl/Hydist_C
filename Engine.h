@@ -48,12 +48,12 @@ pair<int, int> load_inputs(string dir, vector<DOUBLE> &h,
 				vector<int> &bienQ);
 
 // cudaError_t initialize(int device);
-// void load_initial_condition(string dir, 
-// 							vector<DOUBLE> &u, 
-// 							vector<DOUBLE> &v,
-// 							vector<DOUBLE> &z,
-// 							vector<DOUBLE> &FS,
-							// vector<int> &khouot);
+void load_initial_condition(string dir, 
+							vector<DOUBLE> &u, 
+							vector<DOUBLE> &v,
+							vector<DOUBLE> &z,
+							vector<DOUBLE> &FS,
+							vector<int> &khouot);
 
 // template <typename T>
 // void device_copy(vector<T> &source, T* des);

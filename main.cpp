@@ -3,6 +3,7 @@
 #include <vector>
 #include "Engine.h"
 #include <unistd.h>
+#include <stdlib.h>
 #include <utility>
 #include <string>
 #include <iostream>

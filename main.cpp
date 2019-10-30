@@ -1,7 +1,7 @@
 // #include <cuda.h>
 // #include <cuda_runtime.h>
 #include <vector>
-#include "Engine.cuh"
+#include "Engine.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include <utility>

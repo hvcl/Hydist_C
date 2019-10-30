@@ -103,7 +103,7 @@ void load_initial_condition(string dir,
 template <typename T>
 void device_copy(vector<T> &source, T* des)
 {
-	cudaError_t status cudaMemcpy(des, source.data(), sizeof(T) * source.size(), cudaMemcpyHostToDevice);
+	cudaError_t status =  cudaMemcpy(des, source.data(), sizeof(T) * source.size(), cudaMemcpyHostToDevice);
 	// assert success here
 }
 

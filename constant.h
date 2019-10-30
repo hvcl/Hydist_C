@@ -1,4 +1,3 @@
-#pragma once
 #ifndef CONSTANT_H__
 #define CONSTANT_H__
 #define PI 3.14159265359

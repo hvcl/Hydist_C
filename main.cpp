@@ -25,7 +25,7 @@ int main (int argc, char ** argv){
 	vector<DOUBLE> bc_up, bc_down, bc_left, bc_right;
 	vector<DOUBLE> CC_u, CC_d, CC_l, CC_r;
 	vector<DOUBLE> u, v, z;
-	vector<int> khouot, bienQ;
+	vector<int> khouot, bienQ, boundary_type;
 
 	// 1. parse arguments 
 	// a. input directory 

@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "constant.h"
 using namespace std;
 template <typename T>
 pair<int, int> load_file(const char* filename, vector<T> &arr){
@@ -139,97 +140,100 @@ void device_copy(vector<T> &source, T* des)
 // 	d_ap.bc_right = device_alloc_and_copy<DOUBLE> (&ap.bc_right);
 
 // 	// intitial conditions
+// 	// need to double check this, to do this only if initial condition is given
 // 	d_ap.u = device_alloc_and_copy<DOUBLE> (&ap.u);
 // 	d_ap.v = device_alloc_and_copy<DOUBLE> (&ap.v);
-// 	d_ap.z = device_alloc_and_copy<DOUBLE> (&ap.z);
-// 	d_ap.FS = device_alloc_and_copy<DOUBLE> (&ap.FS);
-// 	// d_ap.khouot = device_alloc_and_copy<int> (&ap.khouot);
+	// d_ap.z = device_alloc_and_copy<DOUBLE> (&ap.z);
+	// d_ap.FS = device_alloc_and_copy<DOUBLE> (&ap.FS);
+	// d_ap.khouot = device_alloc_and_copy<int> (&ap.khouot);
 
-// 	// cuda mem alloc arrays on device only
+	// // d_ap.khouot = device_alloc_and_copy<int> (&ap.khouot);
 
-// 	int nBytes = ap.u.size() * sizeof (DOUBLE);
-// 	d_ap.t_u = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.t_v = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.t_z = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.Kx1 = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.Ky1 = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.Hdtu = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.Hdtv = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.htaiz = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.htaiz_bd = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.H_moi = device_alloc<DOUBLE> (nBytes);
+	// // cuda mem alloc arrays on device only
 
-// 	d_ap.Tsxw = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.Tsyw = device_alloc<DOUBLE> (nBytes);
+	// int nBytes = ap.u.size() * sizeof (DOUBLE);
+	// d_ap.t_u = device_alloc<DOUBLE> (nBytes);
+	// d_ap.t_v = device_alloc<DOUBLE> (nBytes);
+	// d_ap.t_z = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Kx1 = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Ky1 = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Hdtu = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Hdtv = device_alloc<DOUBLE> (nBytes);
+	// d_ap.htaiz = device_alloc<DOUBLE> (nBytes);
+	// d_ap.htaiz_bd = device_alloc<DOUBLE> (nBytes);
+	// d_ap.H_moi = device_alloc<DOUBLE> (nBytes);
 
-// 	d_ap.VTH = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.Qbx = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.Qby = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.FS  = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.tFS = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.Kx  = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.Ky  = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.dH  = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Tsxw = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Tsyw = device_alloc<DOUBLE> (nBytes);
 
-// 	d_ap.ubt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (M + 2));
-// 	d_ap.ubt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (M + 2));
-// 	d_ap.vbt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (N + 2));
-// 	d_ap.vbt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (N + 2));
+	// d_ap.VTH = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Qbx = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Qby = device_alloc<DOUBLE> (nBytes);
+	// d_ap.FS  = device_alloc<DOUBLE> (nBytes);
+	// d_ap.tFS = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Kx  = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Ky  = device_alloc<DOUBLE> (nBytes);
+	// d_ap.dH  = device_alloc<DOUBLE> (nBytes);
 
-// 	d_ap.khouot = device_alloc<int> (sizeof (int) * ap.u.size());
-// 	d_ap.moci = device_alloc<int> (sizeof(int) * (N + 2));
-// 	d_ap.mocj = device_alloc<int> (sizeof(int) * (M + 2));
-// 	d_ap.daui = device_alloc<int> (sizeof(int) * segment_limit * (N + 2));
-// 	d_ap.cuoi = device_alloc<int> (sizeof(int) * segment_limit * (N + 2));
-// 	d_ap.dauj = device_alloc<int> (sizeof(int) * segment_limit * (M + 2));
-// 	d_ap.cuoij = device_alloc<int> (sizeof(int) * segment_limit * (M + 2));
-// 	// attention
-// 	d_ap.hi = device_alloc<DOUBLE> (sizeof(DOUBLE) * (2 * (M + N + 6)));
-// 	cudaError_t status = cudaMalloc((void**) device_arg_ptr, sizeof(Argument_Pointers));
-// 	// assert sucess here
-// 	cudaError_t copy_status = cudaMemcpy(*device_arg_ptr, &d_ap, sizeof(Argument_Pointers), cudaMemcpyHostToDevice);
-// 	// assesrt success here
-// 	// cuda copy arrays
+	// d_ap.ubt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (M + 2));
+	// d_ap.ubt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (M + 2));
+	// d_ap.vbt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (N + 2));
+	// d_ap.vbt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (N + 2));
 
-// 	return d_ap;
+	
+	// d_ap.moci = device_alloc<int> (sizeof(int) * (N + 2));
+	// d_ap.mocj = device_alloc<int> (sizeof(int) * (M + 2));
+	// d_ap.daui = device_alloc<int> (sizeof(int) * segment_limit * (N + 2));
+	// d_ap.cuoi = device_alloc<int> (sizeof(int) * segment_limit * (N + 2));
+	// d_ap.dauj = device_alloc<int> (sizeof(int) * segment_limit * (M + 2));
+	// d_ap.cuoij = device_alloc<int> (sizeof(int) * segment_limit * (M + 2));
+	// // attention
+	// d_ap.hi = device_alloc<DOUBLE> (sizeof(DOUBLE) * (2 * (M + N + 6)));
+	// cudaError_t status = cudaMalloc((void**) device_arg_ptr, sizeof(Argument_Pointers));
+	// // assert sucess here
+	// cudaError_t copy_status = cudaMemcpy(*device_arg_ptr, &d_ap, sizeof(Argument_Pointers), cudaMemcpyHostToDevice);
+	// // assesrt success here
+	// // cuda copy arrays
+
+	// return d_ap;
 // }
 
 
-// Array_Pointers supporting_arrays_alloc(int M, int N, Array_Pointers** device_arr_ptr)
-// {
-// 	Argument_Pointers d_ap;
-// 	int nBytes = sizeof (DOUBLE) * (M * N + 2 * max(M, N));
-// 	d_ap.a1 = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.b1 = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.c1 = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.d1 = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.a2 = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.c2 = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.ad = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.f1 = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.f2 = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.f3 = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.f5 = device_alloc<DOUBLE> (nBytes);
+Array_Pointers supporting_arrays_alloc(int M, int N, Array_Pointers** device_arr_ptr)
+{
+	Argument_Pointers d_ap;
+	int nBytes = sizeof (DOUBLE) * (M * N + 2 * max(M, N));
+	d_ap.a1 = device_alloc<DOUBLE> (nBytes);
+	d_ap.b1 = device_alloc<DOUBLE> (nBytes);
+	d_ap.c1 = device_alloc<DOUBLE> (nBytes);
+	d_ap.d1 = device_alloc<DOUBLE> (nBytes);
+	d_ap.a2 = device_alloc<DOUBLE> (nBytes);
+	d_ap.c2 = device_alloc<DOUBLE> (nBytes);
+	d_ap.ad = device_alloc<DOUBLE> (nBytes);
+	d_ap.f1 = device_alloc<DOUBLE> (nBytes);
+	d_ap.f2 = device_alloc<DOUBLE> (nBytes);
+	d_ap.f3 = device_alloc<DOUBLE> (nBytes);
+	d_ap.f5 = device_alloc<DOUBLE> (nBytes);
 
-// 	int nBytes = sizeof (DOUBLE) * (2 * M * N + 4 * max(M, N));
-// 	d_ap.AA = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.BB = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.CC = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.DD = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.Ap = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.Bp = device_alloc<DOUBLE> (nBytes);
-// 	d_ap.ep = device_alloc<DOUBLE> (nBytes);	
-// 	d_ap.x = device_alloc<DOUBLE> (nBytes);	
+	int nBytes = sizeof (DOUBLE) * (2 * M * N + 4 * max(M, N));
+	d_ap.AA = device_alloc<DOUBLE> (nBytes);
+	d_ap.BB = device_alloc<DOUBLE> (nBytes);
+	d_ap.CC = device_alloc<DOUBLE> (nBytes);
+	d_ap.DD = device_alloc<DOUBLE> (nBytes);
+	d_ap.Ap = device_alloc<DOUBLE> (nBytes);
+	d_ap.Bp = device_alloc<DOUBLE> (nBytes);
+	d_ap.ep = device_alloc<DOUBLE> (nBytes);	
+	d_ap.x = device_alloc<DOUBLE> (nBytes);	
 
-// 	d_ap.SN = device_alloc<int> (sizeof(int) * segment_limit * max(M, N));
-// 	cudaError_t status = cudaMalloc((void**) device_arr_ptr, sizeof(Array_Pointers));
-// 	// assert success here
-// 	cudaError_t copy_status = cudaMemcpy(*device_arr_ptr, &d_ap, sizeof(Array_Pointers));
-// 	// assert success here
+	d_ap.SN = device_alloc<int> (sizeof(int) * segment_limit * max(M, N));
+	cudaError_t status = cudaMalloc((void**) device_arr_ptr, sizeof(Array_Pointers));
+	// assert success here
+	cudaError_t copy_status = cudaMemcpy(*device_arr_ptr, &d_ap, sizeof(Array_Pointers));
+	// assert success here
 
-// 	return d_ap;
+	return d_ap;
 
-// }
+}
 
 
 

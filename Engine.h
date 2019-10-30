@@ -31,6 +31,22 @@ struct Options{
 
 	}
 };
+
+struct Argument_Pointers
+{
+};
+
+struct  Host_arrays
+{
+	int M, N, total_time;
+	vector<DOUBLE> h, hsnham, VISCOINDX, Fw, FS, dH;
+	vector<DOUBLE> bc_up, bc_down, bc_left, bc_right;
+	vector<DOUBLE> CC_u, CC_d, CC_l, CC_r;
+	vector<DOUBLE> u, v, z;
+	vector<int> khouot, bienQ, boundary_type;
+};
+
+
 template <typename T>
 pair<int, int> load_file(const char* filename, vector<T> &arr);
 
@@ -64,6 +80,8 @@ T* device_alloc(int nBytes);
 
 template <typename T>
 T* device_alloc_and_copy(vector<T> &h_array);
+
+Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Argument_Pointers** device_arg_ptr)
 // void update_boundary()
 
 // void simulate(Options ops);

@@ -38,7 +38,7 @@ struct Options{
 struct  Host_arrays
 {
 	int M, N, total_time;
-	vector<DOUBLE> h, hsnham, VISCOINDX, Fw, FS, dH;
+	vector<DOUBLE> h, hsnham, VISCOIDX, Fw, FS, dH;
 	vector<DOUBLE> bc_up, bc_down, bc_left, bc_right;
 	vector<DOUBLE> CC_u, CC_d, CC_l, CC_r;
 	vector<DOUBLE> u, v, z;
@@ -52,7 +52,7 @@ pair<int, int> load_file(const char* filename, vector<T> &arr);
 
 pair<int, int> load_inputs(string dir, vector<DOUBLE> &h,
 				vector<DOUBLE> &hsnham,
-				vector<DOUBLE> &VISCOINDX, 
+				vector<DOUBLE> &VISCOIDX, 
 				vector<DOUBLE> &bc_up,
 				vector<DOUBLE> &bc_right,
 				vector<DOUBLE> &bc_left, 

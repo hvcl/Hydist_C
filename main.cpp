@@ -21,7 +21,7 @@ using namespace std;
 
 int main (int argc, char ** argv){
 	int M, N, total_time;
-	vector<DOUBLE> h, hsnham, VISCOINDX, Fw, FS, dH;
+	vector<DOUBLE> h, hsnham, VISCOIDX, Fw, FS, dH;
 	vector<DOUBLE> bc_up, bc_down, bc_left, bc_right;
 	vector<DOUBLE> CC_u, CC_d, CC_l, CC_r;
 	vector<DOUBLE> u, v, z;
@@ -115,7 +115,7 @@ int main (int argc, char ** argv){
 	// cout << mesh_size.first << " " << mesh_size.second << endl;
 
 	
-	pair <int, int> mesh_size =  load_inputs(dir, h, hsnham, VISCOINDX, bc_up, bc_down, bc_left, bc_right,
+	pair <int, int> mesh_size =  load_inputs(dir, h, hsnham, VISCOIDX, bc_up, bc_down, bc_left, bc_right,
 				CC_u, CC_d, CC_l, CC_r,  bienQ);
 	cout << mesh_size.first << " " << mesh_size.second << endl;
 	M = mesh_size.first;

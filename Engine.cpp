@@ -156,8 +156,8 @@ Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Arg
 	d_ap.t_z = device_alloc<DOUBLE> (nBytes);
 	d_ap.Kx1 = device_alloc<DOUBLE> (nBytes);
 	d_ap.Ky1 = device_alloc<DOUBLE> (nBytes);
-	d_ap.Hdtu = device_alloc<DOUBLE> (nBytes);
-	d_ap.Hdtv = device_alloc<DOUBLE> (nBytes);
+	d_ap.Htdu = device_alloc<DOUBLE> (nBytes);
+	d_ap.Htdv = device_alloc<DOUBLE> (nBytes);
 	d_ap.htaiz = device_alloc<DOUBLE> (nBytes);
 	d_ap.htaiz_bd = device_alloc<DOUBLE> (nBytes);
 	d_ap.H_moi = device_alloc<DOUBLE> (nBytes);
@@ -183,10 +183,10 @@ Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Arg
 	d_ap.moci = device_alloc<int> (sizeof(int) * (N + 2));
 	d_ap.mocj = device_alloc<int> (sizeof(int) * (M + 2));
 	d_ap.daui = device_alloc<int> (sizeof(int) * segment_limit * (N + 2));
-	d_ap.cuoi = device_alloc<int> (sizeof(int) * segment_limit * (N + 2));
+	d_ap.cuoii = device_alloc<int> (sizeof(int) * segment_limit * (N + 2));
 	d_ap.dauj = device_alloc<int> (sizeof(int) * segment_limit * (M + 2));
 	d_ap.cuoij = device_alloc<int> (sizeof(int) * segment_limit * (M + 2));
-	
+
 	// attention
 	d_ap.hi = device_alloc<DOUBLE> (sizeof(DOUBLE) * (2 * (M + N + 6)));
 	cudaError_t status = cudaMalloc((void**) device_arg_ptr, sizeof(Argument_Pointers));

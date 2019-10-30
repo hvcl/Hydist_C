@@ -118,80 +118,80 @@ Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Arg
 	d_ap.N = N;
 
 	// maps
-	d_ap.h = device_alloc_and_copy<DOUBLE> (&ap.h);
-	d_ap.hsnham = device_alloc_and_copy<DOUBLE> (&ap.hsnham);
-	d_ap.VISCOINDX = device_alloc_and_copy<DOUBLE> (&ap.VISCOINDX);
-	d_ap.Fw = device_alloc_and_copy<DOUBLE> (&ap.Fw);
+	d_ap.h = device_alloc_and_copy<DOUBLE> (ap.h);
+	d_ap.hsnham = device_alloc_and_copy<DOUBLE> (ap.hsnham);
+	d_ap.VISCOINDX = device_alloc_and_copy<DOUBLE> (ap.VISCOINDX);
+	d_ap.Fw = device_alloc_and_copy<DOUBLE> (ap.Fw);
 
 	// boundary condition for FS
-	d_ap.CC_u = device_alloc_and_copy<DOUBLE> (&ap.CC_u);
-	d_ap.CC_d = device_alloc_and_copy<DOUBLE> (&ap.CC_d);
-	d_ap.CC_l = device_alloc_and_copy<DOUBLE> (&ap.CC_l);
-	d_ap.CC_r = device_alloc_and_copy<DOUBLE> (&ap.CC_r);
+	// d_ap.CC_u = device_alloc_and_copy<DOUBLE> (&ap.CC_u);
+	// d_ap.CC_d = device_alloc_and_copy<DOUBLE> (&ap.CC_d);
+	// d_ap.CC_l = device_alloc_and_copy<DOUBLE> (&ap.CC_l);
+	// d_ap.CC_r = device_alloc_and_copy<DOUBLE> (&ap.CC_r);
 
-	// boundary conditions
-	d_ap.bienQ = device_alloc_and_copy<int> (&ap.bienQ);
-	d_ap.boundary_type = device_alloc_and_copy<int> (&ap.boundary_type);
+	// // boundary conditions
+	// d_ap.bienQ = device_alloc_and_copy<int> (&ap.bienQ);
+	// d_ap.boundary_type = device_alloc_and_copy<int> (&ap.boundary_type);
 
-	d_ap.bc_up = device_alloc_and_copy<DOUBLE> (&ap.bc_up);
-	d_ap.bc_down = device_alloc_and_copy<DOUBLE> (&ap.bc_down);
-	d_ap.bc_left = device_alloc_and_copy<DOUBLE> (&ap.bc_left);
-	d_ap.bc_right = device_alloc_and_copy<DOUBLE> (&ap.bc_right);
+	// d_ap.bc_up = device_alloc_and_copy<DOUBLE> (&ap.bc_up);
+	// d_ap.bc_down = device_alloc_and_copy<DOUBLE> (&ap.bc_down);
+	// d_ap.bc_left = device_alloc_and_copy<DOUBLE> (&ap.bc_left);
+	// d_ap.bc_right = device_alloc_and_copy<DOUBLE> (&ap.bc_right);
 
-	// intitial conditions
-	// need to double check this, to do this only if initial condition is given
-	d_ap.u = device_alloc_and_copy<DOUBLE> (&ap.u);
-	d_ap.v = device_alloc_and_copy<DOUBLE> (&ap.v);
-	d_ap.z = device_alloc_and_copy<DOUBLE> (&ap.z);
-	d_ap.FS = device_alloc_and_copy<DOUBLE> (&ap.FS);
-	d_ap.khouot = device_alloc_and_copy<int> (&ap.khouot);
+	// // intitial conditions
+	// // need to double check this, to do this only if initial condition is given
+	// d_ap.u = device_alloc_and_copy<DOUBLE> (&ap.u);
+	// d_ap.v = device_alloc_and_copy<DOUBLE> (&ap.v);
+	// d_ap.z = device_alloc_and_copy<DOUBLE> (&ap.z);
+	// d_ap.FS = device_alloc_and_copy<DOUBLE> (&ap.FS);
+	// d_ap.khouot = device_alloc_and_copy<int> (&ap.khouot);
 
 	// d_ap.khouot = device_alloc_and_copy<int> (&ap.khouot);
 
 	// cuda mem alloc arrays on device only
 
-	int nBytes = ap.u.size() * sizeof (DOUBLE);
-	d_ap.t_u = device_alloc<DOUBLE> (nBytes);
-	d_ap.t_v = device_alloc<DOUBLE> (nBytes);
-	d_ap.t_z = device_alloc<DOUBLE> (nBytes);
-	d_ap.Kx1 = device_alloc<DOUBLE> (nBytes);
-	d_ap.Ky1 = device_alloc<DOUBLE> (nBytes);
-	d_ap.Hdtu = device_alloc<DOUBLE> (nBytes);
-	d_ap.Hdtv = device_alloc<DOUBLE> (nBytes);
-	d_ap.htaiz = device_alloc<DOUBLE> (nBytes);
-	d_ap.htaiz_bd = device_alloc<DOUBLE> (nBytes);
-	d_ap.H_moi = device_alloc<DOUBLE> (nBytes);
+	// int nBytes = ap.u.size() * sizeof (DOUBLE);
+	// d_ap.t_u = device_alloc<DOUBLE> (nBytes);
+	// d_ap.t_v = device_alloc<DOUBLE> (nBytes);
+	// d_ap.t_z = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Kx1 = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Ky1 = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Hdtu = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Hdtv = device_alloc<DOUBLE> (nBytes);
+	// d_ap.htaiz = device_alloc<DOUBLE> (nBytes);
+	// d_ap.htaiz_bd = device_alloc<DOUBLE> (nBytes);
+	// d_ap.H_moi = device_alloc<DOUBLE> (nBytes);
 
-	d_ap.Tsxw = device_alloc<DOUBLE> (nBytes);
-	d_ap.Tsyw = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Tsxw = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Tsyw = device_alloc<DOUBLE> (nBytes);
 
-	d_ap.VTH = device_alloc<DOUBLE> (nBytes);
-	d_ap.Qbx = device_alloc<DOUBLE> (nBytes);
-	d_ap.Qby = device_alloc<DOUBLE> (nBytes);
-	d_ap.FS  = device_alloc<DOUBLE> (nBytes);
-	d_ap.tFS = device_alloc<DOUBLE> (nBytes);
-	d_ap.Kx  = device_alloc<DOUBLE> (nBytes);
-	d_ap.Ky  = device_alloc<DOUBLE> (nBytes);
-	d_ap.dH  = device_alloc<DOUBLE> (nBytes);
+	// d_ap.VTH = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Qbx = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Qby = device_alloc<DOUBLE> (nBytes);
+	// d_ap.FS  = device_alloc<DOUBLE> (nBytes);
+	// d_ap.tFS = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Kx  = device_alloc<DOUBLE> (nBytes);
+	// d_ap.Ky  = device_alloc<DOUBLE> (nBytes);
+	// d_ap.dH  = device_alloc<DOUBLE> (nBytes);
 
-	d_ap.ubt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (M + 2));
-	d_ap.ubt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (M + 2));
-	d_ap.vbt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (N + 2));
-	d_ap.vbt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (N + 2));
+	// d_ap.ubt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (M + 2));
+	// d_ap.ubt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (M + 2));
+	// d_ap.vbt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (N + 2));
+	// d_ap.vbt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (N + 2));
 
 	
-	d_ap.moci = device_alloc<int> (sizeof(int) * (N + 2));
-	d_ap.mocj = device_alloc<int> (sizeof(int) * (M + 2));
-	d_ap.daui = device_alloc<int> (sizeof(int) * segment_limit * (N + 2));
-	d_ap.cuoi = device_alloc<int> (sizeof(int) * segment_limit * (N + 2));
-	d_ap.dauj = device_alloc<int> (sizeof(int) * segment_limit * (M + 2));
-	d_ap.cuoij = device_alloc<int> (sizeof(int) * segment_limit * (M + 2));
-	// attention
-	d_ap.hi = device_alloc<DOUBLE> (sizeof(DOUBLE) * (2 * (M + N + 6)));
-	cudaError_t status = cudaMalloc((void**) device_arg_ptr, sizeof(Argument_Pointers));
-	// assert sucess here
-	cudaError_t copy_status = cudaMemcpy(*device_arg_ptr, &d_ap, sizeof(Argument_Pointers), cudaMemcpyHostToDevice);
-	// assesrt success here
+	// d_ap.moci = device_alloc<int> (sizeof(int) * (N + 2));
+	// d_ap.mocj = device_alloc<int> (sizeof(int) * (M + 2));
+	// d_ap.daui = device_alloc<int> (sizeof(int) * segment_limit * (N + 2));
+	// d_ap.cuoi = device_alloc<int> (sizeof(int) * segment_limit * (N + 2));
+	// d_ap.dauj = device_alloc<int> (sizeof(int) * segment_limit * (M + 2));
+	// d_ap.cuoij = device_alloc<int> (sizeof(int) * segment_limit * (M + 2));
+	// // attention
+	// d_ap.hi = device_alloc<DOUBLE> (sizeof(DOUBLE) * (2 * (M + N + 6)));
+	// cudaError_t status = cudaMalloc((void**) device_arg_ptr, sizeof(Argument_Pointers));
+	// // assert sucess here
+	// cudaError_t copy_status = cudaMemcpy(*device_arg_ptr, &d_ap, sizeof(Argument_Pointers), cudaMemcpyHostToDevice);
+	// // assesrt success here
 	// cuda copy arrays
 
 	return d_ap;

@@ -1,4 +1,4 @@
-#include "cuda.h"
+// #include "cuda.h"
 #include "constant.h"
 #include <fstream>
 #include <string>

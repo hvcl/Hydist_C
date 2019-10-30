@@ -79,26 +79,26 @@ void load_initial_condition(string dir,
 }
 
 
-// template <typename T>
-// T* device_alloc_and_copy(vector<T> &h_array){
-// 	int nBytes = h_array.size() * sizeof(T);
-// 	T* d_array;
-// 	cudaError_t malloc_status = cudaMalloc((void**) &d_array, nBytes);
-// 	// assert success here
-// 	cudaError_t copy_status = cudaMemcpy(T, h_array.data(), nBytes, cudaMemcpyHostToDevice);
-// 	// asser success here
-// 	// returna address of array on device here
-// 	return d_array;
+template <typename T>
+T* device_alloc_and_copy(vector<T> &h_array){
+	int nBytes = h_array.size() * sizeof(T);
+	T* d_array;
+	cudaError_t malloc_status = cudaMalloc((void**) &d_array, nBytes);
+	// assert success here
+	cudaError_t copy_status = cudaMemcpy(T, h_array.data(), nBytes, cudaMemcpyHostToDevice);
+	// asser success here
+	// returna address of array on device here
+	return d_array;
 
-// }
+}
 
-// template <typename T>
-// T* device_alloc(int nBytes){
-// 	T* d_array;
-// 	cudaError_t status = cudaMalloc((void**) &d_array, nBytes);
-// 	// assert success
-// 	return d_array;
-// }
+template <typename T>
+T* device_alloc(int nBytes){
+	T* d_array;
+	cudaError_t status = cudaMalloc((void**) &d_array, nBytes);
+	// assert success
+	return d_array;
+}
 
 template <typename T>
 void device_copy(vector<T> &source, T* des)

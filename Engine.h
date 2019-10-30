@@ -1,7 +1,6 @@
 #ifndef ENGINE_H__
 #define ENGINE_H__
 #include "cuda.h"
-// #include "constant.h"
 #include <fstream>
 #include <string>
 #include <utility>

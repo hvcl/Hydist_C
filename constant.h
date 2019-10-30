@@ -3,30 +3,30 @@
 #define PI 3.14159265359
 #define DOUBLE double
 
-struct Argument_Pointers {
-	int M, N;
-	DOUBLE hmax_u, hmax_d, hmax_l, hmax_r;
-	int *bienQ;
-	int* daui, *dauj, *cuoii, *cuoij, *moci, *mocj, *khouot, *boundary_type;
-	DOUBLE* h, *v, *u, *z, *t_u, *t_v, *t_z, *Htdu, *Htdv, *H_moi, *htaiz, *htaiz_bd;
-	DOUBLE* ubt, *ubp, *vbt, *vbd; //*vt, *ut;
-	DOUBLE* hsnham, *VISCOIDX, *Kx1, *Ky1, *Tsyw, *Tsxw;
-	DOUBLE* bc_up, *bc_down, *bc_left, *bc_right;
-	DOUBLE* hi;
-	DOUBLE* FS, *tFS, *CC_u, *CC_d, *CC_l, *CC_r;
-	DOUBLE *VTH, *Kx, *Ky, *Fw;
-	DOUBLE* Qbx, *Qby;
-	DOUBLE* dH;
-};
+// struct Argument_Pointers {
+// 	int M, N;
+// 	DOUBLE hmax_u, hmax_d, hmax_l, hmax_r;
+// 	int *bienQ;
+// 	int* daui, *dauj, *cuoii, *cuoij, *moci, *mocj, *khouot, *boundary_type;
+// 	DOUBLE* h, *v, *u, *z, *t_u, *t_v, *t_z, *Htdu, *Htdv, *H_moi, *htaiz, *htaiz_bd;
+// 	DOUBLE* ubt, *ubp, *vbt, *vbd; //*vt, *ut;
+// 	DOUBLE* hsnham, *VISCOIDX, *Kx1, *Ky1, *Tsyw, *Tsxw;
+// 	DOUBLE* bc_up, *bc_down, *bc_left, *bc_right;
+// 	DOUBLE* hi;
+// 	DOUBLE* FS, *tFS, *CC_u, *CC_d, *CC_l, *CC_r;
+// 	DOUBLE *VTH, *Kx, *Ky, *Fw;
+// 	DOUBLE* Qbx, *Qby;
+// 	DOUBLE* dH;
+// };
 
-struct Array_Pointers {
-	DOUBLE* a1, *b1, *c1, *d1, *a2, *c2, *d2;
-	DOUBLE* f1, *f2, *f3, *f5;
-	DOUBLE* AA, *BB, *CC, *DD;
-	DOUBLE* x;
-	DOUBLE* Ap, *Bp, *ep;
-	int *SN;
-};
+// struct Array_Pointers {
+// 	DOUBLE* a1, *b1, *c1, *d1, *a2, *c2, *d2;
+// 	DOUBLE* f1, *f2, *f3, *f5;
+// 	DOUBLE* AA, *BB, *CC, *DD;
+// 	DOUBLE* x;
+// 	DOUBLE* Ap, *Bp, *ep;
+// 	int *SN;
+// };
 
 __constant__ int segment_limit = 20;
 __constant__ DOUBLE dY = 10.0;

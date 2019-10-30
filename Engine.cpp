@@ -124,29 +124,29 @@ Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Arg
 	d_ap.Fw = device_alloc_and_copy<DOUBLE> (ap.Fw);
 
 	// boundary condition for FS
-	// d_ap.CC_u = device_alloc_and_copy<DOUBLE> (&ap.CC_u);
-	// d_ap.CC_d = device_alloc_and_copy<DOUBLE> (&ap.CC_d);
-	// d_ap.CC_l = device_alloc_and_copy<DOUBLE> (&ap.CC_l);
-	// d_ap.CC_r = device_alloc_and_copy<DOUBLE> (&ap.CC_r);
+	d_ap.CC_u = device_alloc_and_copy<DOUBLE> (ap.CC_u);
+	d_ap.CC_d = device_alloc_and_copy<DOUBLE> (ap.CC_d);
+	d_ap.CC_l = device_alloc_and_copy<DOUBLE> (ap.CC_l);
+	d_ap.CC_r = device_alloc_and_copy<DOUBLE> (ap.CC_r);
 
-	// // boundary conditions
-	// d_ap.bienQ = device_alloc_and_copy<int> (&ap.bienQ);
-	// d_ap.boundary_type = device_alloc_and_copy<int> (&ap.boundary_type);
+	// boundary conditions
+	d_ap.bienQ = device_alloc_and_copy<int> (ap.bienQ);
+	d_ap.boundary_type = device_alloc_and_copy<int> (ap.boundary_type);
 
-	// d_ap.bc_up = device_alloc_and_copy<DOUBLE> (&ap.bc_up);
-	// d_ap.bc_down = device_alloc_and_copy<DOUBLE> (&ap.bc_down);
-	// d_ap.bc_left = device_alloc_and_copy<DOUBLE> (&ap.bc_left);
-	// d_ap.bc_right = device_alloc_and_copy<DOUBLE> (&ap.bc_right);
+	d_ap.bc_up = device_alloc_and_copy<DOUBLE> (ap.bc_up);
+	d_ap.bc_down = device_alloc_and_copy<DOUBLE> (ap.bc_down);
+	d_ap.bc_left = device_alloc_and_copy<DOUBLE> (ap.bc_left);
+	d_ap.bc_right = device_alloc_and_copy<DOUBLE> (ap.bc_right);
 
-	// // intitial conditions
-	// // need to double check this, to do this only if initial condition is given
-	// d_ap.u = device_alloc_and_copy<DOUBLE> (&ap.u);
-	// d_ap.v = device_alloc_and_copy<DOUBLE> (&ap.v);
-	// d_ap.z = device_alloc_and_copy<DOUBLE> (&ap.z);
-	// d_ap.FS = device_alloc_and_copy<DOUBLE> (&ap.FS);
-	// d_ap.khouot = device_alloc_and_copy<int> (&ap.khouot);
+	// intitial conditions
+	// need to double check this, to do this only if initial condition is given
+	d_ap.u = device_alloc_and_copy<DOUBLE> (ap.u);
+	d_ap.v = device_alloc_and_copy<DOUBLE> (ap.v);
+	d_ap.z = device_alloc_and_copy<DOUBLE> (ap.z);
+	d_ap.FS = device_alloc_and_copy<DOUBLE> (ap.FS);
+	d_ap.khouot = device_alloc_and_copy<int> (ap.khouot);
 
-	// d_ap.khouot = device_alloc_and_copy<int> (&ap.khouot);
+	d_ap.khouot = device_alloc_and_copy<int> (ap.khouot);
 
 	// cuda mem alloc arrays on device only
 

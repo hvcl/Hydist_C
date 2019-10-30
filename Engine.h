@@ -1,5 +1,5 @@
-// #include "cuda.h"
-#include "constant.h"
+#include "cuda.h"
+// #include "constant.h"
 #include <fstream>
 #include <string>
 #include <utility>

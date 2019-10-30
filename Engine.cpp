@@ -208,13 +208,13 @@ Array_Pointers supporting_arrays_alloc(int M, int N, Array_Pointers** device_arr
 	d_ap.d1 = device_alloc<DOUBLE> (nBytes);
 	d_ap.a2 = device_alloc<DOUBLE> (nBytes);
 	d_ap.c2 = device_alloc<DOUBLE> (nBytes);
-	d_ap.ad = device_alloc<DOUBLE> (nBytes);
+	d_ap.d2 = device_alloc<DOUBLE> (nBytes);
 	d_ap.f1 = device_alloc<DOUBLE> (nBytes);
 	d_ap.f2 = device_alloc<DOUBLE> (nBytes);
 	d_ap.f3 = device_alloc<DOUBLE> (nBytes);
 	d_ap.f5 = device_alloc<DOUBLE> (nBytes);
 
-	int nBytes = sizeof (DOUBLE) * (2 * M * N + 4 * max(M, N));
+	nBytes = sizeof (DOUBLE) * (2 * M * N + 4 * max(M, N));
 	d_ap.AA = device_alloc<DOUBLE> (nBytes);
 	d_ap.BB = device_alloc<DOUBLE> (nBytes);
 	d_ap.CC = device_alloc<DOUBLE> (nBytes);
@@ -227,7 +227,7 @@ Array_Pointers supporting_arrays_alloc(int M, int N, Array_Pointers** device_arr
 	d_ap.SN = device_alloc<int> (sizeof(int) * segment_limit * max(M, N));
 	cudaError_t status = cudaMalloc((void**) device_arr_ptr, sizeof(Array_Pointers));
 	// assert success here
-	cudaError_t copy_status = cudaMemcpy(*device_arr_ptr, &d_ap, sizeof(Array_Pointers));
+	cudaError_t copy_status = cudaMemcpy(*device_arr_ptr, &d_ap, sizeof(Array_Pointers), cudaMemcpyHostToDevice);
 	// assert success here
 
 	return d_ap;

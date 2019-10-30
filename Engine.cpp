@@ -1,5 +1,4 @@
 #include "Engine.h"
-#include "constant.h"
 using namespace std;
 template <typename T>
 pair<int, int> load_file(const char* filename, vector<T> &arr){

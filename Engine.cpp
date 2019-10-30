@@ -120,7 +120,7 @@ Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Arg
 	// maps
 	d_ap.h = device_alloc_and_copy<DOUBLE> (ap.h);
 	d_ap.hsnham = device_alloc_and_copy<DOUBLE> (ap.hsnham);
-	d_ap.VISCOINDX = device_alloc_and_copy<DOUBLE> (ap.VISCOINDX);
+	d_ap.VISCOIDX = device_alloc_and_copy<DOUBLE> (ap.VISCOIDX);
 	d_ap.Fw = device_alloc_and_copy<DOUBLE> (ap.Fw);
 
 	// boundary condition for FS

@@ -200,7 +200,7 @@ void device_copy(vector<T> &source, T* des)
 
 Array_Pointers supporting_arrays_alloc(int M, int N, Array_Pointers** device_arr_ptr)
 {
-	Argument_Pointers d_ap;
+	Array_Pointers d_ap;
 	int nBytes = sizeof (DOUBLE) * (M * N + 2 * max(M, N));
 	d_ap.a1 = device_alloc<DOUBLE> (nBytes);
 	d_ap.b1 = device_alloc<DOUBLE> (nBytes);

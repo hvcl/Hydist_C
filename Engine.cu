@@ -1,4 +1,4 @@
-#include "Engine.h"
+#include "Engine.cuh"
 using namespace std;
 template <typename T>
 pair<int, int> load_file(const char* filename, vector<T> &arr){
@@ -100,12 +100,12 @@ void load_initial_condition(string dir,
 // 	return d_array;
 // }
 
-// template <typename T>
-// void device_copy(vector<T> &source, T* des)
-// {
-// 	cudaError_t status cudaMemcpy(des, source.data(), sizeof(T) * source.size(), cudaMemcpyHostToDevice);
-// 	// assert success here
-// }
+template <typename T>
+void device_copy(vector<T> &source, T* des)
+{
+	cudaError_t status cudaMemcpy(des, source.data(), sizeof(T) * source.size(), cudaMemcpyHostToDevice);
+	// assert success here
+}
 
 
 // Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Argument_Pointers** device_arg_ptr)

@@ -1,3 +1,5 @@
+#ifndef ENGINE_H__
+#define ENGINE_H__
 #include "cuda.h"
 #include "constant.h"
 #include <fstream>
@@ -87,3 +89,4 @@ Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Arg
 
 // void simulate(Options ops);
 
+#endif

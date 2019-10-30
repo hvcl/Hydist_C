@@ -85,7 +85,7 @@ T* device_alloc_and_copy(vector<T> &h_array){
 	T* d_array;
 	cudaError_t malloc_status = cudaMalloc((void**) &d_array, nBytes);
 	// assert success here
-	cudaError_t copy_status = cudaMemcpy(T, h_array.data(), nBytes, cudaMemcpyHostToDevice);
+	cudaError_t copy_status = cudaMemcpy(d_array, h_array.data(), nBytes, cudaMemcpyHostToDevice);
 	// asser success here
 	// returna address of array on device here
 	return d_array;

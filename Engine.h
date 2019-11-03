@@ -110,4 +110,8 @@ Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Arg
 
 // void simulate(Options ops);
 
+// solution for the constant thing:
+// keep constant on device known to device functions onky 
+// retrive constant value from device and pass to host when needed
+
 #endif

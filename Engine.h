@@ -7,10 +7,12 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
-#define DOUBLE double
-// #include "cuda_runtime.h"
+#include "cuda_runtime.h"
 using namespace std;
 
+
+#define DOUBLE double
+#define	segment_limit 20
 
 struct Options{
 	int Tmax, interval, sediment_start, bed_change_start, kenhhepd, kenhhepng;

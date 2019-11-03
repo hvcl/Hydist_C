@@ -28,7 +28,7 @@
 // 	int *SN;
 // };
 
-__constant__ int segment_limit = 20;
+// __constant__ int segment_limit = 20;
 __constant__ DOUBLE dY = 10.0;
 __constant__ DOUBLE dT = 2;
 

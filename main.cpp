@@ -163,17 +163,17 @@ int main (int argc, char ** argv){
 		if (h[i] != 0){
 			cout << h[i] << endl; 
 			if (host_ap.h[i] != h[i]){
+				fail = true;
 				cout << "test failed"
 					<< h[i] << " != " << host_ap.h[i] << endl;
 				break;
-			fail = true;
 			}
 		}
 
 	}
 	if (!fail) 
 			cout << "sucess! " << endl;
-		
+
 	// what do I need: 
 	// a struct that contain addresses of pointers in host
 	// a struct that cintain addresses of pointer in device 

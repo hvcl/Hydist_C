@@ -52,7 +52,7 @@ pair<int, int> load_inputs(string dir,
 	cout << size.first << " " << size.second << endl;
 	load_file<DOUBLE> ((dir + "hsnhotroiA.txt").c_str(), VISCOINDX);
 
-	load_file<DOUBLE> ((dir + "Fw_map.txt").c_str(), Fw)
+	load_file<DOUBLE> ((dir + "Fw_map.txt").c_str(), Fw);
 
 	// load_file<DOUBLE> (dir + "bientren.txt", bc_up);
 	load_file<DOUBLE> ((dir + "bienduoi.txt").c_str(), bc_down);

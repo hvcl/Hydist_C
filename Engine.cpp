@@ -111,7 +111,7 @@ void device_copy(vector<T> &source, T* des)
 	cudaError_t status =  cudaMemcpy(des, source.data(), sizeof(T) * source.size(), cudaMemcpyHostToDevice);
 	// assert success here
 	assert(status == cudaSuccess);
-	
+
 }
 
 
@@ -201,8 +201,12 @@ void attribute_arrays_memory_alloc(int device, Host_arrays &ap, Argument_Pointer
 	d_ap.hi = device_alloc<DOUBLE> (sizeof(DOUBLE) * (2 * (M + N + 6)));
 	cudaError_t status = cudaMalloc((void**) device_arg_ptr, sizeof(Argument_Pointers));
 	// assert sucess here
+	assert(status == cudaSuccess);
+
 	cudaError_t copy_status = cudaMemcpy(*device_arg_ptr, &d_ap, sizeof(Argument_Pointers), cudaMemcpyHostToDevice);
 	// assesrt success here
+	assert(status == cudaSuccess);
+	
 	// cuda copy arrays
 }
 
@@ -236,8 +240,14 @@ Array_Pointers supporting_arrays_alloc(int M, int N, Array_Pointers** device_arr
 	d_ap.SN = device_alloc<int> (sizeof(int) * segment_limit * max(M, N));
 	cudaError_t status = cudaMalloc((void**) device_arr_ptr, sizeof(Array_Pointers));
 	// assert success here
+	// cout << "device copy: " << cudaSuccess << endl;
+	assert(status == cudaSuccess);
+
+
 	cudaError_t copy_status = cudaMemcpy(*device_arr_ptr, &d_ap, sizeof(Array_Pointers), cudaMemcpyHostToDevice);
 	// assert success here
+	assert(status == cudaSuccess);
+
 
 	return d_ap;
 

@@ -7,6 +7,7 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <assert.h>
 #include "cuda_runtime.h"
 using namespace std;
 

@@ -154,8 +154,8 @@ int main (int argc, char ** argv){
 	cout << "checking vector assignment: " << endl
 		 << "size : " << host_ap.h.size() 
 		  << " " << h.size() << endl
-		  << "first 2 elem:  " << h[0] << " " << h[1] << endl
-		  << " " << host_ap.h[0] << " " << host_ap.h[1] << endl;
+		  << "first 2 elem:  " << h[ M * 2 + 100] << " " << h[M * 2 + 100] << endl
+		  << " " << host_ap.h[M * 2 + 100] << " " << host_ap.h[M * 2 + 100] << endl;
 
 
 	

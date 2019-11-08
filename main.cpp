@@ -157,18 +157,23 @@ int main (int argc, char ** argv){
 		 << "first 2 elem:  " << h[ M * 2 + 100] << " " << h[M * 2 + 100] << endl
 		 << " " << host_ap.h[M * 2 + 100] << " " << host_ap.h[M * 2 + 100] << endl;
 
+	bool fail = false;
 
 	for (int i = 0; i < h.size(); i++){
 		if (h[i] != 0){
 			cout << h[i] << endl; 
-			if (host_ap.h[i] != h[i])
+			if (host_ap.h[i] != h[i]){
 				cout << "test failed"
 					<< h[i] << " != " << host_ap.h[i] << endl;
 				break;
+			fail = true;
+			}
 		}
-		cout << "sucess! " << endl;
-	}
 
+	}
+	if (!fail) 
+			cout << "sucess! " << endl;
+		
 	// what do I need: 
 	// a struct that contain addresses of pointers in host
 	// a struct that cintain addresses of pointer in device 

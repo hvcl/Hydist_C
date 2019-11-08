@@ -122,16 +122,58 @@ int main (int argc, char ** argv){
 	M = mesh_size.first;
 	N = mesh_size.second;
 
-	// // b. alocate memory on GPU and transfer data to GPU
-	// // argument pointers struct's pointer on device
-	// Argument_Pointers* argument_pointer_struct_on_device;
-	// Argument_Pointers argument_pointer;
-	// // host pointers here 
+	// b. alocate memory on GPU and transfer data to GPU
+	// argument pointers struct's pointer on device
+	Argument_Pointers* argument_pointer_struct_on_device;
+	Argument_Pointers argument_pointer;
+	// host pointers here 
+	Host_arrays host_ap; 
+	host_ap.M = M;
+	host_ap.N = N;
+	host_ap.h = h;
+	host_ap.hsnham = hsnham;
+	host_ap.VISCOIDX = VISCOIDX;
+	host_ap.Fw = Fw;
+	host_ap.FS = FS;
+	host_ap.dH = dH;
+	host_ap.bc_up = bc_up;
+	host_ap.bc_down = bc_down;
+	host_ap.bc_left = bc_left;
+	host_ap.bc_right = bc_right;
+	host_ap.CC_u = CC_u;
+	host_ap.CC_d = CC_d;
+	host_ap.CC_r = CC_r;
+	host_ap.CC_l = CC_l;
+	host_ap.u = u;
+	host_ap.v = v;
+	host_ap.z = z;
+	host_ap.khouot = khouot;
+	host_ap.bienQ = bienQ;
+	host_ap.boundary_type = boundary_type;
+
+	cout << "checking vector assignment: " << endl
+		 << "size : " << host_ap.hsnham.size() 
+		  << " " << hsnham.size() << endl
+		  << "first 2 elem:  " << hsnham[0] << " " << hsnham[1] << endl
+		  << " " << host_ap.hsnham[0] << " " << host_ap.hsnham[1] << endl;
+		  
+
 	
 
+	// what do I need: 
+	// a struct that contain addresses of pointers in host
+	// a struct that cintain addresses of pointer in device 
+
+	// how can I achive what I need?
+	// struct in host: done
+	// struct in device: allocate mem on device, store their address on a struct in host
+	// allocate memory on device to store content of the struct 
+	// copy the content of the struct to device 
 
 	// // allocate memory and transfer here
 	// // todo: test the function 
+
+
 
 
 
@@ -141,6 +183,8 @@ int main (int argc, char ** argv){
 	// 	// call load initial condition here
 
 
+	// 
+	
 
 
 

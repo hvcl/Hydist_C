@@ -61,7 +61,7 @@ struct Array_Pointers {
 };
 
 struct  Host_arrays
-{
+{	
 	int M, N, total_time;
 	vector<DOUBLE> h, hsnham, VISCOIDX, Fw, FS, dH;
 	vector<DOUBLE> bc_up, bc_down, bc_left, bc_right;
@@ -69,6 +69,7 @@ struct  Host_arrays
 	vector<DOUBLE> u, v, z;
 	vector<int> khouot, bienQ, boundary_type;
 };
+
 
 
 template <typename T>

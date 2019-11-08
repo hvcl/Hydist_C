@@ -116,7 +116,7 @@ int main (int argc, char ** argv){
 	// cout << mesh_size.first << " " << mesh_size.second << endl;
 
 	
-	pair <int, int> mesh_size =  load_inputs(dir, h, hsnham, VISCOIDX, bc_up, bc_down, bc_left, bc_right,
+	pair <int, int> mesh_size =  load_inputs(dir, h, hsnham, VISCOIDX, Fw, bc_up, bc_down, bc_left, bc_right,
 				CC_u, CC_d, CC_l, CC_r,  bienQ);
 	cout << mesh_size.first << " " << mesh_size.second << endl;
 	M = mesh_size.first;
@@ -151,32 +151,33 @@ int main (int argc, char ** argv){
 	host_ap.bienQ = bienQ;
 	host_ap.boundary_type = boundary_type;
 
-	cout << "checking vector assignment: " << endl
-		 << "size : " << host_ap.h.size() 
-		 << " " << h.size() << endl
-		 << "first 2 elem:  " << h[ M * 2 + 100] << " " << h[M * 2 + 100] << endl
-		 << " " << host_ap.h[M * 2 + 100] << " " << host_ap.h[M * 2 + 100] << endl;
+	// cout << "checking vector assignment: " << endl
+	// 	 << "size : " << host_ap.h.size() 
+	// 	 << " " << h.size() << endl
+	// 	 << "first 2 elem:  " << h[ M * 2 + 100] << " " << h[M * 2 + 100] << endl
+	// 	 << " " << host_ap.h[M * 2 + 100] << " " << host_ap.h[M * 2 + 100] << endl;
 
-	bool fail = false;
+	// bool fail = false;
 
-	for (int i = 0; i < h.size(); i++){
-		if (h[i] != 0){
-			cout << h[i] << endl; 
-			if (host_ap.h[i] != h[i]){
-				fail = true;
-				cout << "test failed"
-					<< h[i] << " != " << host_ap.h[i] << endl;
-				break;
-			}
-		}
+	// for (int i = 0; i < h.size(); i++){
+	// 	if (h[i] != 0){
+	// 		cout << h[i] << endl; 
+	// 		if (host_ap.h[i] != h[i]){
+	// 			fail = true;
+	// 			cout << "test failed"
+	// 				<< h[i] << " != " << host_ap.h[i] << endl;
+	// 			break;
+	// 		}
+	// 	}
 
-	}
-	if (!fail) 
-			cout << "sucess! " << endl;
+	// }
+	// if (!fail) 
+	// 		cout << "sucess! " << endl;
 
 	// what do I need: 
-	// a struct that contain addresses of pointers in host
+	// a struct that contain addresses of pointers in host: done: host_ap
 	// a struct that cintain addresses of pointer in device 
+
 
 	// how can I achive what I need?
 	// struct in host: done

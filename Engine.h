@@ -79,6 +79,7 @@ pair<int, int> load_file(const char* filename, vector<T> &arr);
 pair<int, int> load_inputs(string dir, vector<DOUBLE> &h,
 				vector<DOUBLE> &hsnham,
 				vector<DOUBLE> &VISCOIDX, 
+				vector <DOUBLE> &FW,
 				vector<DOUBLE> &bc_up,
 				vector<DOUBLE> &bc_right,
 				vector<DOUBLE> &bc_left, 

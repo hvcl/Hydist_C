@@ -90,7 +90,7 @@ T* device_alloc_and_copy(vector<T> &h_array){
 	// assert success here
 	cudaError_t copy_status = cudaMemcpy(d_array, h_array.data(), nBytes, cudaMemcpyHostToDevice);
 	// asser success here
-	cout << "alloc and copy: " << copy_status << endl;
+	cout << "alloc and copy: " << copy_status == cudaSuccess << endl;
 	// returna address of array on device here
 	return d_array;
 
@@ -101,7 +101,7 @@ T* device_alloc(int nBytes){
 	T* d_array;
 	cudaError_t status = cudaMalloc((void**) &d_array, nBytes);
 	// assert success
-	cout << "device alloc: " << status << endl;
+	cout << "device alloc: " << status == cudaSuccess << endl;
 	return d_array;
 }
 
@@ -110,7 +110,7 @@ void device_copy(vector<T> &source, T* des)
 {
 	cudaError_t status =  cudaMemcpy(des, source.data(), sizeof(T) * source.size(), cudaMemcpyHostToDevice);
 	// assert success here
-	cout << "device copy: " << status << endl;
+	cout << "device copy: " << status == cudaSuccess << endl;
 }
 
 

@@ -176,7 +176,10 @@ int main (int argc, char ** argv){
 
 	// what do I need: 
 	// a struct that contain addresses of pointers in host: done: host_ap
-	// a struct that cintain addresses of pointer in device 
+	// a struct that contain addresses of pointer in device 
+
+	// test function : attribute_arrays_memory_alloc
+	attribute_arrays_memory_alloc(0, host_ap, &argument_pointer_struct_on_device);
 
 
 	// how can I achive what I need?

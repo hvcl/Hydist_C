@@ -152,11 +152,11 @@ int main (int argc, char ** argv){
 	host_ap.boundary_type = boundary_type;
 
 	cout << "checking vector assignment: " << endl
-		 << "size : " << host_ap.hsnham.size() 
-		  << " " << hsnham.size() << endl
-		  << "first 2 elem:  " << hsnham[0] << " " << hsnham[1] << endl
-		  << " " << host_ap.hsnham[0] << " " << host_ap.hsnham[1] << endl;
-		  
+		 << "size : " << host_ap.h.size() 
+		  << " " << h.size() << endl
+		  << "first 2 elem:  " << h[0] << " " << h[1] << endl
+		  << " " << host_ap.h[0] << " " << host_ap.h[1] << endl;
+
 
 	
 

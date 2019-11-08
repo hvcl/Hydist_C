@@ -153,12 +153,21 @@ int main (int argc, char ** argv){
 
 	cout << "checking vector assignment: " << endl
 		 << "size : " << host_ap.h.size() 
-		  << " " << h.size() << endl
-		  << "first 2 elem:  " << h[ M * 2 + 100] << " " << h[M * 2 + 100] << endl
-		  << " " << host_ap.h[M * 2 + 100] << " " << host_ap.h[M * 2 + 100] << endl;
+		 << " " << h.size() << endl
+		 << "first 2 elem:  " << h[ M * 2 + 100] << " " << h[M * 2 + 100] << endl
+		 << " " << host_ap.h[M * 2 + 100] << " " << host_ap.h[M * 2 + 100] << endl;
 
 
-	
+	for (int i = 0; i < h.size(); i++){
+		if (h[i] != 0){
+			cout << h[i] << endl; 
+			if (host_ap.h[i] != h[i])
+				cout << "test failed"
+					<< h[i] << " != " << host_ap.h[i] << endl;
+				break;
+		}
+		cout << "sucess! " << endl;
+	}
 
 	// what do I need: 
 	// a struct that contain addresses of pointers in host

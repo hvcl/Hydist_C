@@ -193,7 +193,7 @@ int main (int argc, char ** argv){
 
 	cout << "sucess!" << endl;
 
-	for (int = 0; i < host_ap.h.size(); i++){
+	for (int i = 0; i < host_ap.h.size(); i++){
 		if (gpu_h[i] != host_ap.h[i]){
 			cout << "failed" << endl
 				<< "i = " << i << endl

@@ -123,11 +123,16 @@ int main (int argc, char ** argv){
 	N = mesh_size.second;
 
 	// b. alocate memory on GPU and transfer data to GPU
-	// argument pointers struct's pointer on device
+
+	// argument pointers struct's pointer on device, this is a pointer to device's memory
 	Argument_Pointers* argument_pointer_struct_on_device;
+
+	// a copy of argument pointer struct that is stored on the host
+	// from this struct we can access pointers to arrays on device
 	Argument_Pointers argument_pointer;
 	// host pointers here 
 	Host_arrays host_ap; 
+
 	host_ap.M = M;
 	host_ap.N = N;
 	host_ap.h = h;
@@ -179,17 +184,14 @@ int main (int argc, char ** argv){
 	// a struct that contain addresses of pointer in device 
 
 	// test function : attribute_arrays_memory_alloc
-	attribute_arrays_memory_alloc(0, host_ap, &argument_pointer_struct_on_device);
+	argument_pointer = attribute_arrays_memory_alloc(0, host_ap, &argument_pointer_struct_on_device);
 
+	DOUBLE* gpu_h; 
+	gpu_h = (DOUBLE*) malloc(host_ap.h.size());
+	cudaError_t status = cudaMemcpy((void*) gpu_h, argument_pointer.h, sizeof(DOUBLE) * host_ap.h.size(), cudaMemcpyDeviceToHost);
+	assert(status == cudaSuccess);
 
-	// how can I achive what I need?
-	// struct in host: done
-	// struct in device: allocate mem on device, store their address on a struct in host
-	// allocate memory on device to store content of the struct 
-	// copy the content of the struct to device 
-
-	// // allocate memory and transfer here
-	// // todo: test the function 
+	// check if values on device are the same with values on host, and if we has stored the right pointers
 
 
 

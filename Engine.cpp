@@ -118,7 +118,7 @@ void device_copy(vector<T> &source, T* des)
 /*
 	This function 
 */
-void attribute_arrays_memory_alloc(int device, Host_arrays &ap, Argument_Pointers** device_arg_ptr)
+Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Argument_Pointers** device_arg_ptr)
 {
 	// cuda mem alloc corresponding arrays
 	int M = ap.M;
@@ -206,8 +206,8 @@ void attribute_arrays_memory_alloc(int device, Host_arrays &ap, Argument_Pointer
 	cudaError_t copy_status = cudaMemcpy(*device_arg_ptr, &d_ap, sizeof(Argument_Pointers), cudaMemcpyHostToDevice);
 	// assesrt success here
 	assert(status == cudaSuccess);
-	
-	// cuda copy arrays
+
+	return d_ap;
 }
 
 

@@ -191,6 +191,18 @@ int main (int argc, char ** argv){
 	cudaError_t status = cudaMemcpy((void*) gpu_h, argument_pointer.h, sizeof(DOUBLE) * host_ap.h.size(), cudaMemcpyDeviceToHost);
 	assert(status == cudaSuccess);
 
+	cout << "sucess!" << endl;
+
+	for (int = 0; i < host_ap.h.size(); i++){
+		if (gpu_h[i] != host_ap.h[i]){
+			cout << "failed" << endl
+				<< "i = " << i << endl
+				<< "gpu: " << gpu_h[i] << endl
+				<< "cpu: " << host_ap.h[i] << endl;
+
+		}
+	}
+
 	// check if values on device are the same with values on host, and if we has stored the right pointers
 
 

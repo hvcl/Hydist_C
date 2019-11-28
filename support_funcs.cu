@@ -351,25 +351,25 @@ __global__ void Htuongdoi(Argument_Pointers* arg){
     
 }
 
-// __global__ void boundary_up(DOUBLE t, int segment_limit, int M, int N, bool* bienQ, DOUBLE* t_z, int* daui, int* cuoii, 
-// 	int* dauj, int* cuoij, DOUBLE* vbt, DOUBLE* vbd, DOUBLE* ubt, DOUBLE* ubp ){
+__global__ void boundary_up(DOUBLE t, int segment_limit, int M, int N, bool* bienQ, DOUBLE* t_z, int* daui, int* cuoii, 
+	int* dauj, int* cuoij, DOUBLE* vbt, DOUBLE* vbd, DOUBLE* ubt, DOUBLE* ubp ){
 	
-// 	int thrx = blockIdx.x * blockDim.x + threadIdx.x;
-//     int thry = blockIdx.y * blockDim.y + threadIdx.y;
-//     int i = thrx * (blockDim.y * gridDim.y) + thry + dauj[M * segment_limit];
-// 	int offset = M + 3;
-// 	//printf("i = %d, cuoij: %d\n", i, cuoij[M * offset] );
-// 	if (i > cuoij[M * segment_limit]) return;
-// 	// if (bienQ[0])
-// 	// 	{vbt[i] = 0;
-// 	// 			printf("here\n");
-// 	// 	}
-// 	else{
-// 		t_z[i * offset + M] = 0.01 * cos(2 * PI / 27.750 * t) * cos(2 * (PI / 100) * (100 - dY / 2));
-// 		t_z[i * offset + M + 1] = 0.01 * cos(2 * PI / 27.75 * t)  * cos(2 * (PI / 100) *  (100 + dY / 2));
-// 		//printf("tz[%d, %d] = %.15f\n",i, M, t_z[i * offset + M]);
-// 	}
-// }
+	int thrx = blockIdx.x * blockDim.x + threadIdx.x;
+    int thry = blockIdx.y * blockDim.y + threadIdx.y;
+    int i = thrx * (blockDim.y * gridDim.y) + thry + dauj[M * segment_limit];
+	int offset = M + 3;
+	//printf("i = %d, cuoij: %d\n", i, cuoij[M * offset] );
+	if (i > cuoij[M * segment_limit]) return;
+	// if (bienQ[0])
+	// 	{vbt[i] = 0;
+	// 			printf("here\n");
+	// 	}
+	else{
+		t_z[i * offset + M] = 0.01 * cos(2 * PI / 27.750 * t) * cos(2 * (PI / 100) * (100 - dY / 2));
+		t_z[i * offset + M + 1] = 0.01 * cos(2 * PI / 27.75 * t)  * cos(2 * (PI / 100) *  (100 + dY / 2));
+		//printf("tz[%d, %d] = %.15f\n",i, M, t_z[i * offset + M]);
+	}
+}
 
 // __global__ void boundary_down(DOUBLE t, int segment_limit, int M, int N, bool* bienQ, DOUBLE* t_z, int* daui, int* cuoii, 
 // 	int* dauj, int* cuoij, DOUBLE* vbt, DOUBLE* vbd, DOUBLE* ubt, DOUBLE* ubp ){

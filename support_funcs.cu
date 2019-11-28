@@ -333,23 +333,23 @@ __global__ void Find_Calculation_limits_Vertical(Argument_Pointers *arg){
 }
 
 
-// __global__ void Htuongdoi(Argument_Pointers* arg){
+__global__ void Htuongdoi(Argument_Pointers* arg){
 
-// 	int i = blockIdx.y * blockDim.y + threadIdx.y + 1;
-// 	int j = blockIdx.x * blockDim.x + threadIdx.x + 1;
-// 	int M = arg->M;
-// 	int N = arg->N; 
-// 	DOUBLE* Htdu = arg->Htdu;
-// 	DOUBLE* Htdv = arg->Htdv;
-// 	DOUBLE* h = arg->h;
-// 	DOUBLE* z = arg->z;
+	int i = blockIdx.y * blockDim.y + threadIdx.y + 1;
+	int j = blockIdx.x * blockDim.x + threadIdx.x + 1;
+	int M = arg->M;
+	int N = arg->N; 
+	DOUBLE* Htdu = arg->Htdu;
+	DOUBLE* Htdv = arg->Htdv;
+	DOUBLE* h = arg->h;
+	DOUBLE* z = arg->z;
 
-// 	if ((i > N) || (j > M)) return;
-// 	int width = M + 3;
-//     Htdu[i * width + j] = (h[i * width + j - 1] + h[i * width + j] + z[(i + 1) * width + j] + z[i * width + j]) * 0.5;
-//     Htdv[i * width + j] = (h[(i - 1) * width + j] + h[i * width + j] + z[i * width + j + 1] + z[i * width + j]) * 0.5;
+	if ((i > N) || (j > M)) return;
+	int width = M + 3;
+    Htdu[i * width + j] = (h[i * width + j - 1] + h[i * width + j] + z[(i + 1) * width + j] + z[i * width + j]) * 0.5;
+    Htdv[i * width + j] = (h[(i - 1) * width + j] + h[i * width + j] + z[i * width + j + 1] + z[i * width + j]) * 0.5;
     
-// }
+}
 
 // __global__ void boundary_up(DOUBLE t, int segment_limit, int M, int N, bool* bienQ, DOUBLE* t_z, int* daui, int* cuoii, 
 // 	int* dauj, int* cuoij, DOUBLE* vbt, DOUBLE* vbd, DOUBLE* ubt, DOUBLE* ubp ){

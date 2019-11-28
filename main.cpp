@@ -3,6 +3,8 @@
 #include <vector>
 #include "Engine.h"
 #include "constant.h"
+#include "support_funcs.cu"
+#include <algorithm>
 #include <unistd.h>
 #include <stdlib.h>
 #include <utility>
@@ -44,7 +46,7 @@ int main (int argc, char ** argv){
 	   -i : save interval - in minute
 	*/
 	string dir;
-	int hour(1), min(0), sec(0), sediment_start(20), bed_change_start(500), bed_change_end(1000);
+	int hour(1), minute(0), sec(0), sediment_start(20), bed_change_start(500), bed_change_end(1000);
 	int save_interval(60), sediment_end(40);
 	bool plot(true), visualize(true), debug(false), load_initial_condition(false);
 	int c;
@@ -60,7 +62,7 @@ int main (int argc, char ** argv){
 				hour = atoi(optarg);
 				continue;
 			case ('m'):
-				min = atoi(optarg);
+				minute = atoi(optarg);
 				continue;
 			case ('s'): 
 				sec = atoi(optarg);
@@ -97,7 +99,7 @@ int main (int argc, char ** argv){
 
 	cout << "dir " << dir << endl
 		<< "hour " << hour << endl
-		<< "min " << min << endl
+		<< "min " << minute << endl
 		<< "sec " << sec << endl
 		<< "plot " << plot << endl
 		<< "debug " << debug << endl
@@ -125,11 +127,13 @@ int main (int argc, char ** argv){
 	// b. alocate memory on GPU and transfer data to GPU
 
 	// argument pointers struct's pointer on device, this is a pointer to device's memory
-	Argument_Pointers* argument_pointer_struct_on_device;
+	Argument_Pointers* d_argument_pointers;
 
 	// a copy of argument pointer struct that is stored on the host
 	// from this struct we can access pointers to arrays on device
-	Argument_Pointers argument_pointer;
+	Argument_Pointers h_argument_pointers;
+
+	Array_Pointers* d_arr_pointers, h_arr_pointers; 
 	// host pointers here 
 	Host_arrays host_ap; 
 
@@ -155,6 +159,8 @@ int main (int argc, char ** argv){
 	host_ap.khouot = khouot;
 	host_ap.bienQ = bienQ;
 	host_ap.boundary_type = boundary_type;
+
+
 
 	// cout << "checking vector assignment: " << endl
 	// 	 << "size : " << host_ap.h.size() 
@@ -184,15 +190,21 @@ int main (int argc, char ** argv){
 	// a struct that contain addresses of pointer in device 
 
 	// test function : attribute_arrays_memory_alloc
-	argument_pointer = attribute_arrays_memory_alloc(0, host_ap, &argument_pointer_struct_on_device);
+	h_argument_pointers = attribute_arrays_memory_alloc(0, host_ap, &d_argument_pointers);
+
 
 	DOUBLE* gpu_h; 
 	gpu_h = (DOUBLE*) malloc(host_ap.h.size());
-	cudaError_t status = cudaMemcpy((void*) gpu_h, argument_pointer.h, sizeof(DOUBLE) * host_ap.h.size(), cudaMemcpyDeviceToHost);
+	cudaError_t status = cudaMemcpy((void*) gpu_h, h_argument_pointers.h, sizeof(DOUBLE) * host_ap.h.size(), cudaMemcpyDeviceToHost);
 	assert(status == cudaSuccess);
+
 
 	cout << "sucess!" << endl;
 
+	h_arr_pointers = supporting_arrays_alloc(M, N, &d_arr_pointers);
+
+	// check if values on device are the same with values on host, and if we has stored the right pointers
+	// done
 	for (int i = 0; i < host_ap.h.size(); i++){
 		if (gpu_h[i] != host_ap.h[i]){
 			cout << "failed" << endl
@@ -203,12 +215,64 @@ int main (int argc, char ** argv){
 		}
 	}
 
-	// check if values on device are the same with values on host, and if we has stored the right pointers
+	// grid size and block size 
+	dim3 block_2d(min(32, M + 3), 1, 1);
+	dim3 grid_2d((M + 3) / min(32, M + 3) + 1,N + 3, 1);
+
+
+	Onetime_init <<<grid_2d, block_2d >>>(d_arr_pointers);
+
+	// load initial condition
+
+	// Find_Calculation_limits_Horizontal <<<>>> ();
+
+	// Find_Calculation_limits_Vertical <<<>>> ();
+
+
+	// gpu_Htuongdoi<<<>>> ();
+
+	// /// put barrier here
+
+	// preprocess_data <<<>>> ();
+
+	// enter main loop here
+
+	// either call everything here, or separate it into another module to keep track easilier
+
+	// Hydraulic Calculatation:
+	/*
+	while (true){
+	t += 0.5 * delta_t;
+	// call first set of kernels
+
+
+
+	t += 0.5 * delta_t;
+	
+	// call second set of kernels
 
 
 
 
 
+	}
+
+
+	*/
+
+
+
+
+
+
+
+ //    if pick_up is True:
+ //        load_intial_condition(dirs, pointers)
+ //    Find_Calculation_limits_x(arg_struct_ptr, block=(32, 1, 1), grid=(1, N, 1))
+ //    Find_Calculation_limits_y(arg_struct_ptr, block=(32, 1, 1), grid=(1, M, 1))
+ //    gpu_Htuongdoi(arg_struct_ptr, block=block_2d, grid=grid_2d)
+ //    ctx.synchronize()
+ //    preprocess(arg_struct_ptr, block=(32, 1, 1), grid = (1, 1, 1))
 
 	// // c. calculate presequiste coeffs on GPU 
 	// if (load_initial_condition)

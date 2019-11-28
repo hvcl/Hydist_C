@@ -126,6 +126,10 @@ Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Arg
 	Argument_Pointers d_ap ;
 	d_ap.M = M;
 	d_ap.N = N;
+	d_ap.hmax_u = 0;
+	d_ap.hmax_d = 0;
+	d_ap.hmax_l = 0;
+	d_ap.hmax_r = 0;
 
 	// maps
 	d_ap.h = device_alloc_and_copy<DOUBLE> (ap.h);

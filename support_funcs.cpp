@@ -3,6 +3,7 @@ ULSAN NATIONAL INSTIUTE OF SCIENCE AND TECHNOLOGY
 Copyright (c) 2019 HVCL lab
 Created by Huong Nguyen
 **/
+#include "cuda.h"
 #include "constant.h"
 #define powf pow
 __device__ void calculate_index(int *i, int *j, int M){

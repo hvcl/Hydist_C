@@ -3,7 +3,7 @@ ULSAN NATIONAL INSTIUTE OF SCIENCE AND TECHNOLOGY
 Copyright (c) 2019 HVCL lab
 Created by Huong Nguyen
 **/
-#include "constant.cuh"
+#include "constant.h"
 #define powf pow
 __device__ void calculate_index(int *i, int *j, int M){
     int thrx = blockIdx.x * blockDim.x + threadIdx.x;

@@ -214,7 +214,7 @@ int main (int argc, char ** argv){
 	// check struct values on GPU:
 	Constant_Coeffs* coeffs;
 	coeffs = (Constant_Coeffs*) malloc(sizeof(Constant_Coeffs));
-	cudaMemcpy((void*) coeffs, d_const_coeffs, sizeof(Constant_Coeffs));
+	cudaMemcpy((void*) coeffs, d_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyDeviceToHost);
 
 	cout << coeffs->dX << "  " << coeffs->dY << " " << coeffs->Ks << endl;
 
@@ -235,7 +235,7 @@ int main (int argc, char ** argv){
 	dim3 grid_2d((M + 3) / min(32, M + 3) + 1,N + 3, 1);
 
 
-	Onetime_init <<<grid_2d, block_2d >>>(d_argument_pointers, );
+	Onetime_init <<<grid_2d, block_2d >>>(d_argument_pointers,d_const_coeffs );
 
 	// load initial condition
 

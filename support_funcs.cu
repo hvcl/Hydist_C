@@ -16,7 +16,13 @@ __device__ void calculate_index(int *i, int *j, int M){
 }
 
 // checked Mar-30
-__global__ void Onetime_init( Argument_Pointers *arg){
+
+__global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
+	__shared__ DOUBLE NANGDAY, g, mu_mn;
+	NANGDAY = coeffs->NANGDAY;
+	g = coeffs->g;
+	mu_mn = coeffs->mu_mn;
+
 	int M = arg->M;
 	int N = arg->N;
 	int* khouot = arg->khouot;

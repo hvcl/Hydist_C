@@ -1,5 +1,89 @@
 #include "Engine.h"
 using namespace std;
+
+
+void Load_coeffs(Constant_Coeffs& ce){
+
+ce.segment_limit = 20;
+ce.dX = 10.0;
+ce.dY = 10.0;
+ce.dT = 2;
+ce.dXbp = ce.dX  * ce.dX;
+ce.dX2 = 2 * ce.dX;
+ce.dYbp = ce.dY * ce.dY;
+ce.dY2 = 2 * ce.dY;
+ce.dTchia2dX = ce.dT / ce.dX2;
+ce.dTchia2dY = ce.dT / ce.dY2;
+ce.QuyDoiTime = 1.0 / 3600;
+ce.QuyDoiPi = 1.0 / PI;
+ce.HaiChiadT = 2.0 / ce.dT;
+ce.kenhhepng = 0;
+ce.kenhhepd = 0
+
+// gioi han tinh
+ce.NANGDAY = 0.0; // thong so nang day
+ce.H_TINH = 0.02; // do sau gioi han (m)
+
+// thong so ve gio
+ce.Wind = 0.0;  // van toc gio (m/s)
+ce.huonggio = 0.0;  // huong gio (degree)
+
+// Zban dau
+ce.Zbandau = 0.0;
+
+// He so lam tron va he so mu manning
+ce.heso = 0.94; //1.0,
+ce.mu_mn = 0.2;
+// ND number (kg/m3)
+ce.NDnen = 0.00;
+ce.NDbphai = 0.5;
+ce.NDbtrai = 0.5;
+ce.NDbtren = 0.5;
+ce.NDbduoi = 0.5;
+
+// tod(toi han boi), toe(toi han xoi)
+// hstoe (he so tinh ung suat tiep toi han xoi theo do sau)
+// ghtoe (gioi han do sau tinh toe(m))
+// Mbochat (kha nang boc hat M(kg/m2/s))
+ce.Tod = 0.06;
+ce.Toe = 0.15;
+ce.hstoe = 0;
+ce.ghtoe = 3;
+ce.Mbochat = 0.00001;
+
+// khoi luong rieng cua nuoc (ro) va khoi luong rieng cua hat (ros) (kg/m3)
+ce.ro = 1000;
+ce.ros = 2000;
+
+// duong kinh trung binh cua hat 50% (m) (dm)
+ce.dm = 0.00001;
+// duong kinh hat trung binh 90% (m) 
+ce.d90 = 0.002;
+
+// he so nhot dong hoc cua nuoc sach
+ce.muy = 1.01e-06;
+
+// Do rong cua hat (Dorong) va Ty trong (KLR cua hat va nuoc) (Sx)
+ce.Dorong = 0.5;
+ce.Sx = 2;
+
+//tong so do sau de tinh he so nham
+ce.sohn = 8;
+//tong so do sau de tinh he so nhot
+ce.soha = 3;
+// tong so do sau de tinh Fw
+ce.sohn1 = 3;
+// //luc coriolis
+CORIOLIS_FORCE = 0.0;
+g = 9.81; //gia toc trong truong = 9.81 m2/s
+
+// //lan truyen
+Ks = 2.5 * dm; // = 2.5 * dm
+// hoac bang Ks = 3 * d 90% 
+
+}
+
+
 template <typename T>
 pair<int, int> load_file(const char* filename, vector<T> &arr){
 

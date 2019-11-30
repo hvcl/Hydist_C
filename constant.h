@@ -107,9 +107,6 @@
 // // tong so do sau de tinh Fw
 // __constant__ DOUBLE sohn1 = 3;
 
-
-
-
 // //luc coriolis
 // __constant__ DOUBLE  CORIOLIS_FORCE = 0.0;
 // __constant__ DOUBLE g = 9.81; //gia toc trong truong = 9.81 m2/s
@@ -117,6 +114,9 @@
 // //lan truyen
 // __constant__ DOUBLE Ks = 2.5 * 0.00001; // = 2.5 * dm
 // hoac bang Ks = 3 * d 90% 
+
+
+
 
 //Boixoi
 //__constant__ DOUBLE Ufr = 0.25 * pow((Sx - 1) * g, (8.0 / 15.0)) * pow(dm, (9.0 / 15.0)) * pow(muy, (-1.0 / 15.0));

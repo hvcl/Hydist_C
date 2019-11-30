@@ -36,6 +36,23 @@ struct Options{
 	}
 };
 
+struct Constant_Coeffs{
+int segment_limit; 
+DOUBLE dX, dY, dT, dXbp, dYbp, dX2, dY2, dTchia2dX, dTchia2dY, HaiChiadT;
+DOUBLE QuyDoiTime, QuyDoiPi;
+DOUBLE NANGDAY, H_TINH, heso, mu_mn;
+DOUBLE kenhhepng, kenhhepd;
+DOUBLE Wind, huonggio, Zbandau;
+DOUBLE NDnen, NDbphai, NDbtrai, NDbtren, NDbduoi;
+DOUBLE Tod, Toe, hstoe, ghtoe , Mbochat;
+DOUBLE ro, ros, d90, Dorong, Sx, sohn, soha, sohn1;
+DOUBLE CORIOLIS_FORCE, g, Ks;
+
+
+};
+
+void Load_coeffs(Constant_Coeffs& ce);
+
 struct Argument_Pointers {
 	int M, N;
 	DOUBLE hmax_u, hmax_d, hmax_l, hmax_r;

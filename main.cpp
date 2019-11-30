@@ -192,7 +192,7 @@ int main (int argc, char ** argv){
 	// test function : attribute_arrays_memory_alloc
 	h_argument_pointers = attribute_arrays_memory_alloc(0, host_ap, &d_argument_pointers);
 
-
+	// gpu_h: the grid depth map on gou
 	DOUBLE* gpu_h; 
 	gpu_h = (DOUBLE*) malloc(host_ap.h.size());
 	cudaError_t status = cudaMemcpy((void*) gpu_h, h_argument_pointers.h, sizeof(DOUBLE) * host_ap.h.size(), cudaMemcpyDeviceToHost);
@@ -202,6 +202,17 @@ int main (int argc, char ** argv){
 	cout << "sucess!" << endl;
 
 	h_arr_pointers = supporting_arrays_alloc(M, N, &d_arr_pointers);
+
+
+	// load coefficients used in Device code
+	Const_Coeffs  h_const_coeffs, *d_const_coeffs;
+	Load_coeffs (h_const_coeffs);
+
+	d_const_coeffs = cudaMalloc((void**) d_const_coeffs, sizeof(Const_Coeffs));
+	cudaMemcpy(d_const_coeffs, &h_const_coeffs, sizeof(Const_Coeffs), cudaMemcpyHostToDevice);
+
+
+
 
 	// check if values on device are the same with values on host, and if we has stored the right pointers
 	// done

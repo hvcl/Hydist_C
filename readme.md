@@ -3,7 +3,8 @@
 - [x] Load all inputs from files
 - [x] Tested Memcopy from host to device
 
-#### Todo: 
+#### Todo:
+- Rewrite makefile 
 - Get rid of global constant
  - [x] Make a struct that contain global constamt
  - [ ] Copy the struct to device

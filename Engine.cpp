@@ -77,7 +77,7 @@ ce.CORIOLIS_FORCE = 0.0;
 ce.g = 9.81; //gia toc trong truong = 9.81 m2/s
 
 // //lan truyen
-ce.Ks = 2.5 * dm; // = 2.5 * dm
+ce.Ks = 2.5 * ce.dm; // = 2.5 * dm
 // hoac bang Ks = 3 * d 90% 
 
 }

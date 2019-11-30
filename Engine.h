@@ -34,7 +34,6 @@ struct Options{
 };
 
 struct Constant_Coeffs{
-	int segment_limit; 
 	DOUBLE dX, dY, dT, dXbp, dYbp, dX2, dY2, dTchia2dX, dTchia2dY, HaiChiadT;
 	DOUBLE QuyDoiTime, QuyDoiPi;
 	DOUBLE NANGDAY, H_TINH, heso, mu_mn;

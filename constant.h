@@ -29,93 +29,93 @@
 // };
 
 // __constant__ int segment_limit = 20;
-__constant__ DOUBLE dX = 10.0;
-__constant__ DOUBLE dY = 10.0;
-__constant__ DOUBLE dT = 2;
+// __constant__ DOUBLE dX = 10.0;
+// __constant__ DOUBLE dY = 10.0;
+// __constant__ DOUBLE dT = 2;
 
-__constant__ DOUBLE dXbp = 10.0 * 10.0;
-__constant__ DOUBLE dX2 = 2 * 10.0;
+// __constant__ DOUBLE dXbp = 10.0 * 10.0;
+// __constant__ DOUBLE dX2 = 2 * 10.0;
 
-__constant__ DOUBLE dYbp = 10.0 * 10.0;
-__constant__ DOUBLE dY2 = 2 * 10.0;
+// __constant__ DOUBLE dYbp = 10.0 * 10.0;
+// __constant__ DOUBLE dY2 = 2 * 10.0;
 
-__constant__ DOUBLE dTchia2dX = 2.0 / (2 * 10.0);
-__constant__ DOUBLE dTchia2dY = 2.0 / (2 * 10.0);
+// __constant__ DOUBLE dTchia2dX = 2.0 / (2 * 10.0);
+// __constant__ DOUBLE dTchia2dY = 2.0 / (2 * 10.0);
 
-__constant__ DOUBLE QuyDoiTime = 1.0 / 3600;
-__constant__ DOUBLE QuyDoiPi = 1.0 / PI;
-__constant__ DOUBLE HaiChiadT = 2.0 / 2.0;
-
-
-__constant__ DOUBLE kenhhepng = 0;
-__constant__ DOUBLE kenhhepd = 0;
-
-// gioi han tinh
-__constant__ DOUBLE NANGDAY = 0.0; // thong so nang day
-__constant__ DOUBLE H_TINH = 0.02; // do sau gioi han (m)
-
-// thong so ve gio
-__constant__ DOUBLE Wind = 0.0;  // van toc gio (m/s)
-__constant__ DOUBLE huonggio = 0.0;  // huong gio (degree)
-
-// Zban dau
-__constant__ DOUBLE Zbandau = 0.0;
-
-// He so lam tron va he so mu manning
-__constant__ DOUBLE heso = 0.94; //1.0;
-__constant__ DOUBLE mu_mn = 0.2;
+// __constant__ DOUBLE QuyDoiTime = 1.0 / 3600;
+// __constant__ DOUBLE QuyDoiPi = 1.0 / PI;
+// __constant__ DOUBLE HaiChiadT = 2.0 / 2.0;
 
 
-// ND number (kg/m3)
-__constant__ DOUBLE NDnen = 0.00;
-__constant__ DOUBLE NDbphai = 0.5;
-__constant__ DOUBLE NDbtrai = 0.5;
-__constant__ DOUBLE NDbtren = 0.5;
-__constant__ DOUBLE NDbduoi = 0.5;
+// __constant__ DOUBLE kenhhepng = 0;
+// __constant__ DOUBLE kenhhepd = 0;
 
-// tod(toi han boi), toe(toi han xoi)
-// hstoe (he so tinh ung suat tiep toi han xoi theo do sau)
-// ghtoe (gioi han do sau tinh toe(m))
-// Mbochat (kha nang boc hat M(kg/m2/s))
-__constant__ DOUBLE Tod = 0.06;
-__constant__ DOUBLE Toe = 0.15;
-__constant__ DOUBLE hstoe = 0;
-__constant__ DOUBLE ghtoe = 3;
-__constant__ DOUBLE Mbochat = 0.00001;
+// // gioi han tinh
+// __constant__ DOUBLE NANGDAY = 0.0; // thong so nang day
+// __constant__ DOUBLE H_TINH = 0.02; // do sau gioi han (m)
 
+// // thong so ve gio
+// __constant__ DOUBLE Wind = 0.0;  // van toc gio (m/s)
+// __constant__ DOUBLE huonggio = 0.0;  // huong gio (degree)
 
-// khoi luong rieng cua nuoc (ro) va khoi luong rieng cua hat (ros) (kg/m3)
-__constant__ DOUBLE ro = 1000;
-__constant__ DOUBLE ros = 2000;
+// // Zban dau
+// __constant__ DOUBLE Zbandau = 0.0;
 
-// duong kinh trung binh cua hat 50% (m) (dm)
-__constant__ DOUBLE dm = 0.00001;
-// duong kinh hat trung binh 90% (m) 
-__constant__ DOUBLE d90 = 0.002;
-
-// he so nhot dong hoc cua nuoc sach
-__constant__ DOUBLE muy = 1.01e-06;
-
-// Do rong cua hat (Dorong) va Ty trong (KLR cua hat va nuoc) (Sx)
-__constant__ DOUBLE Dorong = 0.5;
-__constant__ DOUBLE Sx = 2;
-
-//tong so do sau de tinh he so nham
-__constant__ DOUBLE sohn = 8;
-//tong so do sau de tinh he so nhot
-__constant__ DOUBLE soha = 3;
-// tong so do sau de tinh Fw
-__constant__ DOUBLE sohn1 = 3;
+// // He so lam tron va he so mu manning
+// __constant__ DOUBLE heso = 0.94; //1.0;
+// __constant__ DOUBLE mu_mn = 0.2;
 
 
+// // ND number (kg/m3)
+// __constant__ DOUBLE NDnen = 0.00;
+// __constant__ DOUBLE NDbphai = 0.5;
+// __constant__ DOUBLE NDbtrai = 0.5;
+// __constant__ DOUBLE NDbtren = 0.5;
+// __constant__ DOUBLE NDbduoi = 0.5;
+
+// // tod(toi han boi), toe(toi han xoi)
+// // hstoe (he so tinh ung suat tiep toi han xoi theo do sau)
+// // ghtoe (gioi han do sau tinh toe(m))
+// // Mbochat (kha nang boc hat M(kg/m2/s))
+// __constant__ DOUBLE Tod = 0.06;
+// __constant__ DOUBLE Toe = 0.15;
+// __constant__ DOUBLE hstoe = 0;
+// __constant__ DOUBLE ghtoe = 3;
+// __constant__ DOUBLE Mbochat = 0.00001;
 
 
-//luc coriolis
-__constant__ DOUBLE  CORIOLIS_FORCE = 0.0;
-__constant__ DOUBLE g = 9.81; //gia toc trong truong = 9.81 m2/s
+// // khoi luong rieng cua nuoc (ro) va khoi luong rieng cua hat (ros) (kg/m3)
+// __constant__ DOUBLE ro = 1000;
+// __constant__ DOUBLE ros = 2000;
 
-//lan truyen
-__constant__ DOUBLE Ks = 2.5 * 0.00001; // = 2.5 * dm
+// // duong kinh trung binh cua hat 50% (m) (dm)
+// __constant__ DOUBLE dm = 0.00001;
+// // duong kinh hat trung binh 90% (m) 
+// __constant__ DOUBLE d90 = 0.002;
+
+// // he so nhot dong hoc cua nuoc sach
+// __constant__ DOUBLE muy = 1.01e-06;
+
+// // Do rong cua hat (Dorong) va Ty trong (KLR cua hat va nuoc) (Sx)
+// __constant__ DOUBLE Dorong = 0.5;
+// __constant__ DOUBLE Sx = 2;
+
+// //tong so do sau de tinh he so nham
+// __constant__ DOUBLE sohn = 8;
+// //tong so do sau de tinh he so nhot
+// __constant__ DOUBLE soha = 3;
+// // tong so do sau de tinh Fw
+// __constant__ DOUBLE sohn1 = 3;
+
+
+
+
+// //luc coriolis
+// __constant__ DOUBLE  CORIOLIS_FORCE = 0.0;
+// __constant__ DOUBLE g = 9.81; //gia toc trong truong = 9.81 m2/s
+
+// //lan truyen
+// __constant__ DOUBLE Ks = 2.5 * 0.00001; // = 2.5 * dm
 // hoac bang Ks = 3 * d 90% 
 
 //Boixoi

@@ -211,8 +211,12 @@ int main (int argc, char ** argv){
 	cudaMalloc((void**) &d_const_coeffs, sizeof(Constant_Coeffs));
 	cudaMemcpy(d_const_coeffs, &h_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyHostToDevice);
 
+	// check struct values on GPU:
+	Constant_Coeffs* coeffs;
+	coeffs = (Constant_Coeffs*) malloc(sizeof(Constant_Coeffs));
+	cudaMemcpy((void*) coeffs, d_const_coeffs, sizeof(Constant_Coeffs));
 
-
+	cout << coeffs->dX << "  " << coeffs->dY << " " << coeffs->Ks << endl;
 
 	// check if values on device are the same with values on host, and if we has stored the right pointers
 	// done
@@ -231,7 +235,7 @@ int main (int argc, char ** argv){
 	dim3 grid_2d((M + 3) / min(32, M + 3) + 1,N + 3, 1);
 
 
-	Onetime_init <<<grid_2d, block_2d >>>(d_argument_pointers);
+	Onetime_init <<<grid_2d, block_2d >>>(d_argument_pointers, );
 
 	// load initial condition
 

@@ -4,7 +4,6 @@ using namespace std;
 
 void Load_coeffs(Constant_Coeffs& ce){
 
-ce.segment_limit = 20;
 ce.dX = 10.0;
 ce.dY = 10.0;
 ce.dT = 2;

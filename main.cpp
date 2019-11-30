@@ -208,7 +208,7 @@ int main (int argc, char ** argv){
 	Constant_Coeffs  h_const_coeffs, *d_const_coeffs;
 	Load_coeffs (h_const_coeffs);
 
-	d_const_coeffs = cudaMalloc((void**) d_const_coeffs, sizeof(Constant_Coeffs));
+	cudaMalloc((void**) &d_const_coeffs, sizeof(Constant_Coeffs));
 	cudaMemcpy(d_const_coeffs, &h_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyHostToDevice);
 
 

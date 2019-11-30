@@ -123,57 +123,57 @@
 //__constant__ DOUBLE Dxr = dm * pow(g * (Sx - 1) / muy * muy,(1 / 3));
 //__constant__ DOUBLE wss = 10 * muy / dm * (pow(1.0 + (0.01 * (Sx - 1) * 9.81 * pow(dm, 3) / pow(muy, 2.0)), 0.5) - 1.0); // cong thuc nay phu thuoc vao duong kinh hat
 
-__device__ DOUBLE Windx() { return  0.0013 * (0.00075 + 0.000067 * abs(Wind)) * abs(Wind) * Wind * cos(huonggio * (PI / 180)); }
-__device__ DOUBLE Windy() { return  0.0013 * (0.00075 + 0.000067 * abs(Wind)) * abs(Wind) * Wind * sin(huonggio * (PI / 180)); }
+// __device__ DOUBLE Windx() { return  0.0013 * (0.00075 + 0.000067 * abs(Wind)) * abs(Wind) * Wind * cos(huonggio * (PI / 180)); }
+// __device__ DOUBLE Windy() { return  0.0013 * (0.00075 + 0.000067 * abs(Wind)) * abs(Wind) * Wind * sin(huonggio * (PI / 180)); }
 
-__device__ DOUBLE Ufr() { return 0.25 * pow((Sx - 1) * g, 8.0 / 15.0) * pow(dm, 9.0 / 15.0) * pow(muy, -1.0 / 15.0); }
-__device__ DOUBLE Dxr() { return dm * pow(g * (Sx - 1) / muy * muy, (1.0 / 3.0)); }
-__device__ DOUBLE wss() {
-	return 10 * muy / dm * (sqrt(1 + 0.01 * (Sx - 1) * 9.81 * pow(dm, 3) / pow(muy, 2)) - 1);
-}
+// __device__ DOUBLE Ufr() { return 0.25 * pow((Sx - 1) * g, 8.0 / 15.0) * pow(dm, 9.0 / 15.0) * pow(muy, -1.0 / 15.0); }
+// __device__ DOUBLE Dxr() { return dm * pow(g * (Sx - 1) / muy * muy, (1.0 / 3.0)); }
+// __device__ DOUBLE wss() {
+// 	return 10 * muy / dm * (sqrt(1 + 0.01 * (Sx - 1) * 9.81 * pow(dm, 3) / pow(muy, 2)) - 1);
+// }
 
-__device__ int locate_segment_v(int N, int M, bool* bienran1, bool* bienran2, int* first, int* last, int row, int col, int* daui, int* cuoii, int* moci, DOUBLE* h) {
+// __device__ int locate_segment_v(int N, int M, bool* bienran1, bool* bienran2, int* first, int* last, int row, int col, int* daui, int* cuoii, int* moci, DOUBLE* h) {
 
-	for (int k = 0; k < moci[row]; k++) {
-		int width = segment_limit;
-		if ((daui[row * width + k] <= col) && (col <= cuoii[row * width + k]))
-		{
-			*first = daui[row * width + k];
-			*last = cuoii[row * width + k];
-			//printf("thread: %d A: dau: %d, cuoi: %d\n", threadIdx.x, *first, *last);
-			//printf("first %d\n", *first);
+// 	for (int k = 0; k < moci[row]; k++) {
+// 		int width = segment_limit;
+// 		if ((daui[row * width + k] <= col) && (col <= cuoii[row * width + k]))
+// 		{
+// 			*first = daui[row * width + k];
+// 			*last = cuoii[row * width + k];
+// 			//printf("thread: %d A: dau: %d, cuoi: %d\n", threadIdx.x, *first, *last);
+// 			//printf("first %d\n", *first);
 
-			width = M + 3;
-			if ((*first > 2) || ((*first == 2) && ((h[row * width + *first - 1] + h[(row - 1) * width + *first - 1]) * 0.5 == NANGDAY)))
-				*bienran1 = true;
-			if ((*last < M) || ((*last == M) && ((h[row * width + *last] + h[(row - 1) * width + *last]) * 0.5 == NANGDAY)))
-				*bienran2 = true;
-			return k;
-		}
-	}
-}
+// 			width = M + 3;
+// 			if ((*first > 2) || ((*first == 2) && ((h[row * width + *first - 1] + h[(row - 1) * width + *first - 1]) * 0.5 == NANGDAY)))
+// 				*bienran1 = true;
+// 			if ((*last < M) || ((*last == M) && ((h[row * width + *last] + h[(row - 1) * width + *last]) * 0.5 == NANGDAY)))
+// 				*bienran2 = true;
+// 			return k;
+// 		}
+// 	}
+// }
 
-__device__ int locate_segment_u(int N, int M, bool* bienran1, bool* bienran2, int* first, int* last, int row, int col, int* dauj, int* cuoij, int* mocj, DOUBLE* h) {
+// __device__ int locate_segment_u(int N, int M, bool* bienran1, bool* bienran2, int* first, int* last, int row, int col, int* dauj, int* cuoij, int* mocj, DOUBLE* h) {
 
-	for (int k = 0; k < mocj[col]; k++) {
-		int width = segment_limit;
-		if ((dauj[col * width + k] <= row) && (row <= cuoij[col * width + k]))
-		{
-			*first = dauj[col * width + k];
-			*last = cuoij[col * width + k];
+// 	for (int k = 0; k < mocj[col]; k++) {
+// 		int width = segment_limit;
+// 		if ((dauj[col * width + k] <= row) && (row <= cuoij[col * width + k]))
+// 		{
+// 			*first = dauj[col * width + k];
+// 			*last = cuoij[col * width + k];
 
-			width = M + 3;
+// 			width = M + 3;
 
-			if ((*first > 2) || ((*first == 2) && ((h[1 * width + col] + h[1 * width + col - 1]) * 0.5 == NANGDAY))) {
-				*bienran1 = true;
+// 			if ((*first > 2) || ((*first == 2) && ((h[1 * width + col] + h[1 * width + col - 1]) * 0.5 == NANGDAY))) {
+// 				*bienran1 = true;
 
-			}
+// 			}
 
-			if ((*last < N) || ((*last == N) && ((h[N * width + col] + h[N * width + col - 1]) * 0.5 == NANGDAY)))
-				*bienran2 = true;
-			return k;
-		}
-	}
+// 			if ((*last < N) || ((*last == N) && ((h[N * width + col] + h[N * width + col - 1]) * 0.5 == NANGDAY)))
+// 				*bienran2 = true;
+// 			return k;
+// 		}
+// 	}
 
-}
+// }
 #endif

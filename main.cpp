@@ -205,11 +205,11 @@ int main (int argc, char ** argv){
 
 
 	// load coefficients used in Device code
-	Const_Coeffs  h_const_coeffs, *d_const_coeffs;
+	Constant_Coeffs  h_const_coeffs, *d_const_coeffs;
 	Load_coeffs (h_const_coeffs);
 
-	d_const_coeffs = cudaMalloc((void**) d_const_coeffs, sizeof(Const_Coeffs));
-	cudaMemcpy(d_const_coeffs, &h_const_coeffs, sizeof(Const_Coeffs), cudaMemcpyHostToDevice);
+	d_const_coeffs = cudaMalloc((void**) d_const_coeffs, sizeof(Constant_Coeffs));
+	cudaMemcpy(d_const_coeffs, &h_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyHostToDevice);
 
 
 

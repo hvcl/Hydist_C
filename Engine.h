@@ -14,6 +14,7 @@ using namespace std;
 
 #define DOUBLE double
 #define	segment_limit 20
+#define PI 3.14159265358979323846
 
 struct Options{
 	int Tmax, interval, sediment_start, bed_change_start, kenhhepd, kenhhepng;
@@ -41,7 +42,7 @@ struct Constant_Coeffs{
 	DOUBLE Wind, huonggio, Zbandau;
 	DOUBLE NDnen, NDbphai, NDbtrai, NDbtren, NDbduoi;
 	DOUBLE Tod, Toe, hstoe, ghtoe , Mbochat;
-	DOUBLE ro, ros, d90, Dorong, Sx, sohn, soha, sohn1;
+	DOUBLE ro, ros, dm, muy, d90, Dorong, Sx, sohn, soha, sohn1;
 	DOUBLE CORIOLIS_FORCE, g, Ks;
 
 

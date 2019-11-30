@@ -17,7 +17,7 @@ ce.QuyDoiTime = 1.0 / 3600;
 ce.QuyDoiPi = 1.0 / PI;
 ce.HaiChiadT = 2.0 / ce.dT;
 ce.kenhhepng = 0;
-ce.kenhhepd = 0
+ce.kenhhepd = 0;
 
 // gioi han tinh
 ce.NANGDAY = 0.0; // thong so nang day

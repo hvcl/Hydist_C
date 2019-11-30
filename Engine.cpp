@@ -73,11 +73,11 @@ ce.soha = 3;
 // tong so do sau de tinh Fw
 ce.sohn1 = 3;
 // //luc coriolis
-CORIOLIS_FORCE = 0.0;
-g = 9.81; //gia toc trong truong = 9.81 m2/s
+ce.CORIOLIS_FORCE = 0.0;
+ce.g = 9.81; //gia toc trong truong = 9.81 m2/s
 
 // //lan truyen
-Ks = 2.5 * dm; // = 2.5 * dm
+ce.Ks = 2.5 * dm; // = 2.5 * dm
 // hoac bang Ks = 3 * d 90% 
 
 }

@@ -44,11 +44,7 @@ struct Constant_Coeffs{
 	DOUBLE Tod, Toe, hstoe, ghtoe , Mbochat;
 	DOUBLE ro, ros, dm, muy, d90, Dorong, Sx, sohn, soha, sohn1;
 	DOUBLE CORIOLIS_FORCE, g, Ks;
-	DOUBLE Windx, Windy;
-	/ __device__ DOUBLE Windx() { return  0.0013 * (0.00075 + 0.000067 * abs(Wind)) * abs(Wind) * Wind * cos(huonggio * (PI / 180)); }
-__device__ DOUBLE Windy() { return  0.0013 * (0.00075 + 0.000067 * abs(Wind)) * abs(Wind) * Wind * sin(huonggio * (PI / 180)); }
-
-// 
+	DOUBLE Windx, Windy; 
 
 
 };

@@ -5,6 +5,7 @@ Created by Huong Nguyen
 **/
 #include "cuda.h"
 #include "engine.h"
+#include "support_funcs.h"
 #define powf pow
 
 

@@ -1,5 +1,5 @@
 CFLAGS = -I.
-DEPS = engine.h 
+DEPS = engine.h support_funcs.h
 OBJ = main.o engine.o support_funcs.o
 
 all: $(OBJ)

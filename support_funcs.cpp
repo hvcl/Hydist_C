@@ -3,10 +3,9 @@ ULSAN NATIONAL INSTIUTE OF SCIENCE AND TECHNOLOGY
 Copyright (c) 2019 HVCL lab
 Created by Huong Nguyen
 **/
-#include "cuda.h"
-#include "engine.h"
+
+
 #include "support_funcs.h"
-#define powf pow
 
 
 // __device__ void calculate_index(int *i, int *j, int M){
@@ -67,20 +66,20 @@ __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 		Ky1[i * width + j] = g * powf((h[(i - 1) * width + j] + h[i * width + j]) * 0.5, -2 * mu_mn) * powf((hsnham[(i - 1) * width + j] + hsnham[i * width + j]) * 0.5, 2);
 
 }
-// __global__ void update_h_moi(Argument_Pointers* arg){
-// 	int M = arg-> M ;
-// 	int N = arg-> N;
-// 	int i = blockIdx.y * blockDim.y + threadIdx.y + 1;
-// 	int j = blockIdx.x * blockDim.x + threadIdx.x + 1;
-// 	if (( i > N) || (j > M)) return;
-// 	int* khouot = arg-> khouot;
-// 	DOUBLE* H_moi = arg-> H_moi;
-// 	DOUBLE* t_z = arg-> t_z;
-// 	DOUBLE* htaiz = arg-> htaiz;
-// 	int grid_pos = i * (M + 3) + j;
-// 	if (khouot[grid_pos] == 0)
-// 		H_moi[grid_pos] = htaiz[grid_pos] + t_z[grid_pos];
-// }
+__global__ void update_h_moi(Argument_Pointers* arg){
+	int M = arg-> M ;
+	int N = arg-> N;
+	int i = blockIdx.y * blockDim.y + threadIdx.y + 1;
+	int j = blockIdx.x * blockDim.x + threadIdx.x + 1;
+	if (( i > N) || (j > M)) return;
+	int* khouot = arg-> khouot;
+	DOUBLE* H_moi = arg-> H_moi;
+	DOUBLE* t_z = arg-> t_z;
+	DOUBLE* htaiz = arg-> htaiz;
+	int grid_pos = i * (M + 3) + j;
+	if (khouot[grid_pos] == 0)
+		H_moi[grid_pos] = htaiz[grid_pos] + t_z[grid_pos];
+}
 
 // __global__ void Reset_states_horizontal(Argument_Pointers* arg){
 // 	int M = arg-> M;

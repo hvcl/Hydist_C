@@ -27,3 +27,5 @@ __global__ void boundary_up (DOUBLE t, Argument_Pointers* arg, Constant_Coeffs* 
 __global__ void boundary_down(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs* coeffs);
 __global__ void boundary_left(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs* coeffs);
 __global__ void boundary_right(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs* coeffs);
+
+__global__ void preprocess_data(Argument_Pointers* arg, Constant_Coeffs* coeffs);

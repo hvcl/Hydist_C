@@ -429,7 +429,7 @@ __global__ void boundary_down(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs*
 
 __global__ void boundary_left(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs* coeffs){
 	DOUBLE *t_z, *ubt;
-	int M, N, *daui, *cuoii;
+	int M, *daui, *cuoii;
 	int *bienQ;
 	DOUBLE dX = coeffs->dX;
 	bienQ = arg->bienQ;
@@ -488,116 +488,122 @@ __global__ void boundary_right(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs
 
 
 
-// __global__ void preprocess_data(Argument_Pointers* arg){
+__global__ void preprocess_data(Argument_Pointers* arg, Constant_Coeffs* coeffs){
 
-// 	// hi is a so-called "scratch pad" array that is used to store some temporary values which
-// 	// are later used to calculate boundary values based on the CCHE formula
-// 	// pre-calculate values and stored in hi is simply to reduce redundant calculation every iterations
-// 	DOUBLE* hi = arg->hi;
-// 	DOUBLE* h = arg->h;
-// 	// DOUBLE* hsnham = arg->hsnham;
-// 	int* daui = arg->daui;
-// 	int* cuoii = arg->cuoii;
-// 	int* dauj = arg->dauj;
-// 	int* cuoij = arg->cuoij;
-// 	int* moci = arg->moci;
-// 	int* mocj = arg->mocj;
-// 	int N = arg->N; int M = arg->M;
-// 	int width = M + 3;
-// 	// int* daui, *cuoii, *dauj, *cuoij, *moci, *mocj;
-// 	// h[i, M]  - hi_up
-// 	for (int k = 0; k < mocj[M]; k++){
-// 		DOUBLE sum  = 0;
-// 		for (int i = dauj[M * segment_limit + k]; i <= cuoij[M * segment_limit + k]; i++){
-// 			hi[i] = (h[i * width + M] + h[(i - 1) * width + M]) / 2.0 - NANGDAY;
-// 			// printf("h[%d], %f\n", i, h[i] );
-// 			sum += powf(hi[i], 5.0/3.0);// / hsnham[i * width + M];
-// 		}
+	// hi is a so-called "scratch pad" array that is used to store some temporary values which
+	// are later used to calculate boundary values based on the CCHE formula
+	// pre-calculate values and stored in hi is simply to reduce redundant calculation every iterations
+	DOUBLE* hi = arg->hi;
+	DOUBLE* h = arg->h;
+	// DOUBLE* hsnham = arg->hsnham;
+	int* daui = arg->daui;
+	int* cuoii = arg->cuoii;
+	int* dauj = arg->dauj;
+	int* cuoij = arg->cuoij;
+	int* moci = arg->moci;
+	int* mocj = arg->mocj;
+	int N = arg->N; int M = arg->M;
+	int width = M + 3;
 
-// 		for (int i = dauj[M * segment_limit + k]; i <= cuoij[M * segment_limit + k]; i++){
-// 			hi[i] = powf(hi[i], 2.0 / 3.0) / (sum * dX ) ;//* hsnham[i * width + M]);
-// 		}
+	DOUBLE NANGDAY, dX, ros;
+	NANGDAY = coeffs ->NANGDAY;
+	dX = coeffs->dX;
+	ros = coeffs->ros;
+	
+	// int* daui, *cuoii, *dauj, *cuoij, *moci, *mocj;
+	// h[i, M]  - hi_up
+	for (int k = 0; k < mocj[M]; k++){
+		DOUBLE sum  = 0;
+		for (int i = dauj[M * segment_limit + k]; i <= cuoij[M * segment_limit + k]; i++){
+			hi[i] = (h[i * width + M] + h[(i - 1) * width + M]) / 2.0 - NANGDAY;
+			// printf("h[%d], %f\n", i, h[i] );
+			sum += powf(hi[i], 5.0/3.0);// / hsnham[i * width + M];
+		}
 
-// 	}
+		for (int i = dauj[M * segment_limit + k]; i <= cuoij[M * segment_limit + k]; i++){
+			hi[i] = powf(hi[i], 2.0 / 3.0) / (sum * dX ) ;//* hsnham[i * width + M]);
+		}
 
-// 	// h[i, 2] - hi_down
+	}
 
-// 	hi += N + 3;
+	// h[i, 2] - hi_down
 
-// 	for (int k = 0; k < mocj[2]; k++){
-// 		DOUBLE sum  = 0;
-// 		// int sum = 0;
-// 		for (int i = dauj[2 * segment_limit + k]; i <= cuoij[2 * segment_limit + k]; i++){
-// 			hi[i] = (h[i * width + 1] + h[(i - 1) * width + 1]) / 2.0 - NANGDAY;
-// 			sum += powf(hi[i], 5.0/3.0);// / hsnham[i * width + 2];
-// 		}
+	hi += N + 3;
 
-// 		for (int i = dauj[2 * segment_limit + k]; i <= cuoij[2 * segment_limit + k]; i++){
-// 			hi[i] = powf(hi[i], 2.0 / 3.0) / (sum * dX) ; // * hsnham[i * width + 2]);
-// 		}
+	for (int k = 0; k < mocj[2]; k++){
+		DOUBLE sum  = 0;
+		// int sum = 0;
+		for (int i = dauj[2 * segment_limit + k]; i <= cuoij[2 * segment_limit + k]; i++){
+			hi[i] = (h[i * width + 1] + h[(i - 1) * width + 1]) / 2.0 - NANGDAY;
+			sum += powf(hi[i], 5.0/3.0);// / hsnham[i * width + 2];
+		}
 
-// 	}
+		for (int i = dauj[2 * segment_limit + k]; i <= cuoij[2 * segment_limit + k]; i++){
+			hi[i] = powf(hi[i], 2.0 / 3.0) / (sum * dX) ; // * hsnham[i * width + 2]);
+		}
 
-// 	// // h[2, i] - hi_left
-// 	hi += N + 3;
-// 	for (int k = 0; k < moci[2]; k++){
-// 		DOUBLE sum = 0;
-// 		// DOUBLE sum  = 0;
-// 		for (int i = daui[2 * segment_limit + k]; i <= cuoii[2 * segment_limit + k]; i++){
-// 			hi[i] = (h[1 * width + i] + h[1 * width + i - 1]) / 2.0 - NANGDAY;
-// 			sum += powf(hi[i], 5.0/3.0);// / hsnham[2 * width + i];
-// 		}
+	}
 
-// 		for (int i = daui[2 * segment_limit + k]; i <= cuoii[2 * segment_limit + k]; i++){
-// 			hi[i] = powf(hi[i], 2.0 / 3.0) / (sum * dX); // * hsnham[2 * width + i]);
-// 		}
+	// // h[2, i] - hi_left
+	hi += N + 3;
+	for (int k = 0; k < moci[2]; k++){
+		DOUBLE sum = 0;
+		// DOUBLE sum  = 0;
+		for (int i = daui[2 * segment_limit + k]; i <= cuoii[2 * segment_limit + k]; i++){
+			hi[i] = (h[1 * width + i] + h[1 * width + i - 1]) / 2.0 - NANGDAY;
+			sum += powf(hi[i], 5.0/3.0);// / hsnham[2 * width + i];
+		}
 
-// 	}
-// 	// h[N, i] - hi_right
+		for (int i = daui[2 * segment_limit + k]; i <= cuoii[2 * segment_limit + k]; i++){
+			hi[i] = powf(hi[i], 2.0 / 3.0) / (sum * dX); // * hsnham[2 * width + i]);
+		}
 
-// 	hi += M + 3;
-// 	for (int k = 0; k < moci[N]; k++){
-// 		DOUBLE sum  = 0;
-// 		for (int i = daui[N * segment_limit + k]; i <= cuoii[N * segment_limit + k]; i++){
-// 			hi[i] = (h[N * width + i] + h[N * width + i - 1]) / 2.0 - NANGDAY;
-// 			sum += powf(hi[i], 5.0/3.0);// / hsnham[N * width + i];
-// 		}
-// 		for (int i = daui[N * segment_limit + k]; i <= cuoii[N * segment_limit + k]; i++){
-// 			hi[i] = powf(hi[i], 2.0 / 3.0) / (sum * dX);// * hsnham[N * width + i]);
-// 		}
+	}
+	// h[N, i] - hi_right
 
-// 	}
+	hi += M + 3;
+	for (int k = 0; k < moci[N]; k++){
+		DOUBLE sum  = 0;
+		for (int i = daui[N * segment_limit + k]; i <= cuoii[N * segment_limit + k]; i++){
+			hi[i] = (h[N * width + i] + h[N * width + i - 1]) / 2.0 - NANGDAY;
+			sum += powf(hi[i], 5.0/3.0);// / hsnham[N * width + i];
+		}
+		for (int i = daui[N * segment_limit + k]; i <= cuoii[N * segment_limit + k]; i++){
+			hi[i] = powf(hi[i], 2.0 / 3.0) / (sum * dX);// * hsnham[N * width + i]);
+		}
 
-// 	DOUBLE * htaiz_bd = arg->htaiz_bd;
-// 	arg->hmax_u = htaiz_bd[2 * width + M];
-// 	arg->hmax_d = htaiz_bd[2 * width + 2];
-// 	for (int i = 3; i < N; i ++){
-// 		if (htaiz_bd[i * width + M] > arg->hmax_u)
-// 			arg->hmax_u = htaiz_bd[i * width + M];
-// 		if (htaiz_bd[i * width + 2] > arg->hmax_d)
-// 			arg->hmax_d = htaiz_bd[i * width + 2];
-// 	}
+	}
 
-// 	arg->hmax_l = htaiz_bd[2 * width + 2];
-// 	arg->hmax_r = htaiz_bd[N * width + 2];
-// 	for (int i = 3; i < M; i ++){
-// 		if (htaiz_bd[2 * width + i] > arg->hmax_l)
-// 			arg->hmax_l = htaiz_bd[2 * width + i];
-// 		if (htaiz_bd[N * width + i] > arg->hmax_r)
-// 			arg->hmax_r = htaiz_bd[N * width + i];
-// 	}
-// 	if (arg->hmax_u != 0)
-// 	arg->hmax_u = 1.0 / (ros * arg->hmax_u);
-// 	if (arg->hmax_d != 0)
-// 	arg->hmax_d = 1.0 / (ros * arg->hmax_d);
-// 	if (arg->hmax_l != 0)
-// 	arg->hmax_l = 1.0 / (ros * arg->hmax_l);
-// 	if (arg->hmax_r != 0)
-// 	arg->hmax_r = 1.0 / (ros * arg->hmax_r);
-// 	// printf("hmax: %d %lf %lf %lf %lf\n", threadIdx.x, arg->hmax_u, arg->hmax_d, arg->hmax_l, arg->hmax_r );
+	DOUBLE * htaiz_bd = arg->htaiz_bd;
+	arg->hmax_u = htaiz_bd[2 * width + M];
+	arg->hmax_d = htaiz_bd[2 * width + 2];
+	for (int i = 3; i < N; i ++){
+		if (htaiz_bd[i * width + M] > arg->hmax_u)
+			arg->hmax_u = htaiz_bd[i * width + M];
+		if (htaiz_bd[i * width + 2] > arg->hmax_d)
+			arg->hmax_d = htaiz_bd[i * width + 2];
+	}
+
+	arg->hmax_l = htaiz_bd[2 * width + 2];
+	arg->hmax_r = htaiz_bd[N * width + 2];
+	for (int i = 3; i < M; i ++){
+		if (htaiz_bd[2 * width + i] > arg->hmax_l)
+			arg->hmax_l = htaiz_bd[2 * width + i];
+		if (htaiz_bd[N * width + i] > arg->hmax_r)
+			arg->hmax_r = htaiz_bd[N * width + i];
+	}
+	if (arg->hmax_u != 0)
+	arg->hmax_u = 1.0 / (ros * arg->hmax_u);
+	if (arg->hmax_d != 0)
+	arg->hmax_d = 1.0 / (ros * arg->hmax_d);
+	if (arg->hmax_l != 0)
+	arg->hmax_l = 1.0 / (ros * arg->hmax_l);
+	if (arg->hmax_r != 0)
+	arg->hmax_r = 1.0 / (ros * arg->hmax_r);
+	// printf("hmax: %d %lf %lf %lf %lf\n", threadIdx.x, arg->hmax_u, arg->hmax_d, arg->hmax_l, arg->hmax_r );
 
 
-// }
+}
 
 // __device__ void Boundary_value(bool isU, DOUBLE t, int location, int location_extension, int width, int total_time,
 // 	int* boundary_type, DOUBLE* hi, DOUBLE* boundary_array, DOUBLE* t_z, DOUBLE* boundary_condition, int* moc, int* dau, int* cuoi){

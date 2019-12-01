@@ -79,6 +79,9 @@ ce.g = 9.81; //gia toc trong truong = 9.81 m2/s
 // //lan truyen
 ce.Ks = 2.5 * ce.dm; // = 2.5 * dm
 // hoac bang Ks = 3 * d 90% 
+Windx = 0.0013 * (0.00075 + 0.000067 * abs(Wind)) * abs(Wind) * Wind * cos(huonggio * (PI / 180));
+Windy = 0.0013 * (0.00075 + 0.000067 * abs(Wind)) * abs(Wind) * Wind * sin(huonggio * (PI / 180));
+
 
 }
 

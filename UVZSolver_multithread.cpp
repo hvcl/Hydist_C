@@ -111,7 +111,7 @@ __device__ void  _vzSolver_calculate_preindex(DOUBLE t, int i, int j, int width,
     DOUBLE q = 0.0;    
     __shared__ DOUBLE *u, *v, *z, *Htdv, *Htdu, *H_moi, *VISCOIDX, *Tsyw, *Ky1, *a2, *c2, *d2, *f1, *f2, *f3, *f5;
     __shared__ int support_array_width;
-    __shared__ DOUBLE H_TINH, dYbp, dT, dTchia2dY, dXbp, dX2;
+    __shared__ DOUBLE H_TINH, dYbp, dT, dTchia2dY,dTchia2dX, dXbp, dX2, CORIOLIS_FORCE, Windy ;
     support_array_width = arg->M + 2;
     u = arg->u;
     v = arg->v;
@@ -135,6 +135,9 @@ __device__ void  _vzSolver_calculate_preindex(DOUBLE t, int i, int j, int width,
     dXbp = coeffs->dXbp;
     dYbp = coeffs->dYbp;
     dX2 = coeffs->dX2;
+    dTchia2dY = coeffs->dTchia2dY;
+    dTchia2dX = coeffs->dTchia2dX;
+    Windy = coeffs->Windy;
     // can phai control dk bien o ngoai function
     // ham nay ko coarseless
     // can actually get rid of fs, and only need to use 3 variables instead of 3 m * n arrays
@@ -161,7 +164,7 @@ __device__ void  _vzSolver_calculate_preindex(DOUBLE t, int i, int j, int width,
             p = (v[(i + 1) * width + j] - 2 * v[i * width + j] + v[(i - 1) * width + j]) / dXbp;
         }
     }
-    f5[j] = -2 * v[i * width + j] + dT * q + dT * CORIOLIS_FORCE * utb - dT * VISCOIDX[i * width + j] * p - dT * (Windy() - Tsyw[i * width + j]) / Htdv[i * width + j];
+    f5[j] = -2 * v[i * width + j] + dT * q + dT * CORIOLIS_FORCE * utb - dT * VISCOIDX[i * width + j] * p - dT * (Windy - Tsyw[i * width + j]) / Htdv[i * width + j];
     c2[j] = dTchia2dY * Htdv[i * width + j];             
     a2[j] = - dTchia2dY * Htdv[i * width + j - 1];
     d2[j] = z[i * width + j] - dTchia2dX * (Htdu[i * width + j] * u[i * width + j] - Htdu[(i - 1) * width + j] * u[(i - 1) * width + j]);

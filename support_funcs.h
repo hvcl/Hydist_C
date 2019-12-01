@@ -5,4 +5,4 @@
 
 __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs);
 
-__global__ void update_h_moi(Argument_Pointers* arg)
+__global__ void update_h_moi(Argument_Pointers* arg);

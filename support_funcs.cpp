@@ -509,7 +509,7 @@ __global__ void preprocess_data(Argument_Pointers* arg, Constant_Coeffs* coeffs)
 	NANGDAY = coeffs ->NANGDAY;
 	dX = coeffs->dX;
 	ros = coeffs->ros;
-	
+
 	// int* daui, *cuoii, *dauj, *cuoij, *moci, *mocj;
 	// h[i, M]  - hi_up
 	for (int k = 0; k < mocj[M]; k++){
@@ -648,6 +648,9 @@ __device__ void Boundary_value(bool isU, DOUBLE t, int location, int location_ex
 
 __device__ void FS_boundary(bool isU, DOUBLE t, int width, int total_time, int location, DOUBLE hmax,  
 	int* boundary_type, DOUBLE* htaiz_bd, DOUBLE* FS, DOUBLE* CC, int* moc, int* dau, int*cuoi ){
+
+
+
 	int t1 = t / 3600;
 	// DOUBLE t2 = (t - (3600.0 * (DOUBLE) t1) ) / 3600.0 ;
 	DOUBLE t2 = (t - (3600.0 * t1) ) / 3600.0 ;
@@ -733,61 +736,77 @@ __global__ void Update_Boundary_Value(DOUBLE t, int total_time, Argument_Pointer
 
 
 // __global__ void update_uvz(int M, int N, DOUBLE* u, DOUBLE* v, DOUBLE* z,  DOUBLE* t_u, DOUBLE* t_v, DOUBLE* t_z, DOUBLE* tmp_u, DOUBLE* tmp_v, int kenhhepd=0, int kenhhepng=0){
-// 	int j = blockIdx.x * blockDim.x + threadIdx.x;
-// 	int i = blockIdx.y * blockDim.y + threadIdx.y;
-// 	if ((i > N) || ( j > M)) return;
-// 	int offset = M + 3;
+__global__ void update_uvz(Argument_Pointers* arg, Constant_Coeffs* coeffs){
 
-// 	z[i * offset + j] = t_z[i * offset + j];
-// 	u[i * offset + j] = t_u[i * offset + j] * (1 - kenhhepd);
-// 	v[i * offset + j] = t_v[i * offset + j] * (1 - kenhhepng);
-// }
+	int M, N, kenhhepng, kenhhepd;
+	DOUBLE *u, *v, *z, *t_u, *t_v. *t_z;
 
-// __device__ void _normalize (DOUBLE coeff, int N, int M, int closenb_dist, int farnb_dist, DOUBLE* tmp_buffer, DOUBLE* val_buff, int* khouot){
-// 	int i = blockIdx.y * blockDim.y + threadIdx.y;
-// 	int j = blockIdx.x * blockDim.x + threadIdx.x;
-// 	int width = M + 3;
-// 	int grid_pos = i * width + j;
-// 	tmp_buffer[grid_pos] = val_buff[grid_pos];
+	M = arg->M; 
+	N = arg->N:
+	u = arg->u;
+	t_u = arg->t_u;
+	v = arg->v;
+	t_v = arg->t_v;
+	z = arg->z;
+	t_z = arg->t_z;
+	kenhhepd = coeffs->kenhhepd;
+	kenhhepng = coeffs->kenhhepng;
 
-// 	if (i > N || j > M || i < 2 || j < 2) return;
-// 	DOUBLE neigbor = 0;
-// 	if (val_buff[grid_pos] != 0){
-// 		int count = 2;
-// 		neigbor = val_buff[grid_pos - closenb_dist] + val_buff[grid_pos + closenb_dist];
+	int j = blockIdx.x * blockDim.x + threadIdx.x;
+	int i = blockIdx.y * blockDim.y + threadIdx.y;
+	if ((i > N) || ( j > M)) return;
+	int offset = M + 3;
 
-// 		if (khouot[grid_pos - farnb_dist] == 0){ neigbor += val_buff[grid_pos - farnb_dist]; count++;}
+	z[i * offset + j] = t_z[i * offset + j];
+	u[i * offset + j] = t_u[i * offset + j] * (1 - kenhhepd);
+	v[i * offset + j] = t_v[i * offset + j] * (1 - kenhhepng);
+}
 
-// 		if (khouot[grid_pos + farnb_dist] == 0){ neigbor += val_buff[grid_pos + farnb_dist]; count++;}
+__device__ void _normalize (DOUBLE coeff, int N, int M, int closenb_dist, int farnb_dist, DOUBLE* tmp_buffer, DOUBLE* val_buff, int* khouot){
+	int i = blockIdx.y * blockDim.y + threadIdx.y;
+	int j = blockIdx.x * blockDim.x + threadIdx.x;
+	int width = M + 3;
+	int grid_pos = i * width + j;
+	tmp_buffer[grid_pos] = val_buff[grid_pos];
 
-// 		tmp_buffer[grid_pos] = tmp_buffer[grid_pos] * coeff + (1 - coeff) * neigbor / count;
-// 	}
+	if (i > N || j > M || i < 2 || j < 2) return;
+	DOUBLE neigbor = 0;
+	if (val_buff[grid_pos] != 0){
+		int count = 2;
+		neigbor = val_buff[grid_pos - closenb_dist] + val_buff[grid_pos + closenb_dist];
 
-// 	// this one is for debugging only. need to change afterward.
-// }
+		if (khouot[grid_pos - farnb_dist] == 0){ neigbor += val_buff[grid_pos - farnb_dist]; count++;}
 
-// __global__ void update_buffer(bool updateU, Argument_Pointers* arg, Array_Pointers* arr){
-// 	int i = blockIdx.y * blockDim.y + threadIdx.y;
-// 	int j = blockIdx.x * blockDim.x + threadIdx.x;
-// 	int width = arg->M + 3;
-// 	int grid_pos = i * width + j;
-// 	if (i > arg->N || j > arg->M || i < 2 || j < 2) return;
-// 	DOUBLE* tmp_buffer;
-// 	DOUBLE* val_buffer;
-// 	if (updateU){
-// 		val_buffer = arg->t_u;
-// 		tmp_buffer = arr->AA;
-// 	} else{
-// 		val_buffer = arg->t_v;
-// 		tmp_buffer = arr->BB;
-// 	}
-// 	val_buffer[grid_pos] = tmp_buffer[grid_pos];
-// }
+		if (khouot[grid_pos + farnb_dist] == 0){ neigbor += val_buff[grid_pos + farnb_dist]; count++;}
 
-// __global__ void Normalize(DOUBLE isU, Argument_Pointers* arg, Array_Pointers* arr){
-// 	if (isU)
-// 		_normalize(heso, arg->N, arg->M, arg->M + 3, 1, arr->AA, arg->t_u, arg->khouot);
-// 	else
-// 		_normalize(heso, arg->N, arg->M, 1, arg->M + 3, arr->BB, arg->t_v, arg->khouot);
+		tmp_buffer[grid_pos] = tmp_buffer[grid_pos] * coeff + (1 - coeff) * neigbor / count;
+	}
 
-// }
+	// this one is for debugging only. need to change afterward.
+}
+
+__global__ void update_buffer(bool updateU, Argument_Pointers* arg, Array_Pointers* arr){
+	int i = blockIdx.y * blockDim.y + threadIdx.y;
+	int j = blockIdx.x * blockDim.x + threadIdx.x;
+	int width = arg->M + 3;
+	int grid_pos = i * width + j;
+	if (i > arg->N || j > arg->M || i < 2 || j < 2) return;
+	DOUBLE* tmp_buffer;
+	DOUBLE* val_buffer;
+	if (updateU){
+		val_buffer = arg->t_u;
+		tmp_buffer = arr->AA;
+	} else{
+		val_buffer = arg->t_v;
+		tmp_buffer = arr->BB;
+	}
+	val_buffer[grid_pos] = tmp_buffer[grid_pos];
+}
+
+__global__ void Normalize(DOUBLE isU, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
+	if (isU)
+		_normalize(coeffs->heso, arg->N, arg->M, arg->M + 3, 1, arr->AA, arg->t_u, arg->khouot);
+	else
+		_normalize(coeffs->heso, arg->N, arg->M, 1, arg->M + 3, arr->BB, arg->t_v, arg->khouot);
+
+}

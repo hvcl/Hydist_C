@@ -7,7 +7,7 @@ Created by Huong Nguyen
 
 #include "UVZSolver_multithread.h"
 #include "support_funcs.h"
-#include "spike_kernel.hxx"
+// #include "spike_kernel.hxx"
 // #define DOUBLE double
 #define epsilon 1e-16
 

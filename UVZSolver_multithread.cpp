@@ -780,7 +780,7 @@ UZSolver_calculate_preindex(int startidx, int endidx, Argument_Pointers* arg, Ar
 // same i are in same block
 
 __global__ void 
-UZSolver_calculate_abcd(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
+UZSolver_calculate_abcd(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
     // i runs from start index to M 
     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
@@ -788,6 +788,10 @@ UZSolver_calculate_abcd(int startidx, int endidx, DOUBLE NANGDAY, Argument_Point
     bool bienran1 = false;
     bool bienran2 = false;
     int first = 0; int last = 0;
+    DOUBLE dTchia2dX, g, NANGDAY;
+    dTchia2dX = coeffs->dTchia2dX;
+    g = coeffs->g;
+    NANGDAY= coeffs->NANGDAY;
     locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
     _calculate_abcd(j, i, first, last, 2 * g * dTchia2dX, arg->N + 2, bienran1 , bienran2, arr);
 
@@ -795,7 +799,7 @@ UZSolver_calculate_abcd(int startidx, int endidx, DOUBLE NANGDAY, Argument_Point
 
 // same i are in same block
 __global__ void 
-UZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY Argument_Pointers* arg, Array_Pointers* arr){
+UZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
     if (j > endidx) return;

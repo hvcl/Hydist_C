@@ -683,132 +683,132 @@ __device__ void uSolver(DOUBLE t, int offset, int N, int first, int last, int ro
 }
 
 
-// __global__ void 
-// VZSolver_calculate_preindex(DOUBLE t, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
-//     // locate segment 
-//     int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
-//     int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
-//     if (i > endidx ) return;
-//     bool bienran1 = false;
-//     bool bienran2 = false;
-//     int first = 0; int last = 0;
-//     locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, coeffs->NANGDAY);
-//     _vzSolver_calculate_preindex(t, i, j, arg->M + 3, first, last, arg, arr, coeffs);
-// }
+__global__ void 
+VZSolver_calculate_preindex(DOUBLE t, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
+    // locate segment 
+    int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
+    int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
+    if (i > endidx ) return;
+    bool bienran1 = false;
+    bool bienran2 = false;
+    int first = 0; int last = 0;
+    locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, coeffs->NANGDAY);
+    _vzSolver_calculate_preindex(t, i, j, arg->M + 3, first, last, arg, arr, coeffs);
+}
 
 
 
-// __global__ void 
-// VZSolver_calculate_abcd(int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
-//     int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
-//     int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
-//     if (i > endidx) return;
+__global__ void 
+VZSolver_calculate_abcd(int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
+    int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
+    int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
+    if (i > endidx) return;
 
-//     bool bienran1 = false;
-//     bool bienran2 = false;
-//     int first = 0; int last = 0;
-//     DOUBLE dTchia2dY, g, NANGDAY;
-//     dTchia2dY = coeffs->dTchia2dY;
-//     g = coeffs->g;
-//     NANGDAY = coeffs->NANGDAY;
-//     locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, NANGDAY);
-//     _calculate_abcd(i, j, first, last, 2 * g * dTchia2dY, arg->M + 2, bienran1 , bienran2, arr);
+    bool bienran1 = false;
+    bool bienran2 = false;
+    int first = 0; int last = 0;
+    DOUBLE dTchia2dY, g, NANGDAY;
+    dTchia2dY = coeffs->dTchia2dY;
+    g = coeffs->g;
+    NANGDAY = coeffs->NANGDAY;
+    locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, NANGDAY);
+    _calculate_abcd(i, j, first, last, 2 * g * dTchia2dY, arg->M + 2, bienran1 , bienran2, arr);
 
-// }
+}
 
-// __global__ void 
-// VZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
-//     int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
-//     int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
-//     if (i > endidx) return;
-//     bool bienran1 = false;
-//     bool bienran2 = false;
-//     int first = 0; int last = 0;
-//     int seg_no = locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, NANGDAY);
+__global__ void 
+VZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
+    int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
+    int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
+    if (i > endidx) return;
+    bool bienran1 = false;
+    bool bienran2 = false;
+    int first = 0; int last = 0;
+    int seg_no = locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, NANGDAY);
 
-//     _calculate_matrix_coeff(false,i, j, arg->M + 2, 2 * (arg->M) + 1, first, last, seg_no, bienran1, bienran2,
-//                           arg->vbd[i], arg->vbt[i], arg->t_z[i * (arg->M + 3) + last], arg->t_z[i * (arg->M + 3) + first], arg->bienQ[1], arg->bienQ[0], arg->M,arg,arr);
-// }
+    _calculate_matrix_coeff(false,i, j, arg->M + 2, 2 * (arg->M) + 1, first, last, seg_no, bienran1, bienran2,
+                          arg->vbd[i], arg->vbt[i], arg->t_z[i * (arg->M + 3) + last], arg->t_z[i * (arg->M + 3) + first], arg->bienQ[1], arg->bienQ[0], arg->M,arg,arr);
+}
 
-// __global__ void 
-// VZSolver_extract_solution(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
+__global__ void 
+VZSolver_extract_solution(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
 
-//     int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
-//     int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
+    int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
+    int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
 
-//     if (i > endidx) return;
-//     bool bienran1 = false;
-//     bool bienran2 = false;
-//     int first = 0; int last = 0;
-//     int seg_no = locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, NANGDAY);
-//     _vzSolver_extract_solution(i, j, arr->SN[i * segment_limit + seg_no], arg->M + 3, first, last, bienran1, bienran2, arg, arr);
+    if (i > endidx) return;
+    bool bienran1 = false;
+    bool bienran2 = false;
+    int first = 0; int last = 0;
+    int seg_no = locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, NANGDAY);
+    _vzSolver_extract_solution(i, j, arr->SN[i * segment_limit + seg_no], arg->M + 3, first, last, bienran1, bienran2, arg, arr);
 
 
-// }
+}
 
-// __global__ void 
-// UZSolver_extract_solution(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
-//     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
-//     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
-//     if (j > endidx) return;
-//     bool bienran1 = false;
-//     bool bienran2 = false;
-//     int first = 0; int last = 0;
-//     int seg_no = locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
+__global__ void 
+UZSolver_extract_solution(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
+    int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
+    int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
+    if (j > endidx) return;
+    bool bienran1 = false;
+    bool bienran2 = false;
+    int first = 0; int last = 0;
+    int seg_no = locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
     
-//     _uzSolver_extract_solution(i, j, arr->SN[j * segment_limit + seg_no], arg->M + 3, first, last, bienran1, bienran2, arg, arr);
+    _uzSolver_extract_solution(i, j, arr->SN[j * segment_limit + seg_no], arg->M + 3, first, last, bienran1, bienran2, arg, arr);
    
 
-// }
+}
 
-// __global__ void 
-// UZSolver_calculate_preindex(int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
-//     // locate segment 
+__global__ void 
+UZSolver_calculate_preindex(int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
+    // locate segment 
 
-//     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
-//     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
+    int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
+    int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
 
-//     if (j > endidx ) return;
-//     bool bienran1 = false;
-//     bool bienran2 = false;
-//     int first = 0; int last = 0;
-//     locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, coeffs->NANGDAY);
+    if (j > endidx ) return;
+    bool bienran1 = false;
+    bool bienran2 = false;
+    int first = 0; int last = 0;
+    locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, coeffs->NANGDAY);
 
-//     _uzSolver_calculate_preindex( i, j, arg->M + 3, first, last, arg, arr, coeffs);
-// }
+    _uzSolver_calculate_preindex( i, j, arg->M + 3, first, last, arg, arr, coeffs);
+}
 
-// // same i are in same block
+// same i are in same block
 
-// __global__ void 
-// UZSolver_calculate_abcd(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
-//     // i runs from start index to M 
-//     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
-//     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
-//     if (j > endidx) return;
-//     bool bienran1 = false;
-//     bool bienran2 = false;
-//     int first = 0; int last = 0;
-//     locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
-//     _calculate_abcd(j, i, first, last, 2 * g * dTchia2dX, arg->N + 2, bienran1 , bienran2, arr);
+__global__ void 
+UZSolver_calculate_abcd(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
+    // i runs from start index to M 
+    int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
+    int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
+    if (j > endidx) return;
+    bool bienran1 = false;
+    bool bienran2 = false;
+    int first = 0; int last = 0;
+    locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
+    _calculate_abcd(j, i, first, last, 2 * g * dTchia2dX, arg->N + 2, bienran1 , bienran2, arr);
 
-// }
+}
 
-// // same i are in same block
-// __global__ void 
-// UZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY Argument_Pointers* arg, Array_Pointers* arr){
-//     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
-//     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
-//     if (j > endidx) return;
+// same i are in same block
+__global__ void 
+UZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY Argument_Pointers* arg, Array_Pointers* arr){
+    int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
+    int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
+    if (j > endidx) return;
     
-//     bool bienran1 = false;
-//     bool bienran2 = false;
-//     int first = 0; int last = 0;
-//     int seg_no = locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
+    bool bienran1 = false;
+    bool bienran2 = false;
+    int first = 0; int last = 0;
+    int seg_no = locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
         
-//     _calculate_matrix_coeff(true, j, i, arg->N + 2, 2 * (arg->N) + 1, first, last, seg_no, bienran1, bienran2,
-//                           arg->ubt[j], arg->ubp[j], arg->t_z[last * (arg->M + 3) + j], arg->t_z[first * (arg->M + 3) + j], arg->bienQ[2], arg->bienQ[3], arg->N ,arg,arr);
+    _calculate_matrix_coeff(true, j, i, arg->N + 2, 2 * (arg->N) + 1, first, last, seg_no, bienran1, bienran2,
+                          arg->ubt[j], arg->ubp[j], arg->t_z[last * (arg->M + 3) + j], arg->t_z[first * (arg->M + 3) + j], arg->bienQ[2], arg->bienQ[3], arg->N ,arg,arr);
 
-// }
+}
 
 
 

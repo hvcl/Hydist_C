@@ -32,3 +32,10 @@ __global__ void preprocess_data(Argument_Pointers* arg, Constant_Coeffs* coeffs)
 
 __device__ void Boundary_value(bool isU, DOUBLE t, int location, int location_extension, int width, int total_time,
 	int* boundary_type, DOUBLE* hi, DOUBLE* boundary_array, DOUBLE* t_z, DOUBLE* boundary_condition, int* moc, int* dau, int* cuoi);
+
+
+__device__ void FS_boundary(bool isU, DOUBLE t, int width, int total_time, int location, DOUBLE hmax,  
+	int* boundary_type, DOUBLE* htaiz_bd, DOUBLE* FS, DOUBLE* CC, int* moc, int* dau, int*cuoi );
+
+__global__ void Update_Boundary_Value(DOUBLE t, int total_time, Argument_Pointers* arg );
+

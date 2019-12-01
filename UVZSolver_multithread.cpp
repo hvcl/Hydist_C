@@ -45,7 +45,7 @@ __global__ void  tridiaxgSolver(bool print, bool isU, int startidx, int endidx, 
     int i = blockIdx.y +  startidx;
     if (i > endidx) return;
     int number_of_segments;
-    int* dau, *cuoi;
+    int *dau, *cuoi;
     if (isU){
         number_of_segments = arg->mocj[i];
         dau = arg->dauj;
@@ -683,257 +683,262 @@ __device__ void uSolver(DOUBLE t, int offset, int N, int first, int last, int ro
 }
 
 
-__global__ void 
-VZSolver_calculate_preindex(DOUBLE t, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
-    // locate segment 
-    int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
-    int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
-    if (i > endidx ) return;
-    bool bienran1 = false;
-    bool bienran2 = false;
-    int first = 0; int last = 0;
-    locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, coeffs->NANGDAY);
-    _vzSolver_calculate_preindex(t, i, j, arg->M + 3, first, last, arg, arr, coeffs);
-}
+// __global__ void 
+// VZSolver_calculate_preindex(DOUBLE t, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
+//     // locate segment 
+//     int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
+//     int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
+//     if (i > endidx ) return;
+//     bool bienran1 = false;
+//     bool bienran2 = false;
+//     int first = 0; int last = 0;
+//     locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, coeffs->NANGDAY);
+//     _vzSolver_calculate_preindex(t, i, j, arg->M + 3, first, last, arg, arr, coeffs);
+// }
 
 
 
-__global__ void 
-VZSolver_calculate_abcd(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
-    int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
-    int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
-    if (i > endidx) return;
+// __global__ void 
+// VZSolver_calculate_abcd(int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
+//     int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
+//     int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
+//     if (i > endidx) return;
 
-    bool bienran1 = false;
-    bool bienran2 = false;
-    int first = 0; int last = 0;
-    locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, NANGDAY);
-    _calculate_abcd(i, j, first, last, 2 * g * dTchia2dY, arg->M + 2, bienran1 , bienran2, arr);
+//     bool bienran1 = false;
+//     bool bienran2 = false;
+//     int first = 0; int last = 0;
+//     DOUBLE dTchia2dY, g, NANGDAY;
+//     dTchia2dY = coeffs->dTchia2dY;
+//     g = coeffs->g;
+//     NANGDAY = coeffs->NANGDAY;
+//     locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, NANGDAY);
+//     _calculate_abcd(i, j, first, last, 2 * g * dTchia2dY, arg->M + 2, bienran1 , bienran2, arr);
 
-}
+// }
 
-__global__ void 
-VZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
-    int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
-    int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
-    if (i > endidx) return;
-    bool bienran1 = false;
-    bool bienran2 = false;
-    int first = 0; int last = 0;
-    int seg_no = locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, NANGDAY);
+// __global__ void 
+// VZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
+//     int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
+//     int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
+//     if (i > endidx) return;
+//     bool bienran1 = false;
+//     bool bienran2 = false;
+//     int first = 0; int last = 0;
+//     int seg_no = locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, NANGDAY);
 
-    _calculate_matrix_coeff(false,i, j, arg->M + 2, 2 * (arg->M) + 1, first, last, seg_no, bienran1, bienran2,
-                          arg->vbd[i], arg->vbt[i], arg->t_z[i * (arg->M + 3) + last], arg->t_z[i * (arg->M + 3) + first], arg->bienQ[1], arg->bienQ[0], arg->M,arg,arr);
-}
+//     _calculate_matrix_coeff(false,i, j, arg->M + 2, 2 * (arg->M) + 1, first, last, seg_no, bienran1, bienran2,
+//                           arg->vbd[i], arg->vbt[i], arg->t_z[i * (arg->M + 3) + last], arg->t_z[i * (arg->M + 3) + first], arg->bienQ[1], arg->bienQ[0], arg->M,arg,arr);
+// }
 
-__global__ void 
-VZSolver_extract_solution(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
+// __global__ void 
+// VZSolver_extract_solution(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
 
-    int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
-    int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
+//     int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
+//     int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
 
-    if (i > endidx) return;
-    bool bienran1 = false;
-    bool bienran2 = false;
-    int first = 0; int last = 0;
-    int seg_no = locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, NANGDAY);
-    _vzSolver_extract_solution(i, j, arr->SN[i * segment_limit + seg_no], arg->M + 3, first, last, bienran1, bienran2, arg, arr);
+//     if (i > endidx) return;
+//     bool bienran1 = false;
+//     bool bienran2 = false;
+//     int first = 0; int last = 0;
+//     int seg_no = locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, NANGDAY);
+//     _vzSolver_extract_solution(i, j, arr->SN[i * segment_limit + seg_no], arg->M + 3, first, last, bienran1, bienran2, arg, arr);
 
 
-}
+// }
 
-__global__ void 
-UZSolver_extract_solution(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
-    int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
-    int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
-    if (j > endidx) return;
-    bool bienran1 = false;
-    bool bienran2 = false;
-    int first = 0; int last = 0;
-    int seg_no = locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
+// __global__ void 
+// UZSolver_extract_solution(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
+//     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
+//     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
+//     if (j > endidx) return;
+//     bool bienran1 = false;
+//     bool bienran2 = false;
+//     int first = 0; int last = 0;
+//     int seg_no = locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
     
-    _uzSolver_extract_solution(i, j, arr->SN[j * segment_limit + seg_no], arg->M + 3, first, last, bienran1, bienran2, arg, arr);
+//     _uzSolver_extract_solution(i, j, arr->SN[j * segment_limit + seg_no], arg->M + 3, first, last, bienran1, bienran2, arg, arr);
    
 
-}
+// }
 
-__global__ void 
-UZSolver_calculate_preindex(int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
-    // locate segment 
+// __global__ void 
+// UZSolver_calculate_preindex(int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
+//     // locate segment 
 
-    int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
-    int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
+//     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
+//     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
 
-    if (j > endidx ) return;
-    bool bienran1 = false;
-    bool bienran2 = false;
-    int first = 0; int last = 0;
-    locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
+//     if (j > endidx ) return;
+//     bool bienran1 = false;
+//     bool bienran2 = false;
+//     int first = 0; int last = 0;
+//     locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, coeffs->NANGDAY);
 
-    _uzSolver_calculate_preindex( i, j, arg->M + 3, first, last, arg, arr, coeffs);
-}
+//     _uzSolver_calculate_preindex( i, j, arg->M + 3, first, last, arg, arr, coeffs);
+// }
 
-// same i are in same block
+// // same i are in same block
 
-__global__ void 
-UZSolver_calculate_abcd(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
-    // i runs from start index to M 
-    int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
-    int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
-    if (j > endidx) return;
-    bool bienran1 = false;
-    bool bienran2 = false;
-    int first = 0; int last = 0;
-    locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
-    _calculate_abcd(j, i, first, last, 2 * g * dTchia2dX, arg->N + 2, bienran1 , bienran2, arr);
+// __global__ void 
+// UZSolver_calculate_abcd(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
+//     // i runs from start index to M 
+//     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
+//     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
+//     if (j > endidx) return;
+//     bool bienran1 = false;
+//     bool bienran2 = false;
+//     int first = 0; int last = 0;
+//     locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
+//     _calculate_abcd(j, i, first, last, 2 * g * dTchia2dX, arg->N + 2, bienran1 , bienran2, arr);
 
-}
+// }
 
-// same i are in same block
-__global__ void 
-UZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY Argument_Pointers* arg, Array_Pointers* arr){
-    int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
-    int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
-    if (j > endidx) return;
+// // same i are in same block
+// __global__ void 
+// UZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY Argument_Pointers* arg, Array_Pointers* arr){
+//     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
+//     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
+//     if (j > endidx) return;
     
-    bool bienran1 = false;
-    bool bienran2 = false;
-    int first = 0; int last = 0;
-    int seg_no = locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
+//     bool bienran1 = false;
+//     bool bienran2 = false;
+//     int first = 0; int last = 0;
+//     int seg_no = locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
         
-    _calculate_matrix_coeff(true, j, i, arg->N + 2, 2 * (arg->N) + 1, first, last, seg_no, bienran1, bienran2,
-                          arg->ubt[j], arg->ubp[j], arg->t_z[last * (arg->M + 3) + j], arg->t_z[first * (arg->M + 3) + j], arg->bienQ[2], arg->bienQ[3], arg->N ,arg,arr);
+//     _calculate_matrix_coeff(true, j, i, arg->N + 2, 2 * (arg->N) + 1, first, last, seg_no, bienran1, bienran2,
+//                           arg->ubt[j], arg->ubp[j], arg->t_z[last * (arg->M + 3) + j], arg->t_z[first * (arg->M + 3) + j], arg->bienQ[2], arg->bienQ[3], arg->N ,arg,arr);
 
-}
-
-
-
-__global__ void solveU(DOUBLE t, int startidx, int endidx, Argument_Pointers* arg, Constant_Coeffs* coeffs){
-
-    // calculate i, j from thread index. Should use function here for general thread assigning patttern.
-    // each thread has its own bienran1, bienran2, dau, cuoi that are passed to uSolver, and executes its own version of uSolver
-
-    int i = blockIdx.y * blockDim.y + threadIdx.y + 1;
-    int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
-    int N = arg->N;
-    int M = arg->M;
+// }
 
 
-    if ((i > N) || (j > endidx)) return;
-    bool bienran1 = false;
-    bool bienran2 = false;
-    int first = 0; int last = 0;
-    locate_segment_u(N, M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, arg->NANGDAY);
+
+
+// __global__ void solveU(DOUBLE t, int startidx, int endidx, Argument_Pointers* arg, Constant_Coeffs* coeffs){
+
+//     // calculate i, j from thread index. Should use function here for general thread assigning patttern.
+//     // each thread has its own bienran1, bienran2, dau, cuoi that are passed to uSolver, and executes its own version of uSolver
+
+//     int i = blockIdx.y * blockDim.y + threadIdx.y + 1;
+//     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
+//     int N = arg->N;
+//     int M = arg->M;
+
+
+//     if ((i > N) || (j > endidx)) return;
+//     bool bienran1 = false;
+//     bool bienran2 = false;
+//     int first = 0; int last = 0;
+//     locate_segment_u(N, M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, arg->NANGDAY);
     
-    if ( first > last || i < first - 1 || i >= last) return;
+//     if ( first > last || i < first - 1 || i >= last) return;
     
 
-    uSolver(t, M + 3, N, first, last, i, j, bienran1, bienran2, arg->VISCOIDX, arg->Tsxw, arg->v, arg->t_v, 
-            arg->u, arg->t_u, arg->z, arg->t_z, arg->Kx1, arg->Htdu, arg->H_moi, coeffs);    
-}
+//     uSolver(t, M + 3, N, first, last, i, j, bienran1, bienran2, arg->VISCOIDX, arg->Tsxw, arg->v, arg->t_v, 
+//             arg->u, arg->t_u, arg->z, arg->t_z, arg->Kx1, arg->Htdu, arg->H_moi, coeffs);    
+// }
 
-__global__ void solveV(DOUBLE t, int startidx, int endidx, Argument_Pointers* arg, Constant_Coeffs* coeffs){
+// __global__ void solveV(DOUBLE t, int startidx, int endidx, Argument_Pointers* arg, Constant_Coeffs* coeffs){
 
-        int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
-        int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
-        int N = arg->N;
-        int M = arg->M;
-        if ((i > endidx) || (j > M)) return;
-        //printf("thread no %d say hello from forth kernel\n", blockIdx.x*blockDim.x + threadIdx.x);
-        // leverage memory ultilization by differrent grid shape. inner function remains unchanged
-        bool bienran1 = false;
-        bool bienran2 = false;
-        int first = 0; int last = 0;
-        locate_segment_v(N, M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, coeffs->NANGDAY);
-        if ((first >= last) || (j >= last) || (j < first) ) return;
-        //printf("dauu, cuoi: %d %d\n", first, last);
-        vSolver(t, M +3, first, last, i, j, bienran1, bienran2, arg->VISCOIDX, arg->Tsyw, arg->v, arg->t_v, arg->u, 
-            arg->t_u, arg->z, arg->t_z, arg->Ky1, arg->Htdv, arg->H_moi, coeffs);
-}
+//         int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
+//         int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
+//         int N = arg->N;
+//         int M = arg->M;
+//         if ((i > endidx) || (j > M)) return;
+//         //printf("thread no %d say hello from forth kernel\n", blockIdx.x*blockDim.x + threadIdx.x);
+//         // leverage memory ultilization by differrent grid shape. inner function remains unchanged
+//         bool bienran1 = false;
+//         bool bienran2 = false;
+//         int first = 0; int last = 0;
+//         locate_segment_v(N, M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, coeffs->NANGDAY);
+//         if ((first >= last) || (j >= last) || (j < first) ) return;
+//         //printf("dauu, cuoi: %d %d\n", first, last);
+//         vSolver(t, M +3, first, last, i, j, bienran1, bienran2, arg->VISCOIDX, arg->Tsyw, arg->v, arg->t_v, arg->u, 
+//             arg->t_u, arg->z, arg->t_z, arg->Ky1, arg->Htdv, arg->H_moi, coeffs);
+// }
 
-__global__ void update_margin_elem_U(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg){
-    int j = blockIdx.y * blockDim.y + threadIdx.y + startidx;
-    int N = arg->N;
-    int M = arg->M;
-    if (j > endidx) return;
-    DOUBLE* t_u = arg->t_u;
-    DOUBLE* h = arg->h;
-    int* dauj = arg->dauj;
-    int* cuoij = arg->cuoij;
-    int* mocj = arg->mocj;
+// __global__ void update_margin_elem_U(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg){
+//     int j = blockIdx.y * blockDim.y + threadIdx.y + startidx;
+//     int N = arg->N;
+//     int M = arg->M;
+//     if (j > endidx) return;
+//     DOUBLE* t_u = arg->t_u;
+//     DOUBLE* h = arg->h;
+//     int* dauj = arg->dauj;
+//     int* cuoij = arg->cuoij;
+//     int* mocj = arg->mocj;
     
-    int first = 0; int last = 0;
-    for (int k = 0; k < mocj[j]; k++){
-        int width = segment_limit;
-        first = dauj[j * width + k];
-        last = cuoij[j * width + k];
-        bool bienran1 = false;
-        bool bienran2 = false;
-        width = M + 3;
-        if ((first > 2) || ( (first == 2) && (( abs( h[1 * width + j] + h[1 * width + j - 1]) * 0.5 - NANGDAY)  < epsilon) ))
-            bienran1 = true;
+//     int first = 0; int last = 0;
+//     for (int k = 0; k < mocj[j]; k++){
+//         int width = segment_limit;
+//         first = dauj[j * width + k];
+//         last = cuoij[j * width + k];
+//         bool bienran1 = false;
+//         bool bienran2 = false;
+//         width = M + 3;
+//         if ((first > 2) || ( (first == 2) && (( abs( h[1 * width + j] + h[1 * width + j - 1]) * 0.5 - NANGDAY)  < epsilon) ))
+//             bienran1 = true;
     
-        if ((last < N) || ((last == N) && ( abs((h[N * width + j] + h[N * width + j - 1]) * 0.5 - NANGDAY ) < epsilon ) ))
-            bienran2 = true;
+//         if ((last < N) || ((last == N) && ( abs((h[N * width + j] + h[N * width + j - 1]) * 0.5 - NANGDAY ) < epsilon ) ))
+//             bienran2 = true;
 
-        if (bienran1){
-            t_u[(first - 1) * width + j] = 0;
-        }
-        else 
-            t_u[(first - 1) * width + j] = 2 * t_u[first * width + j] - t_u[(first + 1) * width + j];
+//         if (bienran1){
+//             t_u[(first - 1) * width + j] = 0;
+//         }
+//         else 
+//             t_u[(first - 1) * width + j] = 2 * t_u[first * width + j] - t_u[(first + 1) * width + j];
 
-        if(bienran2)
-            t_u[last * width + j] = 0;
-        else 
-            t_u[last * width + j] = 2 * t_u[(last - 1) * width +  j] - t_u[(last - 2) * width +  j];           
-    }
-}
+//         if(bienran2)
+//             t_u[last * width + j] = 0;
+//         else 
+//             t_u[last * width + j] = 2 * t_u[(last - 1) * width +  j] - t_u[(last - 2) * width +  j];           
+//     }
+// }
 
-__global__ void update_margin_elem_V(DOUBLE t, int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg){
-    int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
-    int M = arg->M;
-    if (i > endidx) return;
-    DOUBLE* t_v = arg->t_v;
-    DOUBLE* h = arg->h;
-    int* daui = arg->daui;
-    int* cuoii = arg->cuoii;
-    int* moci = arg->moci;
+// __global__ void update_margin_elem_V(DOUBLE t, int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg){
+//     int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
+//     int M = arg->M;
+//     if (i > endidx) return;
+//     DOUBLE* t_v = arg->t_v;
+//     DOUBLE* h = arg->h;
+//     int* daui = arg->daui;
+//     int* cuoii = arg->cuoii;
+//     int* moci = arg->moci;
     
-    int first = 0; int last = 0;
-    for (int k = 0; k < moci[i]; k++){
-        bool bienran1 = false;
-        bool bienran2 = false;
-        int width = segment_limit;
-        first = daui[i * width + k];
-        last = cuoii[i * width + k];
-        width = M + 3;
-        if ((first > 2) || ((first == 2) && ( abs((h[i * width + first - 1] + h[(i - 1) * width + first - 1]) * 0.5 - NANGDAY) < epsilon))){
-           bienran1 = true;
-        }
+//     int first = 0; int last = 0;
+//     for (int k = 0; k < moci[i]; k++){
+//         bool bienran1 = false;
+//         bool bienran2 = false;
+//         int width = segment_limit;
+//         first = daui[i * width + k];
+//         last = cuoii[i * width + k];
+//         width = M + 3;
+//         if ((first > 2) || ((first == 2) && ( abs((h[i * width + first - 1] + h[(i - 1) * width + first - 1]) * 0.5 - NANGDAY) < epsilon))){
+//            bienran1 = true;
+//         }
 
 
-        if ((last < M) || ((last == M) && ( abs((h[i * width +  last] + h[(i - 1) * width + last]) * 0.5 - NANGDAY) < epsilon))) {
-            bienran2 = true;
-        }
+//         if ((last < M) || ((last == M) && ( abs((h[i * width +  last] + h[(i - 1) * width + last]) * 0.5 - NANGDAY) < epsilon))) {
+//             bienran2 = true;
+//         }
 
         
 
-        if (bienran1)
-            t_v[i * width +  first - 1] = 0;
-        else{
-            t_v[i * width +  first - 1] = 2 * t_v[i * width +  first] - t_v[i * width +  first + 1];
-        }
-        if (bienran2){
+//         if (bienran1)
+//             t_v[i * width +  first - 1] = 0;
+//         else{
+//             t_v[i * width +  first - 1] = 2 * t_v[i * width +  first] - t_v[i * width +  first + 1];
+//         }
+//         if (bienran2){
 
-            t_v[i * width +  last] = 0;
-        }
-        else{
+//             t_v[i * width +  last] = 0;
+//         }
+//         else{
             
-            t_v[i * width +  last] = 2 * t_v[i * width +  last - 1] - t_v[i * width +  last - 2];
-        }         
-    }
+//             t_v[i * width +  last] = 2 * t_v[i * width +  last - 1] - t_v[i * width +  last - 2];
+//         }         
+//     }
         
-}
+// }
 
 
 

@@ -138,6 +138,7 @@ __device__ void  _vzSolver_calculate_preindex(DOUBLE t, int i, int j, int width,
     dTchia2dY = coeffs->dTchia2dY;
     dTchia2dX = coeffs->dTchia2dX;
     Windy = coeffs->Windy;
+    CORIOLIS_FORCE = coeffs->CORIOLIS_FORCE;
     // can phai control dk bien o ngoai function
     // ham nay ko coarseless
     // can actually get rid of fs, and only need to use 3 variables instead of 3 m * n arrays
@@ -172,62 +173,75 @@ __device__ void  _vzSolver_calculate_preindex(DOUBLE t, int i, int j, int width,
 
 }
 
-// __device__ void  _uzSolver_calculate_preindex(int i, int j, int width, int first, int last, Argument_Pointers* arg, Array_Pointers *arr){
-//     if ((first > last) || (i < first) || ( i > last)) return;
-//     DOUBLE p = 0.0;
-//     DOUBLE q = 0.0;
-//     __shared__ DOUBLE *u, *v, *z, *Htdv, *Htdu, *H_moi, *VISCOIDX, *Tsxw, *Kx1, *a2, *c2, *d2, *f1, *f2, *f3, *f5;
-//     __shared__ int support_array_width;
-//     support_array_width = arg->N + 2;
-//     u = arg->u;
-//     v = arg->v;
-//     z = arg->z;
-//     Htdv = arg->Htdv;
-//     Htdu = arg->Htdu;
-//     VISCOIDX = arg->VISCOIDX;
-//     Tsxw = arg->Tsxw;
-//     H_moi = arg->H_moi;
-//     Kx1 = arg-> Kx1;
-//     a2 = &(arr->a2[j * support_array_width]);
-//     c2 = &(arr->c2[j * support_array_width]);
-//     d2 = &(arr->d2[j * support_array_width]);
-//     f1 = &(arr->f1[j * support_array_width]);
-//     f2 = &(arr->f2[j * support_array_width]);
-//     f3 = &(arr->f3[j * support_array_width]);
-//     f5 = &(arr->f5[j * support_array_width]);
-//     DOUBLE vtb = (v[i * width +  j - 1] + v[i * width + j] + v[(i + 1) * width + j - 1] + v[(i + 1) * width + j]) * 0.25;
-//     f1[i] = dTchia2dX * u[i * width + j] + VISCOIDX[i * width + j] * dT / dXbp;
-//     f2[i] = -(2 + Kx1[i * width + j] * dT * sqrt(u[i * width + j] * u[i * width + j] + vtb * vtb) / Htdu[i * width + j] + (2 * dT * VISCOIDX[i * width + j]) / dXbp); // chua tinh muc nuoc trung binh
+__device__ void  _uzSolver_calculate_preindex(int i, int j, int width, int first, int last, Argument_Pointers* arg, Array_Pointers *arr, Constant_Coeffs* coeffs){
+    if ((first > last) || (i < first) || ( i > last)) return;
+    DOUBLE p = 0.0;
+    DOUBLE q = 0.0;
+    __shared__ DOUBLE *u, *v, *z, *Htdv, *Htdu, *H_moi, *VISCOIDX, *Tsxw, *Kx1, *a2, *c2, *d2, *f1, *f2, *f3, *f5;
+    __shared__ int support_array_width;
+    __shared__ DOUBLE H_TINH, dYbp, dXbp, dT, dTchia2dY,dTchia2dX, dY2, CORIOLIS_FORCE, Windx ;
 
-//     f3[i] = dT * VISCOIDX[i * width + j] / dXbp - dTchia2dX * u[i * width + j];
+    support_array_width = arg->N + 2;
+    u = arg->u;
+    v = arg->v;
+    z = arg->z;
+    Htdv = arg->Htdv;
+    Htdu = arg->Htdu;
+    VISCOIDX = arg->VISCOIDX;
+    Tsxw = arg->Tsxw;
+    H_moi = arg->H_moi;
+    Kx1 = arg-> Kx1;
+    a2 = &(arr->a2[j * support_array_width]);
+    c2 = &(arr->c2[j * support_array_width]);
+    d2 = &(arr->d2[j * support_array_width]);
+    f1 = &(arr->f1[j * support_array_width]);
+    f2 = &(arr->f2[j * support_array_width]);
+    f3 = &(arr->f3[j * support_array_width]);
+    f5 = &(arr->f5[j * support_array_width]);
+
+    H_TINH = coeffs->H_TINH;
+    dT = coeffs->dT;
+    dXbp = coeffs->dXbp;
+    dYbp = coeffs->dYbp;
+    dY2 = coeffs->dY2;
+    dTchia2dY = coeffs->dTchia2dY;
+    dTchia2dX = coeffs->dTchia2dX;
+    Windx = coeffs->Windx;
+    CORIOLIS_FORCE = coeffs->CORIOLIS_FORCE;
+
+    DOUBLE vtb = (v[i * width +  j - 1] + v[i * width + j] + v[(i + 1) * width + j - 1] + v[(i + 1) * width + j]) * 0.25;
+    f1[i] = dTchia2dX * u[i * width + j] + VISCOIDX[i * width + j] * dT / dXbp;
+    f2[i] = -(2 + Kx1[i * width + j] * dT * sqrt(u[i * width + j] * u[i * width + j] + vtb * vtb) / Htdu[i * width + j] + (2 * dT * VISCOIDX[i * width + j]) / dXbp); // chua tinh muc nuoc trung binh
+
+    f3[i] = dT * VISCOIDX[i * width + j] / dXbp - dTchia2dX * u[i * width + j];
     
-//     if (H_moi[i * width + j - 1] <= H_TINH){
-//         if (vtb < 0){
-//             p = vtb * (-3 * u[i * width + j] + 4 * u[i * width + j + 1] - u[i * width + j + 2]) / dY2;
-//             q = (u[i * width + j] - 2 * u[i * width + j + 1] + u[i * width + j + 2]) / dYbp;
-//         }
-//     }
-//     else{
-//         if (H_moi[i * width + j + 1] <= H_TINH){
-//             if ((H_moi[i * width + j - 2] > H_TINH) && (vtb > 0)){
-//                 p = vtb * (3 * u[i * width + j] - 4 * u[i * width + j - 1] + u[i * width + j - 2]) / dY2;
-//                 q = (u[i * width + j] - 2 * u[i * width + j - 1] + u[i * width + j - 2] ) / dYbp;
-//             }
-//         }else{
-//             p = vtb * (u[i * width + j + 1] - u[i * width + j - 1]) / dY2;
-//             q = (u[i * width + j + 1] - 2 * u[i * width + j] + u[i * width + j - 1]) / dYbp;
-//         }
-//     }
+    if (H_moi[i * width + j - 1] <= H_TINH){
+        if (vtb < 0){
+            p = vtb * (-3 * u[i * width + j] + 4 * u[i * width + j + 1] - u[i * width + j + 2]) / dY2;
+            q = (u[i * width + j] - 2 * u[i * width + j + 1] + u[i * width + j + 2]) / dYbp;
+        }
+    }
+    else{
+        if (H_moi[i * width + j + 1] <= H_TINH){
+            if ((H_moi[i * width + j - 2] > H_TINH) && (vtb > 0)){
+                p = vtb * (3 * u[i * width + j] - 4 * u[i * width + j - 1] + u[i * width + j - 2]) / dY2;
+                q = (u[i * width + j] - 2 * u[i * width + j - 1] + u[i * width + j - 2] ) / dYbp;
+            }
+        }else{
+            p = vtb * (u[i * width + j + 1] - u[i * width + j - 1]) / dY2;
+            q = (u[i * width + j + 1] - 2 * u[i * width + j] + u[i * width + j - 1]) / dYbp;
+        }
+    }
 
-//     f5[i] = -2 * u[i * width + j] + dT * p  - dT * CORIOLIS_FORCE * vtb - dT * VISCOIDX[i * width + j] * q - dT * (Windx() - Tsxw[i * width + j]) / Htdu[i * width + j];
+    f5[i] = -2 * u[i * width + j] + dT * p  - dT * CORIOLIS_FORCE * vtb - dT * VISCOIDX[i * width + j] * q - dT * (Windx() - Tsxw[i * width + j]) / Htdu[i * width + j];
 
     
-//     c2[i] = dTchia2dX * Htdu[i * width + j];
-//     a2[i] = - dTchia2dX * Htdu[(i - 1) * width + j];
+    c2[i] = dTchia2dX * Htdu[i * width + j];
+    a2[i] = - dTchia2dX * Htdu[(i - 1) * width + j];
 
-//     d2[i] = z[i * width + j] - dTchia2dY * (Htdv[i * width + j] * v[i * width + j] - Htdv[i * width + j - 1] * v[i * width + j - 1]);
+    d2[i] = z[i * width + j] - dTchia2dY * (Htdv[i * width + j] * v[i * width + j] - Htdv[i * width + j - 1] * v[i * width + j - 1]);
     
-// }
+}
 
 // __device__ void _calculate_abcd(int i, int j, int first, int last, DOUBLE f4, int support_array_width,  bool bienran1, bool bienran2, Array_Pointers* arr){
 //     if ((first > last) || (j < first) || ( j > last)) return;

@@ -13,32 +13,32 @@ Created by Huong Nguyen
 
 
 
-__device__ void tridiag(int sn, DOUBLE* AA, DOUBLE* BB, DOUBLE* CC, DOUBLE*DD, DOUBLE *x, 
-    DOUBLE *Ap, DOUBLE *Bp, DOUBLE *ep){
-    if (sn == 0){
-        x[0] = DD[0] / BB[0];
-        return;
-    }
+// __device__ void tridiag(int sn, DOUBLE* AA, DOUBLE* BB, DOUBLE* CC, DOUBLE*DD, DOUBLE *x, 
+//     DOUBLE *Ap, DOUBLE *Bp, DOUBLE *ep){
+//     if (sn == 0){
+//         x[0] = DD[0] / BB[0];
+//         return;
+//     }
 
-    Ap[0] = - CC[0] / BB[0];
-    Bp[0] = DD[0] / BB[0];
+//     Ap[0] = - CC[0] / BB[0];
+//     Bp[0] = DD[0] / BB[0];
   
-    for (int i = 1; i < sn; i++){
+//     for (int i = 1; i < sn; i++){
         
-        ep[i] = AA[i] * Ap[i - 1] + BB[i]; 
-        Ap[i] = -CC[i] / ep[i];
-        Bp[i] = (DD[i] - (AA[i] * Bp[i - 1]) ) / ep[i];
+//         ep[i] = AA[i] * Ap[i - 1] + BB[i]; 
+//         Ap[i] = -CC[i] / ep[i];
+//         Bp[i] = (DD[i] - (AA[i] * Bp[i - 1]) ) / ep[i];
         
-    }
+//     }
     
-    x[sn] = (DD[sn] - (AA[sn] * Bp[sn - 1])) / (BB[sn] + (AA[sn] * Ap[sn - 1]));
+//     x[sn] = (DD[sn] - (AA[sn] * Bp[sn - 1])) / (BB[sn] + (AA[sn] * Ap[sn - 1]));
     
 
-    for (int i = sn - 1; i >= 0; i--){
-        x[i] = Bp[i] + (Ap[i] * x[i + 1]);     
+//     for (int i = sn - 1; i >= 0; i--){
+//         x[i] = Bp[i] + (Ap[i] * x[i + 1]);     
 
-    }        
-}
+//     }        
+// }
 
 
 // __global__ void  tridiaxgSolver(bool print, bool isU, int startidx, int endidx, int jumpstep, int tridiag_coeff_width, Argument_Pointers* arg, Array_Pointers * arr){

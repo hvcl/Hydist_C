@@ -20,7 +20,9 @@ Created by Huong Nguyen
 // checked Mar-30
 
 __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
-	__shared__ DOUBLE NANGDAY, g, mu_mn;
+	__shared__ DOUBLE NANGDAY;
+	__shared__ DOUBLE g, 
+	__shared__ DOUBLE mu_mn;
 	NANGDAY = coeffs->NANGDAY;
 	g = coeffs->g;
 	mu_mn = coeffs->mu_mn;

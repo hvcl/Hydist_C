@@ -241,7 +241,7 @@ __device__ void Interpolate_FS_d(int location, int offset, int sign, Argument_Po
 	}
 
 }
-__global__ void Find_Calculation_limits_Horizontal( Argument_Pointers *arg){
+__global__ void Find_Calculation_limits_Horizontal( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 
 	// int thrx = blockIdx.x * blockDim.x + threadIdx.x;
  //    int thry = blockIdx.y * blockDim.y + threadIdx.y;
@@ -259,9 +259,9 @@ __global__ void Find_Calculation_limits_Horizontal( Argument_Pointers *arg){
 	int end = 0;
 	int offset = M + 3;
 	if (i == N)
-		Interpolate_FS_ng(N, N - 1, -1, arg);
+		Interpolate_FS_ng(N, N - 1, -1, arg, coeffs);
 	if (i == 2)
-		Interpolate_FS_ng(2, 2, 1, arg);
+		Interpolate_FS_ng(2, 2, 1, arg, coeffs);
 
 	while (start < M){
 		//printf("i: %d, start %d \n",i, start );
@@ -294,7 +294,7 @@ __global__ void Find_Calculation_limits_Horizontal( Argument_Pointers *arg){
 }
 
 
-__global__ void Find_Calculation_limits_Vertical(Argument_Pointers *arg){
+__global__ void Find_Calculation_limits_Vertical(Argument_Pointers *arg, Constant_Coeffs* coeffs){
 
 	// int thrx = blockIdx.x * blockDim.x + threadIdx.x;
  //    int thry = blockIdx.y * blockDim.y + threadIdx.y;
@@ -313,7 +313,7 @@ __global__ void Find_Calculation_limits_Vertical(Argument_Pointers *arg){
 	int offset = M + 3;
 	
 	if (j == M)
-		Interpolate_FS_d(M, M - 1, -1, arg);
+		Interpolate_FS_d(M, M - 1, -1, arg, coeffs);
 	while (start < N){
 		if (khouot[start * offset + j] != 0  ){
 			while ((khouot[start * offset + j]) && (start < N)) start++;
@@ -349,98 +349,168 @@ __global__ void Find_Calculation_limits_Vertical(Argument_Pointers *arg){
 }
 
 
-// __global__ void Htuongdoi(Argument_Pointers* arg){
+__global__ void Htuongdoi(Argument_Pointers* arg){
 
-// 	int i = blockIdx.y * blockDim.y + threadIdx.y + 1;
-// 	int j = blockIdx.x * blockDim.x + threadIdx.x + 1;
-// 	int M = arg->M;
-// 	int N = arg->N; 
-// 	DOUBLE* Htdu = arg->Htdu;
-// 	DOUBLE* Htdv = arg->Htdv;
-// 	DOUBLE* h = arg->h;
-// 	DOUBLE* z = arg->z;
+	int i = blockIdx.y * blockDim.y + threadIdx.y + 1;
+	int j = blockIdx.x * blockDim.x + threadIdx.x + 1;
+	int M = arg->M;
+	int N = arg->N; 
+	DOUBLE* Htdu = arg->Htdu;
+	DOUBLE* Htdv = arg->Htdv;
+	DOUBLE* h = arg->h;
+	DOUBLE* z = arg->z;
 
-// 	if ((i > N) || (j > M)) return;
-// 	int width = M + 3;
-//     Htdu[i * width + j] = (h[i * width + j - 1] + h[i * width + j] + z[(i + 1) * width + j] + z[i * width + j]) * 0.5;
-//     Htdv[i * width + j] = (h[(i - 1) * width + j] + h[i * width + j] + z[i * width + j + 1] + z[i * width + j]) * 0.5;
+	if ((i > N) || (j > M)) return;
+	int width = M + 3;
+    Htdu[i * width + j] = (h[i * width + j - 1] + h[i * width + j] + z[(i + 1) * width + j] + z[i * width + j]) * 0.5;
+    Htdv[i * width + j] = (h[(i - 1) * width + j] + h[i * width + j] + z[i * width + j + 1] + z[i * width + j]) * 0.5;
     
-// }
+}
 
-// __global__ void boundary_up(DOUBLE t, int segment_limit, int M, int N, bool* bienQ, DOUBLE* t_z, int* daui, int* cuoii, 
+// __global__ void boundary_up(DOUBLE t, int M, int N, bool* bienQ, DOUBLE* t_z, int* daui, int* cuoii, 
 // 	int* dauj, int* cuoij, DOUBLE* vbt, DOUBLE* vbd, DOUBLE* ubt, DOUBLE* ubp ){
-	
-// 	int thrx = blockIdx.x * blockDim.x + threadIdx.x;
-//     int thry = blockIdx.y * blockDim.y + threadIdx.y;
-//     int i = thrx * (blockDim.y * gridDim.y) + thry + dauj[M * segment_limit];
-// 	int offset = M + 3;
-// 	//printf("i = %d, cuoij: %d\n", i, cuoij[M * offset] );
-// 	if (i > cuoij[M * segment_limit]) return;
-// 	// if (bienQ[0])
-// 	// 	{vbt[i] = 0;
-// 	// 			printf("here\n");
-// 	// 	}
-// 	else{
-// 		t_z[i * offset + M] = 0.01 * cos(2 * PI / 27.750 * t) * cos(2 * (PI / 100) * (100 - dY / 2));
-// 		t_z[i * offset + M + 1] = 0.01 * cos(2 * PI / 27.75 * t)  * cos(2 * (PI / 100) *  (100 + dY / 2));
-// 		//printf("tz[%d, %d] = %.15f\n",i, M, t_z[i * offset + M]);
-// 	}
-// }
+__global__ void boundary_up (DOUBLE t, Argument_Pointers* arg, Constant_Coeffs* coeffs){
+	DOUBLE *t_z, *vbt, *vbd, *ubt, *ubp;
+	int M, N, *daui, *cuoii, *dauj, *cuoij;
+	bool *bienQ;
+	DOUBLE dY = coeffs->dY;
+	bienQ = arg->bienQ;
+	t_z = arg->t_z;
+	vbt = arg->vbt;
+	vbd = arg->vbd;
+	ubt = arg->ubt;
+	ubp = arg->ubp;
+	M = arg->M;
+	N = arg->N;
+	daui = arg->daui;
+	cuoii = arg->cuoii;
+	dauj = arg->dauj;
+	cuoij = arg->cuoij;
 
-// __global__ void boundary_down(DOUBLE t, int segment_limit, int M, int N, bool* bienQ, DOUBLE* t_z, int* daui, int* cuoii, 
+	int thrx = blockIdx.x * blockDim.x + threadIdx.x;
+    int thry = blockIdx.y * blockDim.y + threadIdx.y;
+    int i = thrx * (blockDim.y * gridDim.y) + thry + dauj[M * segment_limit];
+	int offset = M + 3;
+	//printf("i = %d, cuoij: %d\n", i, cuoij[M * offset] );
+	if (i > cuoij[M * segment_limit]) return;
+	// if (bienQ[0])
+	// 	{vbt[i] = 0;
+	// 			printf("here\n");
+	// 	}
+	else{
+		t_z[i * offset + M] = 0.01 * cos(2 * PI / 27.750 * t) * cos(2 * (PI / 100) * (100 - dY / 2));
+		t_z[i * offset + M + 1] = 0.01 * cos(2 * PI / 27.75 * t)  * cos(2 * (PI / 100) *  (100 + dY / 2));
+		//printf("tz[%d, %d] = %.15f\n",i, M, t_z[i * offset + M]);
+	}
+}
+
+// __global__ void boundary_down(DOUBLE t,  int M, int N, bool* bienQ, DOUBLE* t_z, int* daui, int* cuoii, 
 // 	int* dauj, int* cuoij, DOUBLE* vbt, DOUBLE* vbd, DOUBLE* ubt, DOUBLE* ubp ){
-	
-// 	int thrx = blockIdx.x * blockDim.x + threadIdx.x;
-//     int thry = blockIdx.y * blockDim.y + threadIdx.y;
-//     int i = thrx * (blockDim.y * gridDim.y) + thry + dauj[2 * segment_limit];
-// 	int offset = M + 3;
-// 	if (i > cuoij[2 * segment_limit]) return;
-// 	if (bienQ[1])
-// 		vbd[i] = 0;
-// 	else{
-// 		t_z[i * offset + 2] = 0.01 * cos(2 * PI / 27.75 * t ) * cos(2 * (PI / 100) * dY / 2);
-//         t_z[i * offset + 1] = 0.01 * cos(2 * PI / 27.75 * t ) * cos(2 * (PI / 100) * (-dY) / 2);
-//         //if (t >= 6.75) printf(" tz[%d, %d] = %.15f\n",i, 2, t_z[i * offset + 2]);
-// 	}
-// }
 
-// __global__ void boundary_left(DOUBLE t, int segment_limit, int M, int N, bool* bienQ, DOUBLE* t_z, int* daui, int* cuoii, 
+__global__ void boundary_down(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs* coeffs){
+	DOUBLE *t_z, *vbt, *vbd, *ubt, *ubp;
+	int M, N, *daui, *cuoii, *dauj, *cuoij;
+	bool *bienQ;
+	DOUBLE dY = coeffs->dY;
+	bienQ = arg->bienQ;
+	t_z = arg->t_z;
+	vbt = arg->vbt;
+	vbd = arg->vbd;
+	ubt = arg->ubt;
+	ubp = arg->ubp;
+	M = arg->M;
+	N = arg->N;
+	daui = arg->daui;
+	cuoii = arg->cuoii;
+	dauj = arg->dauj;
+	cuoij = arg->cuoij;
+	
+	int thrx = blockIdx.x * blockDim.x + threadIdx.x;
+    int thry = blockIdx.y * blockDim.y + threadIdx.y;
+    int i = thrx * (blockDim.y * gridDim.y) + thry + dauj[2 * segment_limit];
+	int offset = M + 3;
+	if (i > cuoij[2 * segment_limit]) return;
+	if (bienQ[1])
+		vbd[i] = 0;
+	else{
+		t_z[i * offset + 2] = 0.01 * cos(2 * PI / 27.75 * t ) * cos(2 * (PI / 100) * dY / 2);
+        t_z[i * offset + 1] = 0.01 * cos(2 * PI / 27.75 * t ) * cos(2 * (PI / 100) * (-dY) / 2);
+        //if (t >= 6.75) printf(" tz[%d, %d] = %.15f\n",i, 2, t_z[i * offset + 2]);
+	}
+}
+
+// __global__ void boundary_left(DOUBLE t, int M, int N, bool* bienQ, DOUBLE* t_z, int* daui, int* cuoii, 
 // 	int* dauj, int* cuoij, DOUBLE* vbt, DOUBLE* vbd, DOUBLE* ubt, DOUBLE* ubp){
 
-	
-// 	int thrx = blockIdx.x * blockDim.x + threadIdx.x;
-//     int thry = blockIdx.y * blockDim.y + threadIdx.y;
-//     int i = thrx * (blockDim.y * gridDim.y) + thry + daui[2 * segment_limit];
-// 	int offset = M + 3;
-// 	//printf("i: %d\n", cuoii[2 * offset]);
-// 	if (i > cuoii[2 * segment_limit]) return;
-// 	if (bienQ[2])
-// 		ubt[i] = 0;
-// 	else{
-// 		t_z[2 * offset + i] = 0.01 * cos(2 * PI / 27.75 * t ) * cos(2 * (PI / 100) * dX / 2);
-//         t_z[1 * offset + i] = 0.01 * cos(2 * PI / 27.75 * t ) * cos(2 * (PI / 100) * (- dX) / 2);
-//         //if (t >= 6.75) printf("tz[%d, %d] = %.15f\n",2, i, t_z[2 * offset + i]);
+__global__ void boundary_left(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs* coeffs){
+	DOUBLE *t_z, *vbt, *vbd, *ubt, *ubp;
+	int M, N, *daui, *cuoii, *dauj, *cuoij;
+	bool *bienQ;
+	DOUBLE dX = coeffs->dX;
+	bienQ = arg->bienQ;
+	t_z = arg->t_z;
+	vbt = arg->vbt;
+	vbd = arg->vbd;
+	ubt = arg->ubt;
+	ubp = arg->ubp;
+	M = arg->M;
+	N = arg->N;
+	daui = arg->daui;
+	cuoii = arg->cuoii;
+	dauj = arg->dauj;
+	cuoij = arg->cuoij;
 
-// 	}
+	int thrx = blockIdx.x * blockDim.x + threadIdx.x;
+    int thry = blockIdx.y * blockDim.y + threadIdx.y;
+    int i = thrx * (blockDim.y * gridDim.y) + thry + daui[2 * segment_limit];
+	int offset = M + 3;
+	//printf("i: %d\n", cuoii[2 * offset]);
+	if (i > cuoii[2 * segment_limit]) return;
+	if (bienQ[2])
+		ubt[i] = 0;
+	else{
+		t_z[2 * offset + i] = 0.01 * cos(2 * PI / 27.75 * t ) * cos(2 * (PI / 100) * dX / 2);
+        t_z[1 * offset + i] = 0.01 * cos(2 * PI / 27.75 * t ) * cos(2 * (PI / 100) * (- dX) / 2);
+        //if (t >= 6.75) printf("tz[%d, %d] = %.15f\n",2, i, t_z[2 * offset + i]);
 
-// }
+	}
 
-// __global__ void boundary_right(DOUBLE t, int segment_limit, int M, int N, bool* bienQ, DOUBLE* t_z, int* daui, int* cuoii, 
+}
+
+// __global__ void boundary_right(DOUBLE t, int M, int N, bool* bienQ, DOUBLE* t_z, int* daui, int* cuoii, 
 // 	int* dauj, int* cuoij, DOUBLE* vbt, DOUBLE* vbd, DOUBLE* ubt, DOUBLE* ubp){
+
+__global__ void boundary_right(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs* coeffs){
+	DOUBLE *t_z, *vbt, *vbd, *ubt, *ubp;
+	int M, N, *daui, *cuoii, *dauj, *cuoij;
+	bool *bienQ;
+	DOUBLE dX = coeffs->dX;
+	bienQ = arg->bienQ;
+	t_z = arg->t_z;
+	vbt = arg->vbt;
+	vbd = arg->vbd;
+	ubt = arg->ubt;
+	ubp = arg->ubp;
+	M = arg->M;
+	N = arg->N;
+	daui = arg->daui;
+	cuoii = arg->cuoii;
+	dauj = arg->dauj;
+	cuoij = arg->cuoij;
 	
-// 	int thrx = blockIdx.x * blockDim.x + threadIdx.x;
-//     int thry = blockIdx.y * blockDim.y + threadIdx.y;
-//     int i = thrx * (blockDim.y * gridDim.y) + thry + daui[2 * segment_limit];
-// 	int offset = M + 3;
-// 	if (i > cuoii[N * segment_limit]) return;
-// 	if (bienQ[3])
-// 		ubp[i] = 0;
-// 	else{
-// 		t_z[N * offset + i] = 0.01 * cos(2 * PI / 27.75 * t)  * cos(2 * (PI / 100) *  (100 - dX / 2));
-//         t_z[(N + 1) * offset + i] = 0.01 * cos(2 * PI / 27.75 * t)  * cos(2 * (PI / 100) *  (100 + dX / 2));
-//         //if (t >= 6.75) printf("tz[%d, %d] = %.15f\n",N, i, t_z[N * offset + i]);
-// 	}
-// }
+	int thrx = blockIdx.x * blockDim.x + threadIdx.x;
+    int thry = blockIdx.y * blockDim.y + threadIdx.y;
+    int i = thrx * (blockDim.y * gridDim.y) + thry + daui[2 * segment_limit];
+	int offset = M + 3;
+	if (i > cuoii[N * segment_limit]) return;
+	if (bienQ[3])
+		ubp[i] = 0;
+	else{
+		t_z[N * offset + i] = 0.01 * cos(2 * PI / 27.75 * t)  * cos(2 * (PI / 100) *  (100 - dX / 2));
+        t_z[(N + 1) * offset + i] = 0.01 * cos(2 * PI / 27.75 * t)  * cos(2 * (PI / 100) *  (100 + dX / 2));
+        //if (t >= 6.75) printf("tz[%d, %d] = %.15f\n",N, i, t_z[N * offset + i]);
+	}
+}
 
 
 

@@ -194,45 +194,51 @@ __global__ void Reset_states_vertical(Argument_Pointers* arg, Constant_Coeffs* c
 }
 
 
-// __device__ void Interpolate_FS_ng(int location, int offset, int sign, Argument_Pointers* arg){
+__device__ void Interpolate_FS_ng(int location, int offset, int sign, Argument_Pointers* arg, Constant_Coeffs* coeffs){
 
-// 	int M = arg->M;
-// 	int width = M + 3;
-// 	DOUBLE* t_u = arg->t_u;
-// 	DOUBLE* u = arg->u;
-// 	DOUBLE* FS = arg->FS;
-// 	DOUBLE deltaX;
-// 	int i, i_deltaX, i_dX;
-// 	for (int j = 1; j < M; j++){
-// 		if (t_u[location  * width + j] > 0){
-// 			deltaX = (u[location * width + j ] + t_u[location * width + j]) * 0.25 * dT;
-// 			i = offset + sign * (deltaX / dX);
-// 			i_deltaX = __double2int_rn(deltaX);
-// 			i_dX = __double2int_rn(dX);
-// 			FS[location * width  + j] = FS[i * width + j] + sign * (FS[(i + 1) * width + j] - FS[i * width + j] )* (deltaX / dX - i_deltaX / i_dX);
-// 		}
-// 	}
+	int M = arg->M;
+	int width = M + 3;
+	DOUBLE* t_u = arg->t_u;
+	DOUBLE* u = arg->u;
+	DOUBLE* FS = arg->FS;
+	DOUBLE deltaX;
+	DOUBLE dT, dX;
+	dT = coeffs->dT;
+	dX = coeffs->dX;
+	int i, i_deltaX, i_dX;
+	for (int j = 1; j < M; j++){
+		if (t_u[location  * width + j] > 0){
+			deltaX = (u[location * width + j ] + t_u[location * width + j]) * 0.25 * dT;
+			i = offset + sign * (deltaX / dX);
+			i_deltaX = __double2int_rn(deltaX);
+			i_dX = __double2int_rn(dX);
+			FS[location * width  + j] = FS[i * width + j] + sign * (FS[(i + 1) * width + j] - FS[i * width + j] )* (deltaX / dX - i_deltaX / i_dX);
+		}
+	}
 
-// }
+}
 
-// __device__ void Interpolate_FS_d(int location, int offset, int sign, Argument_Pointers* arg){
+__device__ void Interpolate_FS_d(int location, int offset, int sign, Argument_Pointers* arg, Constant_Coeffs* coeffs){
 
-// 	int M = arg->M;
-// 	int width = M + 3;
-// 	DOUBLE* t_v = arg->t_v;
-// 	DOUBLE* v = arg->v;
-// 	DOUBLE* FS = arg->FS;
-// 	DOUBLE deltaY;
-// 	int j, j_deltaY, j_dY;
-// 	for (int i = 1; i < M; i++){
-// 		if (t_v[i  * width + location] > 0){
-// 			deltaY = (v[i * width + location ] + t_v[i * width + location]) * 0.25 * dT;
-// 			j = offset + sign * (deltaY / dY);
-// 			j_deltaY = __double2int_rn(deltaY);
-// 			j_dY = __double2int_rn(dY);
-// 			FS[i * width  + location] = FS[i * width + j + 1] + (FS[i * width + j + 1] - FS[i * width + j] )* (deltaY / dY - j_deltaY / j_dY);
-// 		}
-// 	}
+	int M = arg->M;
+	int width = M + 3;
+	DOUBLE* t_v = arg->t_v;
+	DOUBLE* v = arg->v;
+	DOUBLE* FS = arg->FS;
+	DOUBLE deltaY;
+	DOUBLE dT, dY;
+	dT = coeffs->dT;
+	dY = coeffs->dY;
+	int j, j_deltaY, j_dY;
+	for (int i = 1; i < M; i++){
+		if (t_v[i  * width + location] > 0){
+			deltaY = (v[i * width + location ] + t_v[i * width + location]) * 0.25 * dT;
+			j = offset + sign * (deltaY / dY);
+			j_deltaY = __double2int_rn(deltaY);
+			j_dY = __double2int_rn(dY);
+			FS[i * width  + location] = FS[i * width + j + 1] + (FS[i * width + j + 1] - FS[i * width + j] )* (deltaY / dY - j_deltaY / j_dY);
+		}
+	}
 
 // }
 // __global__ void Find_Calculation_limits_Horizontal( Argument_Pointers *arg){

@@ -1,6 +1,6 @@
 CFLAGS = -I.
-DEPS = Engine.h 
-OBJ = main.o Engine.o support_funcs.o
+DEPS = engine.h 
+OBJ = main.o engine.o support_funcs.o
 
 all: $(OBJ)
 	nvcc -arch=sm_60 $(OBJ) -o rep

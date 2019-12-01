@@ -605,46 +605,46 @@ __global__ void preprocess_data(Argument_Pointers* arg, Constant_Coeffs* coeffs)
 
 }
 
-// __device__ void Boundary_value(bool isU, DOUBLE t, int location, int location_extension, int width, int total_time,
-// 	int* boundary_type, DOUBLE* hi, DOUBLE* boundary_array, DOUBLE* t_z, DOUBLE* boundary_condition, int* moc, int* dau, int* cuoi){
+__device__ void Boundary_value(bool isU, DOUBLE t, int location, int location_extension, int width, int total_time,
+	int* boundary_type, DOUBLE* hi, DOUBLE* boundary_array, DOUBLE* t_z, DOUBLE* boundary_condition, int* moc, int* dau, int* cuoi){
 
-// 	int t1 = t / 3600;
-// 	// DOUBLE t2 = (t - (3600.0 * (DOUBLE) t1) ) / 3600.0 ;
-// 	DOUBLE t2 = (t - (3600.0f * t1) ) / 3600.0f ;
+	int t1 = t / 3600;
+	// DOUBLE t2 = (t - (3600.0 * (DOUBLE) t1) ) / 3600.0 ;
+	DOUBLE t2 = (t - (3600.0f * t1) ) / 3600.0f ;
 	
-// 	// locate which segment the thread is in charge of
-// 	int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
+	// locate which segment the thread is in charge of
+	int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
 
-// 	int seg_no = - 1;
-// 	for (int k = 0; k < moc[location]; k++){
-// 		if ((dau[location * segment_limit +  k] <= i) && (i <= cuoi[location * segment_limit + k])) 
-// 			seg_no = k;
-// 		break;
-// 	}
+	int seg_no = - 1;
+	for (int k = 0; k < moc[location]; k++){
+		if ((dau[location * segment_limit +  k] <= i) && (i <= cuoi[location * segment_limit + k])) 
+			seg_no = k;
+		break;
+	}
 
-// 	// if there is no boundary in a certain edge
-// 	if (seg_no == -1) return;
+	// if there is no boundary in a certain edge
+	if (seg_no == -1) return;
 	
 
-// 	DOUBLE boundary_value = boundary_condition[seg_no * total_time + t1] * (1.0f - t2) + boundary_condition[seg_no * total_time + t1 + 1] * t2;
+	DOUBLE boundary_value = boundary_condition[seg_no * total_time + t1] * (1.0f - t2) + boundary_condition[seg_no * total_time + t1 + 1] * t2;
 	
-// 	if (boundary_type[seg_no] == 2){
-// 		boundary_array[i] = boundary_value * hi[i];
+	if (boundary_type[seg_no] == 2){
+		boundary_array[i] = boundary_value * hi[i];
 		
-// 	} else{
-// 	// if boudary condition is given in Z
-// 		if (isU){
-// 		t_z[location * width + i] = boundary_value;
-// 		t_z[location_extension * width  + i] = boundary_value;
-// 		} else{
-// 		// if (i == 158)
-// 		// 	printf("222 tz[%d, %d], %llx\n", location, i, boundary_value );
-// 		 t_z[i * width + location] = boundary_value;
-// 		 t_z[i * width + location_extension] = boundary_value;
-// 		}
-// 	}
+	} else{
+	// if boudary condition is given in Z
+		if (isU){
+		t_z[location * width + i] = boundary_value;
+		t_z[location_extension * width  + i] = boundary_value;
+		} else{
+		// if (i == 158)
+		// 	printf("222 tz[%d, %d], %llx\n", location, i, boundary_value );
+		 t_z[i * width + location] = boundary_value;
+		 t_z[i * width + location_extension] = boundary_value;
+		}
+	}
 	
-// }
+}
 
 // __device__ void FS_boundary(bool isU, DOUBLE t, int width, int total_time, int location, DOUBLE hmax,  
 // 	int* boundary_type, DOUBLE* htaiz_bd, DOUBLE* FS, DOUBLE* CC, int* moc, int* dau, int*cuoi ){

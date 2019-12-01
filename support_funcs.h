@@ -29,3 +29,6 @@ __global__ void boundary_left(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs*
 __global__ void boundary_right(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs* coeffs);
 
 __global__ void preprocess_data(Argument_Pointers* arg, Constant_Coeffs* coeffs);
+
+__device__ void Boundary_value(bool isU, DOUBLE t, int location, int location_extension, int width, int total_time,
+	int* boundary_type, DOUBLE* hi, DOUBLE* boundary_array, DOUBLE* t_z, DOUBLE* boundary_condition, int* moc, int* dau, int* cuoi);

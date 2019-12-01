@@ -812,7 +812,7 @@ __global__ void Normalize(DOUBLE isU, Argument_Pointers* arg, Array_Pointers* ar
 }
 
 __device__ int locate_segment_v(int N, int M, bool* bienran1, bool* bienran2, int* first, int* last, 
-	int row, int col,  int* daui, int* cuoii, int* moci, DOUBLE* , DOUBLE NANGDAY){
+	int row, int col,  int* daui, int* cuoii, int* moci, DOUBLE* h, DOUBLE NANGDAY){
     
     for (int k = 0; k < moci[row]; k++){
         int width = segment_limit;

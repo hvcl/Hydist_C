@@ -624,13 +624,13 @@ __device__ void vSolver(DOUBLE t, int offset, int first, int last, int row, int 
 __device__ void uSolver(DOUBLE t, int offset, int N, int first, int last, int row, int col, bool bienran1, bool bienran2, DOUBLE* VISCOIDX, DOUBLE* Tsxw,
     DOUBLE *v, DOUBLE *t_v, DOUBLE *u, DOUBLE *t_u, DOUBLE *z, DOUBLE *t_z, DOUBLE *Kx1, DOUBLE *Htdu, DOUBLE *H_moi, Constant_Coeffs* coeffs){
 
-    __shared__ DOUBLE H_TINH, dY2, dX2, dX, CORIOLIS_FORCE, Windy, dXbp, dYbp, g, HaiChiadT;
+    __shared__ DOUBLE H_TINH, dY2, dX2, dX, CORIOLIS_FORCE, Windx, dXbp, dYbp, g, HaiChiadT;
 
     H_TINH = coeffs->H_TINH; 
     dX = coeffs->dY;
     dY2 = coeffs->dY2;
     dX2 = coeffs->dX2;
-    Windy = coeffs->Windy;
+    Windx = coeffs->Windy;
     dXbp = coeffs->dXbp;
     dYbp = coeffs->dYbp;
     CORIOLIS_FORCE = coeffs->CORIOLIS_FORCE;
@@ -673,7 +673,7 @@ __device__ void uSolver(DOUBLE t, int offset, int N, int first, int last, int ro
 
     q = HaiChiadT * u[row * offset +  col] - q + CORIOLIS_FORCE * t_vtb;
     q = (q - g * (z[(row + 1) * offset +  col] - z[row * offset +  col]) / dX + VISCOIDX[row * offset +  col] * (tmp + (u[(row + 1) * offset +  col] - 
-                        2 * u[row * offset +  col] + u[(row - 1) * offset +  col]) / dXbp )) + (Windx() - Tsxw[row * offset +  col]) / Htdu[row * offset +  col];
+                        2 * u[row * offset +  col] + u[(row - 1) * offset +  col]) / dXbp )) + (Windx - Tsxw[row * offset +  col]) / Htdu[row * offset +  col];
 
     t_u[row * offset +  col] = q / p;
     
@@ -681,18 +681,18 @@ __device__ void uSolver(DOUBLE t, int offset, int N, int first, int last, int ro
 }
 
 
-// __global__ void 
-// VZSolver_calculate_preindex(DOUBLE t, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr){
-//     // locate segment 
-//     int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
-//     int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
-//     if (i > endidx ) return;
-//     bool bienran1 = false;
-//     bool bienran2 = false;
-//     int first = 0; int last = 0;
-//     locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h);
-//     _vzSolver_calculate_preindex(t, i, j, arg->M + 3, first, last, arg, arr);
-// }
+__global__ void 
+VZSolver_calculate_preindex(DOUBLE t, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr){
+    // locate segment 
+    int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
+    int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
+    if (i > endidx ) return;
+    bool bienran1 = false;
+    bool bienran2 = false;
+    int first = 0; int last = 0;
+    locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h);
+    _vzSolver_calculate_preindex(t, i, j, arg->M + 3, first, last, arg, arr);
+}
 
 
 

@@ -81,118 +81,117 @@ __global__ void update_h_moi(Argument_Pointers* arg){
 		H_moi[grid_pos] = htaiz[grid_pos] + t_z[grid_pos];
 }
 
-// __global__ void Reset_states_horizontal(Argument_Pointers* arg){
-// 	int M = arg-> M;
-// 	int N = arg-> N;
-// 	DOUBLE* H_moi = arg->H_moi;
-// 	DOUBLE* htaiz = arg-> htaiz;
-// 	int* khouot = arg->khouot;
-// 	DOUBLE* z = arg->z;
-// 	DOUBLE* t_z = arg-> t_z;
-// 	DOUBLE* t_u = arg-> t_u;
-// 	DOUBLE* t_v = arg-> t_v;
-// 	DOUBLE* FS = arg->FS;
+__global__ void Reset_states_horizontal(Argument_Pointers* arg){
+	int M = arg-> M;
+	int N = arg-> N;
+	DOUBLE* H_moi = arg->H_moi;
+	DOUBLE* htaiz = arg-> htaiz;
+	int* khouot = arg->khouot;
+	DOUBLE* z = arg->z;
+	DOUBLE* t_z = arg-> t_z;
+	DOUBLE* t_u = arg-> t_u;
+	DOUBLE* t_v = arg-> t_v;
+	DOUBLE* FS = arg->FS;
 
-// 	int i = blockIdx.y * blockDim.y + threadIdx.y + 1;
-// 	// int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
-// 	int offset = M + 3;
-// 	if (i > N) return;
-// 	// if (( i > N) || (j > M)) return;
-// 	for (int j = 2; j <= M; j++)
-// 	{
-// 		if (t_z[i * offset + j] > z[i * offset + j]){
-// 			if (khouot[i * offset + j - 1] == 1){
-// 				// if (threadIdx.x == 0)
-// 				// 	printf ("open 5 %d %d\n", i, j - 1);
-// 				t_z[i * offset + j - 1] = t_z[i * offset + j];
-// 				H_moi[i * offset + j - 1] = htaiz[i * offset + j - 1] + t_z[i * offset + j];
-// 	            khouot[i * offset + j - 1] = 0;
-// 	            FS[i * offset + j - 1] = FS[i * offset + j];
-// 			}
-// 			if (khouot[i * offset + j + 1] == 1){
-// 				// if (threadIdx.x == 0)
-// 				// 	printf ("open 4 %d %d\n", i, j + 1);
-// 				t_z[i * offset + j + 1] = t_z[i * offset + j];
-// 	            H_moi[i * offset + j + 1] = htaiz[i * offset + j + 1] + t_z[i * offset + j];
-// 	            khouot[i * offset + j + 1] = 0;
-// 	            FS[i * offset + j  + 1] = FS[i * offset + j ];
-// 			}
-// 		}
-// 	}
+	int i = blockIdx.y * blockDim.y + threadIdx.y + 1;
+	// int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
+	int offset = M + 3;
+	if (i > N) return;
+	// if (( i > N) || (j > M)) return;
+	for (int j = 2; j <= M; j++)
+	{
+		if (t_z[i * offset + j] > z[i * offset + j]){
+			if (khouot[i * offset + j - 1] == 1){
+				// if (threadIdx.x == 0)
+				// 	printf ("open 5 %d %d\n", i, j - 1);
+				t_z[i * offset + j - 1] = t_z[i * offset + j];
+				H_moi[i * offset + j - 1] = htaiz[i * offset + j - 1] + t_z[i * offset + j];
+	            khouot[i * offset + j - 1] = 0;
+	            FS[i * offset + j - 1] = FS[i * offset + j];
+			}
+			if (khouot[i * offset + j + 1] == 1){
+				// if (threadIdx.x == 0)
+				// 	printf ("open 4 %d %d\n", i, j + 1);
+				t_z[i * offset + j + 1] = t_z[i * offset + j];
+	            H_moi[i * offset + j + 1] = htaiz[i * offset + j + 1] + t_z[i * offset + j];
+	            khouot[i * offset + j + 1] = 0;
+	            FS[i * offset + j  + 1] = FS[i * offset + j ];
+			}
+		}
+	}
 
-// 	for (int j = 2; j <= M; j++){
+	for (int j = 2; j <= M; j++){
 		
-// 		if ((khouot[i * offset + j] == 0) && (H_moi[i * offset + j] <= H_TINH) ){
+		if ((khouot[i * offset + j] == 0) && (H_moi[i * offset + j] <= H_TINH) ){
 			
-// 			t_u[(i - 1) * offset + j] = 0;
-// 			t_u[i * offset + j] = 0;
+			t_u[(i - 1) * offset + j] = 0;
+			t_u[i * offset + j] = 0;
 			
-// 			t_v[i * offset + j - 1] = 0;
-// 			t_v[i * offset + j] = 0;
-// 			khouot[i * offset + j] = 1;
-// 			FS[i * offset + j ] = 0;
+			t_v[i * offset + j - 1] = 0;
+			t_v[i * offset + j] = 0;
+			khouot[i * offset + j] = 1;
+			FS[i * offset + j ] = 0;
 			
-// 		}
-// 	}
+		}
+	}
 
-// }
+}
 
 
 // doc
-// __global__ void Reset_states_vertical(int M, int N, DOUBLE* H_moi,DOUBLE* htaiz, int* khouot, DOUBLE* z, DOUBLE* t_z, DOUBLE* t_u, DOUBLE* t_v){
-// __global__ void Reset_states_vertical(Argument_Pointers* arg){
+__global__ void Reset_states_vertical(Argument_Pointers* arg){
 
-// 	int M = arg-> M;
-// 	int N = arg-> N;
-// 	DOUBLE* H_moi = arg->H_moi;
-// 	DOUBLE* htaiz = arg-> htaiz;
-// 	int* khouot = arg->khouot;
-// 	DOUBLE* z = arg->z;
-// 	DOUBLE* t_z = arg-> t_z;
-// 	DOUBLE* t_u = arg-> t_u;
-// 	DOUBLE* t_v = arg-> t_v;
-// 	DOUBLE* FS = arg->FS;
+	int M = arg-> M;
+	int N = arg-> N;
+	DOUBLE* H_moi = arg->H_moi;
+	DOUBLE* htaiz = arg-> htaiz;
+	int* khouot = arg->khouot;
+	DOUBLE* z = arg->z;
+	DOUBLE* t_z = arg-> t_z;
+	DOUBLE* t_u = arg-> t_u;
+	DOUBLE* t_v = arg-> t_v;
+	DOUBLE* FS = arg->FS;
 
-// 	// int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
-// 	int j = blockIdx.x * blockDim.x + threadIdx.x + 1;
-// 	if (j > M) return;
-// 	int offset = M + 3;
+	// int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
+	int j = blockIdx.x * blockDim.x + threadIdx.x + 1;
+	if (j > M) return;
+	int offset = M + 3;
 
-// 	for (int i = 2; i <= N; i++) {
-// 		if (t_z[i * offset + j] > z[i * offset + j]){
-// 			if (khouot[(i - 1) * offset + j] == 1){
-// 				// if (threadIdx.y == 0)
-// 				// 	printf("open 1 %d %d\n", i - 1, j);
-// 				t_z[(i - 1) * offset + j] = t_z[i * offset + j];
-// 				H_moi[(i - 1) * offset + j] = htaiz[(i - 1) * offset + j] + t_z[i * offset + j];
-// 	            khouot[(i - 1) * offset + j] = 0;
-// 	            FS[(i - 1) * offset + j] = FS[i * offset + j];
-// 			}
-// 			if (khouot[(i + 1) * offset + j] == 1){
-// 				// if (threadIdx.y == 0)
-// 				// 	printf("open 2 %d %d \n", i + 1, j);
-// 				t_z[(i + 1) * offset + j] = t_z[i * offset + j];
-// 	            H_moi[(i + 1) * offset + j] = htaiz[(i + 1) * offset + j] + t_z[i * offset + j];
-// 	            khouot[(i + 1) * offset + j] = 0;
-// 	            FS[(i + 1) * offset + j] = FS[i * offset + j];
-// 			}
-// 		}
-// 	}
+	for (int i = 2; i <= N; i++) {
+		if (t_z[i * offset + j] > z[i * offset + j]){
+			if (khouot[(i - 1) * offset + j] == 1){
+				// if (threadIdx.y == 0)
+				// 	printf("open 1 %d %d\n", i - 1, j);
+				t_z[(i - 1) * offset + j] = t_z[i * offset + j];
+				H_moi[(i - 1) * offset + j] = htaiz[(i - 1) * offset + j] + t_z[i * offset + j];
+	            khouot[(i - 1) * offset + j] = 0;
+	            FS[(i - 1) * offset + j] = FS[i * offset + j];
+			}
+			if (khouot[(i + 1) * offset + j] == 1){
+				// if (threadIdx.y == 0)
+				// 	printf("open 2 %d %d \n", i + 1, j);
+				t_z[(i + 1) * offset + j] = t_z[i * offset + j];
+	            H_moi[(i + 1) * offset + j] = htaiz[(i + 1) * offset + j] + t_z[i * offset + j];
+	            khouot[(i + 1) * offset + j] = 0;
+	            FS[(i + 1) * offset + j] = FS[i * offset + j];
+			}
+		}
+	}
 
-// 	for (int i = 2; i <= N; i++) {
-// 		if ((khouot[i * offset + j] == 0) && (H_moi[i * offset + j] <= H_TINH)){
-// 				// if (threadIdx.y == 0)
-// 				// 	printf("close 0 %d %d\n", i, j);
-// 			t_u[(i - 1) * offset + j] = 0;
-// 			t_u[i * offset + j] = 0;
+	for (int i = 2; i <= N; i++) {
+		if ((khouot[i * offset + j] == 0) && (H_moi[i * offset + j] <= H_TINH)){
+				// if (threadIdx.y == 0)
+				// 	printf("close 0 %d %d\n", i, j);
+			t_u[(i - 1) * offset + j] = 0;
+			t_u[i * offset + j] = 0;
 
-// 			t_v[i * offset + j - 1] = 0;
-// 			t_v[i * offset + j] = 0;
-// 			khouot[i * offset + j] = 1;
-// 			FS[i * offset + j] = 0;
-// 		}
-// 	}
-// }
+			t_v[i * offset + j - 1] = 0;
+			t_v[i * offset + j] = 0;
+			khouot[i * offset + j] = 1;
+			FS[i * offset + j] = 0;
+		}
+	}
+}
 
 
 // __device__ void Interpolate_FS_ng(int location, int offset, int sign, Argument_Pointers* arg){

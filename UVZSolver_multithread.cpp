@@ -429,180 +429,193 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
         arr->SN[i * segment_limit + seg_no] = sn;
 }
 
-// __device__ void _vzSolver_extract_solution( int i,int j, int sn, int width, int first, int last, bool bienran1, bool bienran2, Argument_Pointers *arg, Array_Pointers * arr)
-// {   
-//     int M = arg->M;
-//     DOUBLE* t_z = arg->t_z;
-//     DOUBLE* t_v = arg->t_v;
-//     int* bienQ = arg->bienQ;
-//     DOUBLE* x = &(arr->x[i * (2 * M + 1)]);
-//     DOUBLE* a2 = &(arr->a2[i * (M + 2)]);
-//     DOUBLE* c2 = &(arr->c2[i * (M + 2)]);
-//     DOUBLE* d2 = &(arr->d2[i * (M + 2)]);
-//     // if ( j == 10){
-//     //     printf("%d %f \n", i, arg->t_u[i * width + j] );
-//     // }
+__device__ void _vzSolver_extract_solution( int i,int j, int sn, int width, int first, int last, bool bienran1, bool bienran2, Argument_Pointers *arg, Array_Pointers * arr)
+{   
+    int M = arg->M;
+    DOUBLE* t_z = arg->t_z;
+    DOUBLE* t_v = arg->t_v;
+    int* bienQ = arg->bienQ;
+    DOUBLE* x = &(arr->x[i * (2 * M + 1)]);
+    DOUBLE* a2 = &(arr->a2[i * (M + 2)]);
+    DOUBLE* c2 = &(arr->c2[i * (M + 2)]);
+    DOUBLE* d2 = &(arr->d2[i * (M + 2)]);
+    // if ( j == 10){
+    //     printf("%d %f \n", i, arg->t_u[i * width + j] );
+    // }
      
-//     if (j > last || j < first) return;
+    if (j > last || j < first) return;
 
-//     if (j < last){
-//         if (bienran1){
-//             t_z[i * width + j] = x[2 * j];
-//             t_v[i * width + j] = x[2 * j + 1];
-//             t_v[i * width + first - 1] = 0;
+    if (j < last){
+        if (bienran1){
+            t_z[i * width + j] = x[2 * j];
+            t_v[i * width + j] = x[2 * j + 1];
+            t_v[i * width + first - 1] = 0;
 
-//         }
-//         else{
-//             if( (bienQ[1]) && (first == 2)){
-//                 t_z[i * width + j] = x[2 * j];
-//                 t_v[i * width + j] = x[2 * j + 1];
-//                 t_v[i * width + first - 1] = arg->vbd[i];
-//             }
-//             else{
-//                 // warp divergent here. TODO
-//                 // TODO: first warp can use one instruction other than other warps
-//                 if (j == first)
-//                 {       
-//                     t_v[i * width + first] = x[2 * first];
-//                     t_v[i * width + first - 1] = (d2[first] - t_z[i * width + first] - c2[first] * t_v[i * width + first]) / a2[first];
-//                 }
-//                 else{
-//                     t_z[i * width + j] = x[2 * j - 1];
-//                     t_v[i * width + j] = x[2 * j];
-//                 }
+        }
+        else{
+            if( (bienQ[1]) && (first == 2)){
+                t_z[i * width + j] = x[2 * j];
+                t_v[i * width + j] = x[2 * j + 1];
+                t_v[i * width + first - 1] = arg->vbd[i];
+            }
+            else{
+                // warp divergent here. TODO
+                // TODO: first warp can use one instruction other than other warps
+                if (j == first)
+                {       
+                    t_v[i * width + first] = x[2 * first];
+                    t_v[i * width + first - 1] = (d2[first] - t_z[i * width + first] - c2[first] * t_v[i * width + first]) / a2[first];
+                }
+                else{
+                    t_z[i * width + j] = x[2 * j - 1];
+                    t_v[i * width + j] = x[2 * j];
+                }
                 
-//             }
-//         }
-//     }  else {
+            }
+        }
+    }  else {
 
-//         if (bienran2){
+        if (bienran2){
             
-//             t_v[i * width + last] = 0;
-//             t_z[i * width + last] = x[first * 2 + sn];
-//             // if (i == arg->N)
-//             //     printf("t_v[%d, %d] initially is %.15lf\n", i, j, t_v[i * width + last]);
-//         }
-//         else{
+            t_v[i * width + last] = 0;
+            t_z[i * width + last] = x[first * 2 + sn];
+            // if (i == arg->N)
+            //     printf("t_v[%d, %d] initially is %.15lf\n", i, j, t_v[i * width + last]);
+        }
+        else{
 
-//             if ((bienQ[0]) && (last == M)){
-//                 t_v[i * width + last] = arg->vbt[i];
-//                 // printf("t_v[%d, %d] = %.15lf\n",i, last, t_v[i * width  + last] );
-//                 t_z[i * width + last] = x[2 * first + sn];
+            if ((bienQ[0]) && (last == M)){
+                t_v[i * width + last] = arg->vbt[i];
+                // printf("t_v[%d, %d] = %.15lf\n",i, last, t_v[i * width  + last] );
+                t_z[i * width + last] = x[2 * first + sn];
 
-//             }
-//             else{
-//                 t_v[i * width + last] = (d2[last] - a2[last] * t_v[i * width + last - 1] - t_z[i * width + last]) / c2[last];
-//             }
-//         }
-//     }
-//     // if (i == 155 && j > 173 && j < 177){
-//     //     printf("%llx %llx %d %d\n", t_z[i * width + j], t_v[i * width + j], i, j );
-//     // }
+            }
+            else{
+                t_v[i * width + last] = (d2[last] - a2[last] * t_v[i * width + last - 1] - t_z[i * width + last]) / c2[last];
+            }
+        }
+    }
+    // if (i == 155 && j > 173 && j < 177){
+    //     printf("%llx %llx %d %d\n", t_z[i * width + j], t_v[i * width + j], i, j );
+    // }
 
-// }
+}
 
 
-// __device__ void _uzSolver_extract_solution( int i, int j, int sn, int width, int first, int last, bool bienran1, bool bienran2, Argument_Pointers *arg, Array_Pointers * arr)
-// {   
-//     int N = arg->N;
-//     DOUBLE* t_z = arg->t_z;
-//     DOUBLE* t_u = arg->t_u;
-//     int* bienQ = arg->bienQ;
-//     DOUBLE* x = &(arr->x[j * (2 * N + 1)]);
-//     DOUBLE* a2 = &(arr->a2[j * (N + 2)]);
-//     DOUBLE* c2 = &(arr->c2[j * (N + 2)]);
-//     DOUBLE* d2 = &(arr->d2[j * (N + 2)]);
-//     if (i > last || i < first) return;
-//     if (i < last){
-//         if (bienran1){
+__device__ void _uzSolver_extract_solution( int i, int j, int sn, int width, int first, int last, bool bienran1, bool bienran2, Argument_Pointers *arg, Array_Pointers * arr)
+{   
+    int N = arg->N;
+    DOUBLE* t_z = arg->t_z;
+    DOUBLE* t_u = arg->t_u;
+    int* bienQ = arg->bienQ;
+    DOUBLE* x = &(arr->x[j * (2 * N + 1)]);
+    DOUBLE* a2 = &(arr->a2[j * (N + 2)]);
+    DOUBLE* c2 = &(arr->c2[j * (N + 2)]);
+    DOUBLE* d2 = &(arr->d2[j * (N + 2)]);
+    if (i > last || i < first) return;
+    if (i < last){
+        if (bienran1){
 
-//             // t_z[i * width + j] = x[2 * (i - first)];
-//             // t_u[i * width + j] = x[2 * (i - first) + 1];
-//             t_z[i * width + j] = x[2 * i];
-//             t_u[i * width + j] = x[2 * i + 1];
-//             t_u[(first - 1) * width + j] = 0;
-//         }else{
-//             if ((bienQ[2]) && (first == 2)){
-//                 t_z[i * width + j] = x[2 * i];
-//                 t_u[i * width + j] = x[2 * i + 1];
-//                 t_u[(first - 1) * width + j] = arg->ubt[j];
-//             }
-//             else{
-//                 if (i == first){
-//                     t_u[first * width + j] = x[first * 2];
-//                     t_u[(first - 1) * width + j] = (d2[first] - t_z[first * width + j] - c2[first] * t_u[first * width + j]) / a2[first];
+            // t_z[i * width + j] = x[2 * (i - first)];
+            // t_u[i * width + j] = x[2 * (i - first) + 1];
+            t_z[i * width + j] = x[2 * i];
+            t_u[i * width + j] = x[2 * i + 1];
+            t_u[(first - 1) * width + j] = 0;
+        }else{
+            if ((bienQ[2]) && (first == 2)){
+                t_z[i * width + j] = x[2 * i];
+                t_u[i * width + j] = x[2 * i + 1];
+                t_u[(first - 1) * width + j] = arg->ubt[j];
+            }
+            else{
+                if (i == first){
+                    t_u[first * width + j] = x[first * 2];
+                    t_u[(first - 1) * width + j] = (d2[first] - t_z[first * width + j] - c2[first] * t_u[first * width + j]) / a2[first];
 
-//                 } else if (i < last){
-//                     t_z[i * width + j] = x[2 * i - 1];
-//                     t_u[i * width + j] = x[2 * i];    
-//                 }
+                } else if (i < last){
+                    t_z[i * width + j] = x[2 * i - 1];
+                    t_u[i * width + j] = x[2 * i];    
+                }
                 
-//             }
-//         }       
-//     }
-//     else { //if (i == last)
-//         if (bienran2 ){
-//             t_u[last * width + j] = 0;
-//             t_z[last * width + j] = x[first * 2 + sn];
+            }
+        }       
+    }
+    else { //if (i == last)
+        if (bienran2 ){
+            t_u[last * width + j] = 0;
+            t_z[last * width + j] = x[first * 2 + sn];
 
-//         }
-//         else{
-//             if ((bienQ[3]) && (last == N)){
-//                 t_u[last * width + j] = arg->ubp[j];
-//                 t_z[last * width + j] = x[first * 2 + sn];
-//             }
+        }
+        else{
+            if ((bienQ[3]) && (last == N)){
+                t_u[last * width + j] = arg->ubp[j];
+                t_z[last * width + j] = x[first * 2 + sn];
+            }
 
-//             else{
-//                 t_u[last * width + j] = (d2[last] - a2[last] * t_u[(last - 1) * width + j] - t_z[last * width + j]) / c2[last];
-//             }
-//         }
-//     }
-// }
+            else{
+                t_u[last * width + j] = (d2[last] - a2[last] * t_u[(last - 1) * width + j] - t_z[last * width + j]) / c2[last];
+            }
+        }
+    }
+}
 
 
 
-// __device__ void vSolver(DOUBLE t, int offset, int first, int last, int row, int col, bool bienran1, bool bienran2, DOUBLE* VISCOIDX, DOUBLE* Tsyw, 
-//     DOUBLE *v, DOUBLE *t_v, DOUBLE *u, DOUBLE *t_u, DOUBLE *z, DOUBLE *t_z, DOUBLE *Ky1, DOUBLE *Htdv, DOUBLE *H_moi){
+__device__ void vSolver(DOUBLE t, int offset, int first, int last, int row, int col, bool bienran1, bool bienran2, DOUBLE* VISCOIDX, DOUBLE* Tsyw, 
+    DOUBLE *v, DOUBLE *t_v, DOUBLE *u, DOUBLE *t_u, DOUBLE *z, DOUBLE *t_z, DOUBLE *Ky1, DOUBLE *Htdv, DOUBLE *H_moi, Constant_Coeffs* coeffs){
 
-//     DOUBLE p, q, tmp;
-//     q = 0;
-//     p = 0;
-//     tmp = 0;
-//     DOUBLE utb = (u[(row - 1) * offset +  col] + u[row * offset +  col] + u[(row - 1) * offset +  col + 1] + u[row * offset +  col + 1]) * 0.25;
-//     DOUBLE t_utb = (t_u[(row - 1) * offset +  col] + t_u[row * offset +  col] + t_u[(row - 1) * offset +  col + 1] + t_u[row * offset +  col + 1]) * 0.25;
+    DOUBLE p, q, tmp;
+    __shared__ DOUBLE H_TINH, dY2, dX2, dY, CORIOLIS_FORCE, Windy, dXbp, dYbp, g;
 
-//     p = (v[row * offset +  col + 1] - v[row * offset +  col - 1]) / dY2;
-//     p = HaiChiadT + p + Ky1[row * offset +  col] * sqrt(utb * utb + v[row * offset +  col] * v[row * offset +  col]) / Htdv[row * offset +  col];
+    H_TINH = coeffs->H_TINH; 
+    dY = coeffs->dY;
+    dY2 = coeffs->dY2;
+    dX2 = coeffs->dX2;
+    Windy = coeffs->Windy;
+    dXbp = coeffs->dXbp;
+    dYbp = coeffs->dYbp;
+    CORIOLIS_FORCE = coeffs->CORIOLIS_FORCE;
+    g = coeffs->g;
+
+
+    q = 0;
+    p = 0;
+    tmp = 0;
+    DOUBLE utb = (u[(row - 1) * offset +  col] + u[row * offset +  col] + u[(row - 1) * offset +  col + 1] + u[row * offset +  col + 1]) * 0.25;
+    DOUBLE t_utb = (t_u[(row - 1) * offset +  col] + t_u[row * offset +  col] + t_u[(row - 1) * offset +  col + 1] + t_u[row * offset +  col + 1]) * 0.25;
+
+    p = (v[row * offset +  col + 1] - v[row * offset +  col - 1]) / dY2;
+    p = HaiChiadT + p + Ky1[row * offset +  col] * sqrt(utb * utb + v[row * offset +  col] * v[row * offset +  col]) / Htdv[row * offset +  col];
     
     
-//     if (H_moi[(row - 1) * offset +  col] <= H_TINH){
-//         if (utb < 0){
-//             q = t_utb * (-3 * v[row * offset +  col] + 4 * v[(row + 1) * offset +  col] - v[(row + 2) * offset +  col]) / dX2;
-//             // q = tutb * (-3 * v(i, j) + 4 * v(i + 1, j) - v(i + 2, j)) / dX2
-//             tmp = (v[row * offset +  col] - 2 * v[(row + 1) * offset +  col] + v[(row + 2) * offset +  col] ) / dXbp;
-//         }
-//     }
-//     else{
-//         if (H_moi[(row + 1) * offset +  col] <= H_TINH){
-//             if ((H_moi[(row - 2) * offset +  col] > H_TINH) && (utb > 0)){
-//                 q = t_utb * (3 * v[row * offset +  col] - 4 * v[(row - 1) * offset +  col] + v[(row - 2) * offset +  col]) /dX2;
-//                 tmp = (v[row * offset +  col] - 2 * v[(row - 1) * offset +  col] + v[(row - 2) * offset +  col] ) / dXbp;
-//             }
-//         }
-//         else{
-//             q = t_utb * (v[(row + 1) * offset +  col] - v[(row - 1) * offset +  col]) / dX2;
-//             tmp = (v[(row + 1) * offset +  col] - 2 * v[row * offset +  col] + v[(row - 1) * offset +  col]) / dXbp;
-//         }
-//     }
-//     q = HaiChiadT * v[row * offset +  col] - q - CORIOLIS_FORCE * t_utb;
+    if (H_moi[(row - 1) * offset +  col] <= H_TINH){
+        if (utb < 0){
+            q = t_utb * (-3 * v[row * offset +  col] + 4 * v[(row + 1) * offset +  col] - v[(row + 2) * offset +  col]) / dX2;
+            // q = tutb * (-3 * v(i, j) + 4 * v(i + 1, j) - v(i + 2, j)) / dX2
+            tmp = (v[row * offset +  col] - 2 * v[(row + 1) * offset +  col] + v[(row + 2) * offset +  col] ) / dXbp;
+        }
+    }
+    else{
+        if (H_moi[(row + 1) * offset +  col] <= H_TINH){
+            if ((H_moi[(row - 2) * offset +  col] > H_TINH) && (utb > 0)){
+                q = t_utb * (3 * v[row * offset +  col] - 4 * v[(row - 1) * offset +  col] + v[(row - 2) * offset +  col]) /dX2;
+                tmp = (v[row * offset +  col] - 2 * v[(row - 1) * offset +  col] + v[(row - 2) * offset +  col] ) / dXbp;
+            }
+        }
+        else{
+            q = t_utb * (v[(row + 1) * offset +  col] - v[(row - 1) * offset +  col]) / dX2;
+            tmp = (v[(row + 1) * offset +  col] - 2 * v[row * offset +  col] + v[(row - 1) * offset +  col]) / dXbp;
+        }
+    }
+    q = HaiChiadT * v[row * offset +  col] - q - CORIOLIS_FORCE * t_utb;
 
-//     q = (q - g * (z[row * offset +  col + 1] - z[row * offset +  col]) / dY + 
-//         VISCOIDX[row * offset +  col] * (tmp + (v[row * offset +  col + 1] - 2 * v[row * offset +  col] + v[row * offset +  col - 1]) / dYbp)) + 
-//         (Windy() - Tsyw[row * offset +  col]) / Htdv[row * offset +  col];
+    q = (q - g * (z[row * offset +  col + 1] - z[row * offset +  col]) / dY + 
+        VISCOIDX[row * offset +  col] * (tmp + (v[row * offset +  col + 1] - 2 * v[row * offset +  col] + v[row * offset +  col - 1]) / dYbp)) + 
+        (Windy - Tsyw[row * offset +  col]) / Htdv[row * offset +  col];
     
 
-//     t_v[row * offset +  col] = q / p ;
-// }
+    t_v[row * offset +  col] = q / p ;
+}
 
 
 

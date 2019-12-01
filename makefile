@@ -6,7 +6,7 @@ all: $(OBJ)
 	nvcc -arch=sm_60 $(OBJ) -o rep
 
 %.o : %.cpp $(DEPS)
-	nvcc -x cu -arch=sm_60 -I. -dc $< -o $@
+	nvcc -x cu -arch=sm_60 $(CFLAGS) -dc $< -o $@
 
 clean:
 	rm -f *.o 

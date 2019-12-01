@@ -105,62 +105,69 @@ __device__ void bienlongdau(int i, int first, int last,  DOUBLE* AA, DOUBLE* BB,
 }
 
 
-// __device__ void  _vzSolver_calculate_preindex(DOUBLE t, int i, int j, int width, int first, int last,  Argument_Pointers* arg, Array_Pointers *arr, Constant_Coeffs* coeffs){
-//     if ((first > last) || (j < first) || ( j > last)) return;
-//     DOUBLE p = 0.0;
-//     DOUBLE q = 0.0;    
-//     __shared__ DOUBLE *u, *v, *z, *Htdv, *Htdu, *H_moi, *VISCOIDX, *Tsyw, *Ky1, *a2, *c2, *d2, *f1, *f2, *f3, *f5;
-//     __shared__ int support_array_width;
-//     support_array_width = arg->M + 2;
-//     u = arg->u;
-//     v = arg->v;
-//     z = arg->z;
-//     Htdv = arg->Htdv;
-//     Htdu = arg->Htdu;
-//     VISCOIDX = arg->VISCOIDX;
-//     Tsyw = arg->Tsyw;
-//     H_moi = arg->H_moi;
-//     Ky1 = arg-> Ky1;
-//     a2 = &(arr->a2[i * support_array_width]);
-//     c2 = &(arr->c2[i * support_array_width]);
-//     d2 = &(arr->d2[i * support_array_width]);
-//     f1 = &(arr->f1[i * support_array_width]);
-//     f2 = &(arr->f2[i * support_array_width]);
-//     f3 = &(arr->f3[i * support_array_width]);
-//     f5 = &(arr->f5[i * support_array_width]);
-//     // can phai control dk bien o ngoai function
-//     // ham nay ko coarseless
-//     // can actually get rid of fs, and only need to use 3 variables instead of 3 m * n arrays
-//     // reduce a significant number of read and write operation to global memory
-//     // make more spaces to accomodate larger data set
-//     DOUBLE utb = (u[(i - 1) * width + j] + u[i * width + j] + u[(i - 1) * width + j + 1] + u[i * width + j + 1]) * 0.25;
-//     f1[j] = dTchia2dY * v[i * width + j] + VISCOIDX[i * width + j] * dT / dYbp;
-//     f2[j] = -(2 + Ky1[i * width + j] * dT * sqrt(v[i * width + j] * v[i * width + j] + utb * utb) / Htdv[i * width + j] + (2 * dT * VISCOIDX[i * width + j]) / dYbp);
-//     f3[j] = dT * VISCOIDX[i * width + j] / dYbp - dTchia2dY * v[i * width + j];
-//     // printf("%d f1[%d] = %.10f\n", i, j, f1[j]);
-//     if (H_moi[(i - 1) * width + j] <= H_TINH){
-//         if (utb < 0){
-//             q = utb * (-3 * v[i * width + j] + 4 * v[(i + 1) * width + j] - v[(i + 2) * width + j]) / dX2;
-//             p = (v[i * width + j] - 2 * v[(i + 1) * width + j] + v[(i + 2) * width + j] ) / dXbp;
-//         }
-//     }else{
-//         if (H_moi[(i + 1) * width + j] <= H_TINH){
-//             if ((H_moi[(i - 2) * width + j] > H_TINH) && (utb > 0)){
-//                 q = utb * (3 * v[i * width + j] - 4 * v[(i - 1) * width + j] + v[(i - 2) * width + j]) / dX2;
-//                 p = (v[i * width + j] - 2 * v[(i - 1) * width + j] + v[(i - 2) * width + j] ) / dXbp;
-//             }
-//         }else{
-//             q = utb * (v[(i + 1) * width + j] - v[(i - 1) * width + j]) / dX2;
-//             p = (v[(i + 1) * width + j] - 2 * v[i * width + j] + v[(i - 1) * width + j]) / dXbp;
-//         }
-//     }
-//     f5[j] = -2 * v[i * width + j] + dT * q + dT * CORIOLIS_FORCE * utb - dT * VISCOIDX[i * width + j] * p - dT * (Windy() - Tsyw[i * width + j]) / Htdv[i * width + j];
-//     c2[j] = dTchia2dY * Htdv[i * width + j];             
-//     a2[j] = - dTchia2dY * Htdv[i * width + j - 1];
-//     d2[j] = z[i * width + j] - dTchia2dX * (Htdu[i * width + j] * u[i * width + j] - Htdu[(i - 1) * width + j] * u[(i - 1) * width + j]);
+__device__ void  _vzSolver_calculate_preindex(DOUBLE t, int i, int j, int width, int first, int last,  Argument_Pointers* arg, Array_Pointers *arr, Constant_Coeffs* coeffs){
+    if ((first > last) || (j < first) || ( j > last)) return;
+    DOUBLE p = 0.0;
+    DOUBLE q = 0.0;    
+    __shared__ DOUBLE *u, *v, *z, *Htdv, *Htdu, *H_moi, *VISCOIDX, *Tsyw, *Ky1, *a2, *c2, *d2, *f1, *f2, *f3, *f5;
+    __shared__ int support_array_width;
+    __shared__ DOUBLE H_TINH, dYbp, dT, dTchia2dY, dXbp, dX2;
+    support_array_width = arg->M + 2;
+    u = arg->u;
+    v = arg->v;
+    z = arg->z;
+    Htdv = arg->Htdv;
+    Htdu = arg->Htdu;
+    VISCOIDX = arg->VISCOIDX;
+    Tsyw = arg->Tsyw;
+    H_moi = arg->H_moi;
+    Ky1 = arg-> Ky1;
+    a2 = &(arr->a2[i * support_array_width]);
+    c2 = &(arr->c2[i * support_array_width]);
+    d2 = &(arr->d2[i * support_array_width]);
+    f1 = &(arr->f1[i * support_array_width]);
+    f2 = &(arr->f2[i * support_array_width]);
+    f3 = &(arr->f3[i * support_array_width]);
+    f5 = &(arr->f5[i * support_array_width]);
+
+    H_TINH = coeffs->H_TINH;
+    dT = coeffs->dT;
+    dXbp = coeffs->dXbp;
+    dYbp = coeffs->dYbp;
+    dX2 = coeffs->dX2;
+    // can phai control dk bien o ngoai function
+    // ham nay ko coarseless
+    // can actually get rid of fs, and only need to use 3 variables instead of 3 m * n arrays
+    // reduce a significant number of read and write operation to global memory
+    // make more spaces to accomodate larger data set
+    DOUBLE utb = (u[(i - 1) * width + j] + u[i * width + j] + u[(i - 1) * width + j + 1] + u[i * width + j + 1]) * 0.25;
+    f1[j] = dTchia2dY * v[i * width + j] + VISCOIDX[i * width + j] * dT / dYbp;
+    f2[j] = -(2 + Ky1[i * width + j] * dT * sqrt(v[i * width + j] * v[i * width + j] + utb * utb) / Htdv[i * width + j] + (2 * dT * VISCOIDX[i * width + j]) / dYbp);
+    f3[j] = dT * VISCOIDX[i * width + j] / dYbp - dTchia2dY * v[i * width + j];
+    // printf("%d f1[%d] = %.10f\n", i, j, f1[j]);
+    if (H_moi[(i - 1) * width + j] <= H_TINH){
+        if (utb < 0){
+            q = utb * (-3 * v[i * width + j] + 4 * v[(i + 1) * width + j] - v[(i + 2) * width + j]) / dX2;
+            p = (v[i * width + j] - 2 * v[(i + 1) * width + j] + v[(i + 2) * width + j] ) / dXbp;
+        }
+    }else{
+        if (H_moi[(i + 1) * width + j] <= H_TINH){
+            if ((H_moi[(i - 2) * width + j] > H_TINH) && (utb > 0)){
+                q = utb * (3 * v[i * width + j] - 4 * v[(i - 1) * width + j] + v[(i - 2) * width + j]) / dX2;
+                p = (v[i * width + j] - 2 * v[(i - 1) * width + j] + v[(i - 2) * width + j] ) / dXbp;
+            }
+        }else{
+            q = utb * (v[(i + 1) * width + j] - v[(i - 1) * width + j]) / dX2;
+            p = (v[(i + 1) * width + j] - 2 * v[i * width + j] + v[(i - 1) * width + j]) / dXbp;
+        }
+    }
+    f5[j] = -2 * v[i * width + j] + dT * q + dT * CORIOLIS_FORCE * utb - dT * VISCOIDX[i * width + j] * p - dT * (Windy() - Tsyw[i * width + j]) / Htdv[i * width + j];
+    c2[j] = dTchia2dY * Htdv[i * width + j];             
+    a2[j] = - dTchia2dY * Htdv[i * width + j - 1];
+    d2[j] = z[i * width + j] - dTchia2dX * (Htdu[i * width + j] * u[i * width + j] - Htdu[(i - 1) * width + j] * u[(i - 1) * width + j]);
 
 
-// }
+}
 
 // __device__ void  _uzSolver_calculate_preindex(int i, int j, int width, int first, int last, Argument_Pointers* arg, Array_Pointers *arr){
 //     if ((first > last) || (i < first) || ( i > last)) return;

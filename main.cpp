@@ -1,7 +1,7 @@
 // #include <cuda.h>
 // #include <cuda_runtime.h>
 #include <vector>
-#include "Engine.h"
+#include "engine.h"
 // #include "constant.h"
 #include "support_funcs.cu"
 #include <algorithm>

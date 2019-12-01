@@ -4,7 +4,7 @@ Copyright (c) 2019 HVCL lab
 Created by Huong Nguyen
 **/
 #include "cuda.h"
-#include "constant.h"
+#include "engine.h"
 #define powf pow
 
 

@@ -4,7 +4,7 @@
 - [x] Tested Memcopy from host to device
 
 #### Todo:
-- Rewrite makefile 
+-  [x] Rewrite makefile 
 - Get rid of global constant
  - [x] Make a struct that contain global constamt
  - [ ] Copy the struct to device

@@ -6,14 +6,16 @@ Created by Huong Nguyen
 #include "cuda.h"
 #include "constant.h"
 #define powf pow
-__device__ void calculate_index(int *i, int *j, int M){
-    int thrx = blockIdx.x * blockDim.x + threadIdx.x;
-    int thry = blockIdx.y * blockDim.y + threadIdx.y;
 
-    int thrnu =  thrx * (blockDim.y * gridDim.y) + thry;
-    *i = thrnu / M;
-    *j = thrnu % M;
-}
+
+// __device__ void calculate_index(int *i, int *j, int M){
+//     int thrx = blockIdx.x * blockDim.x + threadIdx.x;
+//     int thry = blockIdx.y * blockDim.y + threadIdx.y;
+
+//     int thrnu =  thrx * (blockDim.y * gridDim.y) + thry;
+//     *i = thrnu / M;
+//     *j = thrnu % M;
+// }
 
 // checked Mar-30
 

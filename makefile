@@ -1,6 +1,6 @@
 CFLAGS = -I.
-DEPS = engine.h support_funcs.h
-OBJ = main.o engine.o support_funcs.o
+DEPS = engine.h support_funcs.h UVZSolver_multithread.h
+OBJ = main.o engine.o support_funcs.o UVZSolver_multithread.o
 
 all: $(OBJ)
 	nvcc -arch=sm_60 $(OBJ) -o rep

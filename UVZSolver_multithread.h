@@ -44,7 +44,7 @@ __global__ void update_margin_elem_V(DOUBLE t, int startidx, int endidx, DOUBLE 
 
 __global__ void UZSolver_extract_solution(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr);
 __global__ void UZSolver_calculate_preindex(int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs);
-UZSolver_calculate_abcd(int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs);
+__global__ void UZSolver_calculate_abcd(int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs);
 __global__ void UZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr);
 __global__ void solveU(DOUBLE t, int startidx, int endidx, Argument_Pointers* arg, Constant_Coeffs* coeffs);
 __global__ void update_margin_elem_U(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg);

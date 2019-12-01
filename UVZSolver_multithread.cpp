@@ -832,7 +832,7 @@ __global__ void solveU(DOUBLE t, int startidx, int endidx, Argument_Pointers* ar
     bool bienran1 = false;
     bool bienran2 = false;
     int first = 0; int last = 0;
-    locate_segment_u(N, M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, arg->NANGDAY);
+    locate_segment_u(N, M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, coeffs->NANGDAY);
     
     if ( first > last || i < first - 1 || i >= last) return;
     

@@ -400,7 +400,7 @@ __global__ void boundary_up (DOUBLE t, Argument_Pointers* arg, Constant_Coeffs* 
 // 	int* dauj, int* cuoij, DOUBLE* vbt, DOUBLE* vbd, DOUBLE* ubt, DOUBLE* ubp ){
 
 __global__ void boundary_down(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs* coeffs){
-	DOUBLE *t_z;
+	DOUBLE *t_z, *vbd;
 	int M,  *dauj, *cuoij, *bienQ;
 	DOUBLE dY = coeffs->dY;
 	bienQ = arg->bienQ;
@@ -408,6 +408,7 @@ __global__ void boundary_down(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs*
 	M = arg->M;
 	dauj = arg->dauj;
 	cuoij = arg->cuoij;
+	vbd = arg->vbd;
 	
 	int thrx = blockIdx.x * blockDim.x + threadIdx.x;
     int thry = blockIdx.y * blockDim.y + threadIdx.y;
@@ -427,7 +428,7 @@ __global__ void boundary_down(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs*
 // 	int* dauj, int* cuoij, DOUBLE* vbt, DOUBLE* vbd, DOUBLE* ubt, DOUBLE* ubp){
 
 __global__ void boundary_left(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs* coeffs){
-	DOUBLE *t_z;
+	DOUBLE *t_z, *ubt;
 	int M, N, *daui, *cuoii;
 	int *bienQ;
 	DOUBLE dX = coeffs->dX;
@@ -435,6 +436,7 @@ __global__ void boundary_left(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs*
 	M = arg->M;
 	daui = arg->daui;
 	cuoii = arg->cuoii;
+	ubt = arg->ubt;
 
 	int thrx = blockIdx.x * blockDim.x + threadIdx.x;
     int thry = blockIdx.y * blockDim.y + threadIdx.y;
@@ -457,7 +459,7 @@ __global__ void boundary_left(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs*
 // 	int* dauj, int* cuoij, DOUBLE* vbt, DOUBLE* vbd, DOUBLE* ubt, DOUBLE* ubp){
 
 __global__ void boundary_right(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs* coeffs){
-	DOUBLE *t_z;
+	DOUBLE *t_z, *ubp;
 	int M, N, *daui, *cuoii;
 	int *bienQ;
 	DOUBLE dX = coeffs->dX;
@@ -467,6 +469,7 @@ __global__ void boundary_right(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs
 	N = arg->N;
 	daui = arg->daui;
 	cuoii = arg->cuoii;
+	ubp = arg->ubp;
 
 	int thrx = blockIdx.x * blockDim.x + threadIdx.x;
     int thry = blockIdx.y * blockDim.y + threadIdx.y;

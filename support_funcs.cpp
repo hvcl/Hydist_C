@@ -433,6 +433,7 @@ __global__ void boundary_left(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs*
 	int *bienQ;
 	DOUBLE dX = coeffs->dX;
 	bienQ = arg->bienQ;
+	t_z = arg->t_z;
 	M = arg->M;
 	daui = arg->daui;
 	cuoii = arg->cuoii;

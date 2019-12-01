@@ -739,10 +739,10 @@ __global__ void Update_Boundary_Value(DOUBLE t, int total_time, Argument_Pointer
 __global__ void update_uvz(Argument_Pointers* arg, Constant_Coeffs* coeffs){
 
 	int M, N, kenhhepng, kenhhepd;
-	DOUBLE *u, *v, *z, *t_u, *t_v. *t_z;
+	DOUBLE *u, *v, *z, *t_u, *t_v, *t_z;
 
 	M = arg->M; 
-	N = arg->N:
+	N = arg->N;
 	u = arg->u;
 	t_u = arg->t_u;
 	v = arg->v;

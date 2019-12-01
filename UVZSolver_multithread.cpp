@@ -565,7 +565,7 @@ __device__ void vSolver(DOUBLE t, int offset, int first, int last, int row, int 
     DOUBLE *v, DOUBLE *t_v, DOUBLE *u, DOUBLE *t_u, DOUBLE *z, DOUBLE *t_z, DOUBLE *Ky1, DOUBLE *Htdv, DOUBLE *H_moi, Constant_Coeffs* coeffs){
 
     DOUBLE p, q, tmp;
-    __shared__ DOUBLE H_TINH, dY2, dX2, dY, CORIOLIS_FORCE, Windy, dXbp, dYbp, g;
+    __shared__ DOUBLE H_TINH, dY2, dX2, dY, CORIOLIS_FORCE, Windy, dXbp, dYbp, g, HaiChiadT;
 
     H_TINH = coeffs->H_TINH; 
     dY = coeffs->dY;
@@ -576,6 +576,7 @@ __device__ void vSolver(DOUBLE t, int offset, int first, int last, int row, int 
     dYbp = coeffs->dYbp;
     CORIOLIS_FORCE = coeffs->CORIOLIS_FORCE;
     g = coeffs->g;
+    HaiChiadT = coeffs->HaiChiadT;
 
 
     q = 0;

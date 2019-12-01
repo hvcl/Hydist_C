@@ -233,7 +233,7 @@ __device__ void  _uzSolver_calculate_preindex(int i, int j, int width, int first
         }
     }
 
-    f5[i] = -2 * u[i * width + j] + dT * p  - dT * CORIOLIS_FORCE * vtb - dT * VISCOIDX[i * width + j] * q - dT * (Windx() - Tsxw[i * width + j]) / Htdu[i * width + j];
+    f5[i] = -2 * u[i * width + j] + dT * p  - dT * CORIOLIS_FORCE * vtb - dT * VISCOIDX[i * width + j] * q - dT * (Windx - Tsxw[i * width + j]) / Htdu[i * width + j];
 
     
     c2[i] = dTchia2dX * Htdu[i * width + j];
@@ -243,191 +243,191 @@ __device__ void  _uzSolver_calculate_preindex(int i, int j, int width, int first
     
 }
 
-// __device__ void _calculate_abcd(int i, int j, int first, int last, DOUBLE f4, int support_array_width,  bool bienran1, bool bienran2, Array_Pointers* arr){
-//     if ((first > last) || (j < first) || ( j > last)) return;
-//     __shared__ DOUBLE *a1, *b1, *c1, *d1, *a2, *c2, *d2, *f1, *f2, *f3, *f5;
-//     a1 = &(arr->a1[i * support_array_width]);
-//     b1 = &(arr->b1[i * support_array_width]);
-//     c1 = &(arr->c1[i * support_array_width]);
-//     d1 = &(arr->d1[i * support_array_width]);
-//     a2 = &(arr->a2[i * support_array_width]);
-//     c2 = &(arr->c2[i * support_array_width]);
-//     d2 = &(arr->d2[i * support_array_width]);
-//     f1 = &(arr->f1[i * support_array_width]);
-//     f2 = &(arr->f2[i * support_array_width]);
-//     // f4 = 2 * g * dTchia2dY;
-//     f3 = &(arr->f3[i * support_array_width]);
-//     f5 = &(arr->f5[i * support_array_width]);
+__device__ void _calculate_abcd(int i, int j, int first, int last, DOUBLE f4, int support_array_width,  bool bienran1, bool bienran2, Array_Pointers* arr){
+    if ((first > last) || (j < first) || ( j > last)) return;
+    __shared__ DOUBLE *a1, *b1, *c1, *d1, *a2, *c2, *d2, *f1, *f2, *f3, *f5;
+    a1 = &(arr->a1[i * support_array_width]);
+    b1 = &(arr->b1[i * support_array_width]);
+    c1 = &(arr->c1[i * support_array_width]);
+    d1 = &(arr->d1[i * support_array_width]);
+    a2 = &(arr->a2[i * support_array_width]);
+    c2 = &(arr->c2[i * support_array_width]);
+    d2 = &(arr->d2[i * support_array_width]);
+    f1 = &(arr->f1[i * support_array_width]);
+    f2 = &(arr->f2[i * support_array_width]);
+    // f4 = 2 * g * dTchia2dY;
+    f3 = &(arr->f3[i * support_array_width]);
+    f5 = &(arr->f5[i * support_array_width]);
 
-//     if (last - 1 > first){
-//             {
-//                 a1[j] = f4 - f1[j] / a2[j];
-//                 c1[j] = -f4 - (f3[j] / c2[j + 1]);
+    if (last - 1 > first){
+            {
+                a1[j] = f4 - f1[j] / a2[j];
+                c1[j] = -f4 - (f3[j] / c2[j + 1]);
 
-//                 b1[j] = f2[j] - (f1[j] * c2[j] / a2[j]) - (f3[j] * a2[j + 1] / c2[j + 1]);
+                b1[j] = f2[j] - (f1[j] * c2[j] / a2[j]) - (f3[j] * a2[j + 1] / c2[j + 1]);
                 
-//                 d1[j] = f5[j] - (f1[j] * d2[j] / a2[j]) - (f3[j] * d2[j + 1] / c2[j + 1]);
+                d1[j] = f5[j] - (f1[j] * d2[j] / a2[j]) - (f3[j] * d2[j + 1] / c2[j + 1]);
 
-//             }
-//         //limit this for the warp with tid range contains first only
-//         __syncthreads();
-//         if (bienran1){
-//             a1[first] = f4;
-//             b1[first] = f2[first] - (f3[first] * a2[first+ 1] / c2[first+ 1]);
-//             c1[first] = - f4 - (f3[first] / c2[first+ 1]);
-//             d1[first] = f5[first] - (f3[first] * d2[first+ 1] / c2[first+ 1]);
-//             // if (i == 245){
-//             //     printf("d1[first] %d %d %d %llx %llx %llx\n",j, first, last, f5[first], f3[first], d2[first+ 1]);
+            }
+        //limit this for the warp with tid range contains first only
+        __syncthreads();
+        if (bienran1){
+            a1[first] = f4;
+            b1[first] = f2[first] - (f3[first] * a2[first+ 1] / c2[first+ 1]);
+            c1[first] = - f4 - (f3[first] / c2[first+ 1]);
+            d1[first] = f5[first] - (f3[first] * d2[first+ 1] / c2[first+ 1]);
+            // if (i == 245){
+            //     printf("d1[first] %d %d %d %llx %llx %llx\n",j, first, last, f5[first], f3[first], d2[first+ 1]);
 
-//             // }
-//         }
-//         // limit this for the warp with tid range contains last only
-//         if (bienran2){
-//             a1[last - 1] = f4 - f1[last -1] / a2[last -1];
-//             b1[last - 1] = f2[last - 1] - (f1[last - 1] * c2[last -1] / a2[last - 1]);
-//             c1[last - 1] = - f4;
-//             d1[last - 1] = f5[last - 1] - (f1[last - 1] * d2[last - 1] / a2[last - 1]);
+            // }
+        }
+        // limit this for the warp with tid range contains last only
+        if (bienran2){
+            a1[last - 1] = f4 - f1[last -1] / a2[last -1];
+            b1[last - 1] = f2[last - 1] - (f1[last - 1] * c2[last -1] / a2[last - 1]);
+            c1[last - 1] = - f4;
+            d1[last - 1] = f5[last - 1] - (f1[last - 1] * d2[last - 1] / a2[last - 1]);
 
-//         }
-//     }
-//     else{
-//         //printf("Overflow, comparision btw DOUBLE and int\n");
-//         a1[first] = f4;
-//         b1[first] = f2[first];
-//         d1[first] = f5[first];
-//         c1[first] = -f4;
-//     }
+        }
+    }
+    else{
+        //printf("Overflow, comparision btw DOUBLE and int\n");
+        a1[first] = f4;
+        b1[first] = f2[first];
+        d1[first] = f5[first];
+        c1[first] = -f4;
+    }
 
-//     // if (i == 245) printf("_calculate_abcd %d %llx %llx %llx %llx %llx \n",j, d1[j], f1[j], d2[j], f3[j], a2[j]);
+    // if (i == 245) printf("_calculate_abcd %d %llx %llx %llx %llx %llx \n",j, d1[j], f1[j], d2[j], f3[j], a2[j]);
 
-// }
+}
 
 
-// __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_array_width, int tridiag_coeff_width, int first, int last, int seg_no, bool bienran1, bool bienran2, 
-//     DOUBLE ubt_or_vbd, DOUBLE ubp_or_vbt,  DOUBLE TZ_r, DOUBLE TZ_l, bool dkBienQ_1, bool dkBienQ_2, int dkfr, Argument_Pointers* arg, Array_Pointers *arr){
-//     //DOUBLE *a1, DOUBLE *b1, DOUBLE *c1, DOUBLE *d1, DOUBLE *a2, DOUBLE *b2, DOUBLE *c2, DOUBLE *d2, DOUBLE* AA, DOUBLE* BB, DOUBLE* CC, DOUBLE* DD){
+__device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_array_width, int tridiag_coeff_width, int first, int last, int seg_no, bool bienran1, bool bienran2, 
+    DOUBLE ubt_or_vbd, DOUBLE ubp_or_vbt,  DOUBLE TZ_r, DOUBLE TZ_l, bool dkBienQ_1, bool dkBienQ_2, int dkfr, Argument_Pointers* arg, Array_Pointers *arr){
+    //DOUBLE *a1, DOUBLE *b1, DOUBLE *c1, DOUBLE *d1, DOUBLE *a2, DOUBLE *b2, DOUBLE *c2, DOUBLE *d2, DOUBLE* AA, DOUBLE* BB, DOUBLE* CC, DOUBLE* DD){
     
 
-//     if ((first > last) || (j < first) || ( j > last)) return;
+    if ((first > last) || (j < first) || ( j > last)) return;
 
 
-//     // int array_width = arg->M + 2;
-//     // int tridiag_coeff_width = 2 * arg->M  + 1;
-//     __shared__ DOUBLE *a1, *b1, *c1, *d1, *a2, *c2, *d2, *AA, *BB, *CC, *DD;
-//     __shared__ int offset;
-//     offset = first * 2;
-//     a1 = &(arr->a1[i * support_array_width]);
-//     b1 = &(arr->b1[i * support_array_width]);
-//     c1 = &(arr->c1[i * support_array_width]);
-//     d1 = &(arr->d1[i * support_array_width]);
-//     a2 = &(arr->a2[i * support_array_width]);
-//     c2 = &(arr->c2[i * support_array_width]);
-//     d2 = &(arr->d2[i * support_array_width]);
-//     AA = &(arr->AA[i * tridiag_coeff_width]);
-//     BB = &(arr->BB[i * tridiag_coeff_width]);
-//     CC = &(arr->CC[i * tridiag_coeff_width]);
-//     DD = &(arr->DD[i * tridiag_coeff_width]);
-//     int sn = 2 * (last - first);
-//     bool isBienran;
+    // int array_width = arg->M + 2;
+    // int tridiag_coeff_width = 2 * arg->M  + 1;
+    __shared__ DOUBLE *a1, *b1, *c1, *d1, *a2, *c2, *d2, *AA, *BB, *CC, *DD;
+    __shared__ int offset;
+    offset = first * 2;
+    a1 = &(arr->a1[i * support_array_width]);
+    b1 = &(arr->b1[i * support_array_width]);
+    c1 = &(arr->c1[i * support_array_width]);
+    d1 = &(arr->d1[i * support_array_width]);
+    a2 = &(arr->a2[i * support_array_width]);
+    c2 = &(arr->c2[i * support_array_width]);
+    d2 = &(arr->d2[i * support_array_width]);
+    AA = &(arr->AA[i * tridiag_coeff_width]);
+    BB = &(arr->BB[i * tridiag_coeff_width]);
+    CC = &(arr->CC[i * tridiag_coeff_width]);
+    DD = &(arr->DD[i * tridiag_coeff_width]);
+    int sn = 2 * (last - first);
+    bool isBienran;
 
-//     // if (j == first)
-//     //     printf("debug %d %x\n", i, BB);
-//     // TODO: can re-organize this function so that only warp with right index range execute right snippet, avoid unnescessary memory access and execution cost.
+    // if (j == first)
+    //     printf("debug %d %x\n", i, BB);
+    // TODO: can re-organize this function so that only warp with right index range execute right snippet, avoid unnescessary memory access and execution cost.
 
-//     if (bienran1){
+    if (bienran1){
         
-//         bienrandau(j, first, last, AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
-//         DD[offset] = d2[first];
+        bienrandau(j, first, last, AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
+        DD[offset] = d2[first];
 
 
-//         // ran - long
-//         if (bienran2 == false){
-//             if ((dkBienQ_2) && (last == dkfr)){         //r == dkfr:   // Kiem tra lai phan nay
-//                 // if (j == last)
-//                 // printf("herrrrreeeeee giai vz ran long q %d \n", last);
-//                 // attention 
-//                 if (j == last){
-//                     AA[sn + offset] = a2[last];
-//                     BB[sn + offset] = 1;
-//                     DD[sn + offset] = d2[last] - c2[last] * ubp_or_vbt;
-//                 }
+        // ran - long
+        if (bienran2 == false){
+            if ((dkBienQ_2) && (last == dkfr)){         //r == dkfr:   // Kiem tra lai phan nay
+                // if (j == last)
+                // printf("herrrrreeeeee giai vz ran long q %d \n", last);
+                // attention 
+                if (j == last){
+                    AA[sn + offset] = a2[last];
+                    BB[sn + offset] = 1;
+                    DD[sn + offset] = d2[last] - c2[last] * ubp_or_vbt;
+                }
 
-//             }
-//             else{
-//                 //printf("ran - long \n");
-//                 sn --;
-//                 if (j == last){
-//                     AA[sn + offset] = a1[last - 1];
-//                     BB[sn + offset] = b1[last - 1];
-//                     DD[sn + offset] = d1[last - 1] - c1[last - 1] * TZ_r;
-//                 }
+            }
+            else{
+                //printf("ran - long \n");
+                sn --;
+                if (j == last){
+                    AA[sn + offset] = a1[last - 1];
+                    BB[sn + offset] = b1[last - 1];
+                    DD[sn + offset] = d1[last - 1] - c1[last - 1] * TZ_r;
+                }
 
-//             }
-//         }
-//         // ran - ran
-//         else{
-//             if (j == last){
-//                 AA[sn + offset] = a2[last];
-//                 BB[sn + offset] = 1;
-//                 DD[sn + offset] = d2[last];
-//             }
-//         }
-//     }
-//     // long
-//     else{
-//         if ((dkBienQ_1) && (first == 2)){
-//             // printf("debug\n");
-//             bienrandau(j,first, last,  AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
+            }
+        }
+        // ran - ran
+        else{
+            if (j == last){
+                AA[sn + offset] = a2[last];
+                BB[sn + offset] = 1;
+                DD[sn + offset] = d2[last];
+            }
+        }
+    }
+    // long
+    else{
+        if ((dkBienQ_1) && (first == 2)){
+            // printf("debug\n");
+            bienrandau(j,first, last,  AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
 
-//             DD[offset] = d2[first] - a2[first] * ubt_or_vbd;
-//             // thieu bb[1] va cc[1] cho truong hop vz, hoi lai co
-//             isBienran = true;
-//         }
-//         else{
-//             bienlongdau(j,first, last, AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
-//             if (j == first){
-//                 BB[offset] = b1[first];
-//                 CC[offset] = c1[first];
-//                 DD[offset] = d1[first] - a1[first] * TZ_l;
-//             }
-//             isBienran = false;
-//         }
-//         // long - long
-//         // TODO: this part should be done by warp with index range contain sn.
+            DD[offset] = d2[first] - a2[first] * ubt_or_vbd;
+            // thieu bb[1] va cc[1] cho truong hop vz, hoi lai co
+            isBienran = true;
+        }
+        else{
+            bienlongdau(j,first, last, AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
+            if (j == first){
+                BB[offset] = b1[first];
+                CC[offset] = c1[first];
+                DD[offset] = d1[first] - a1[first] * TZ_l;
+            }
+            isBienran = false;
+        }
+        // long - long
+        // TODO: this part should be done by warp with index range contain sn.
 
-//         if (bienran2 == false){ // variable isbienran is equivalent with variable text in original code
-//             if ((dkBienQ_1) && (last == dkfr)){     //r == dkfr: // BienQ[0] && r == M trong truong hop giaianv
-//                 if (!isBienran) sn --;
-//                 if(j == last){
-//                     AA[sn + offset] = a2[last];
-//                     BB[sn + offset] = 1;
-//                     DD[sn + offset] = d2[last] - c2[last] * ubp_or_vbt;
-//                 }
-//             }
-//             else{
-//                 sn --;
-//                 if (!isBienran)
-//                     sn -= 1;
-//                 if (j == last){
-//                     AA[sn + offset] = a1[last - 1];
-//                     BB[sn + offset] = b1[last - 1];
-//                     DD[sn + offset] = d1[last - 1] - c1[last - 1] * TZ_r;
-//                 }
-//             }
-//         }
-//         else{
-//             if (!isBienran) sn --;
-//             if (j == last){
-//                 AA[sn + offset] = a2[last];
-//                 BB[sn + offset] = 1;
-//                 DD[sn + offset] = d2[last];
-//             }
-//         }
-//     }
+        if (bienran2 == false){ // variable isbienran is equivalent with variable text in original code
+            if ((dkBienQ_1) && (last == dkfr)){     //r == dkfr: // BienQ[0] && r == M trong truong hop giaianv
+                if (!isBienran) sn --;
+                if(j == last){
+                    AA[sn + offset] = a2[last];
+                    BB[sn + offset] = 1;
+                    DD[sn + offset] = d2[last] - c2[last] * ubp_or_vbt;
+                }
+            }
+            else{
+                sn --;
+                if (!isBienran)
+                    sn -= 1;
+                if (j == last){
+                    AA[sn + offset] = a1[last - 1];
+                    BB[sn + offset] = b1[last - 1];
+                    DD[sn + offset] = d1[last - 1] - c1[last - 1] * TZ_r;
+                }
+            }
+        }
+        else{
+            if (!isBienran) sn --;
+            if (j == last){
+                AA[sn + offset] = a2[last];
+                BB[sn + offset] = 1;
+                DD[sn + offset] = d2[last];
+            }
+        }
+    }
     
-//     if (j == last)
-//         arr->SN[i * segment_limit + seg_no] = sn;
-// }
+    if (j == last)
+        arr->SN[i * segment_limit + seg_no] = sn;
+}
 
 // __device__ void _vzSolver_extract_solution( int i,int j, int sn, int width, int first, int last, bool bienran1, bool bienran2, Argument_Pointers *arg, Array_Pointers * arr)
 // {   

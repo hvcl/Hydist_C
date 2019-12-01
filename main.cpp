@@ -2,6 +2,7 @@
 // #include <cuda_runtime.h>
 #include <vector>
 #include "engine.h"
+#include "support_funcs.h"
 #include <algorithm>
 #include <unistd.h>
 #include <stdlib.h>

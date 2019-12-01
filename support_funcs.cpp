@@ -240,113 +240,113 @@ __device__ void Interpolate_FS_d(int location, int offset, int sign, Argument_Po
 		}
 	}
 
-// }
-// __global__ void Find_Calculation_limits_Horizontal( Argument_Pointers *arg){
+}
+__global__ void Find_Calculation_limits_Horizontal( Argument_Pointers *arg){
 
-// 	// int thrx = blockIdx.x * blockDim.x + threadIdx.x;
-//  //    int thry = blockIdx.y * blockDim.y + threadIdx.y;
-//  //    int i = thrx * (blockDim.y * gridDim.y) + thry + 2;
-// 	int i = blockDim.y * blockIdx.y + threadIdx.y + 2;
-// 	int M = arg->M;
-// 	int N = arg->N;
-//     if (i > N) return;
-//     int* khouot = arg->khouot;
-//     int* moci = arg->moci;
-//     int* cuoii = arg->cuoii;
-//     int* daui = arg->daui;
-// 	int number_of_seg = 0;
-// 	int start = 2;
-// 	int end = 0;
-// 	int offset = M + 3;
-// 	if (i == N)
-// 		Interpolate_FS_ng(N, N - 1, -1, arg);
-// 	if (i == 2)
-// 		Interpolate_FS_ng(2, 2, 1, arg);
+	// int thrx = blockIdx.x * blockDim.x + threadIdx.x;
+ //    int thry = blockIdx.y * blockDim.y + threadIdx.y;
+ //    int i = thrx * (blockDim.y * gridDim.y) + thry + 2;
+	int i = blockDim.y * blockIdx.y + threadIdx.y + 2;
+	int M = arg->M;
+	int N = arg->N;
+    if (i > N) return;
+    int* khouot = arg->khouot;
+    int* moci = arg->moci;
+    int* cuoii = arg->cuoii;
+    int* daui = arg->daui;
+	int number_of_seg = 0;
+	int start = 2;
+	int end = 0;
+	int offset = M + 3;
+	if (i == N)
+		Interpolate_FS_ng(N, N - 1, -1, arg);
+	if (i == 2)
+		Interpolate_FS_ng(2, 2, 1, arg);
 
-// 	while (start < M){
-// 		//printf("i: %d, start %d \n",i, start );
-// 		if (khouot[i * offset + start] != 0){
-// 			while ((khouot[i * offset + start]) && (start < M)) start++;
-// 		} 
-// 		if (start + 1 == M) start = M;
+	while (start < M){
+		//printf("i: %d, start %d \n",i, start );
+		if (khouot[i * offset + start] != 0){
+			while ((khouot[i * offset + start]) && (start < M)) start++;
+		} 
+		if (start + 1 == M) start = M;
 
-// 		if (khouot[i * offset + start] == 0 && start + 1 < M){
-// 			daui[i * segment_limit + number_of_seg] = start;
-// 			// if (threadIdx.x == 0)
-// 				// printf("start: %d, i: %d\n", start, i );
-// 			end  = start;
-// 			while((khouot[i * offset + end] == 0) && (end < M)) end++;
+		if (khouot[i * offset + start] == 0 && start + 1 < M){
+			daui[i * segment_limit + number_of_seg] = start;
+			// if (threadIdx.x == 0)
+				// printf("start: %d, i: %d\n", start, i );
+			end  = start;
+			while((khouot[i * offset + end] == 0) && (end < M)) end++;
 
-// 			if ((khouot[i * offset + end] != 0) && (end <= M)){
-// 				cuoii[i * segment_limit + number_of_seg] = end - 1;
-// 				start = end;
-// 				number_of_seg++;
-// 			} else{
-// 				cuoii[i * segment_limit + number_of_seg] = M ;
-// 				//printf("i: %d, cuoii : %d\n", i, M);
-// 				start = M;
-// 				number_of_seg++;
-// 			}
+			if ((khouot[i * offset + end] != 0) && (end <= M)){
+				cuoii[i * segment_limit + number_of_seg] = end - 1;
+				start = end;
+				number_of_seg++;
+			} else{
+				cuoii[i * segment_limit + number_of_seg] = M ;
+				//printf("i: %d, cuoii : %d\n", i, M);
+				start = M;
+				number_of_seg++;
+			}
 			
-// 		} 
-// 	}
-// 	moci[i] = number_of_seg;
-// }
+		} 
+	}
+	moci[i] = number_of_seg;
+}
 
 
-// __global__ void Find_Calculation_limits_Vertical(Argument_Pointers *arg){
+__global__ void Find_Calculation_limits_Vertical(Argument_Pointers *arg){
 
-// 	// int thrx = blockIdx.x * blockDim.x + threadIdx.x;
-//  //    int thry = blockIdx.y * blockDim.y + threadIdx.y;
-//  //    int j = thrx * (blockDim.y * gridDim.y) + thry + 2;
-// 	int j = blockDim.y * blockIdx.y + threadIdx.y + 2;
-// 	int M = arg->M;
-// 	int N = arg->N;
-//     if (j > M) return;
-//     int* khouot = arg->khouot;
-//     int* mocj = arg->mocj;
-//     int* cuoij = arg->cuoij;
-//     int* dauj = arg->dauj;
-// 	int number_of_seg  = 0;
-// 	int start = 2;
-// 	int end = 0;
-// 	int offset = M + 3;
+	// int thrx = blockIdx.x * blockDim.x + threadIdx.x;
+ //    int thry = blockIdx.y * blockDim.y + threadIdx.y;
+ //    int j = thrx * (blockDim.y * gridDim.y) + thry + 2;
+	int j = blockDim.y * blockIdx.y + threadIdx.y + 2;
+	int M = arg->M;
+	int N = arg->N;
+    if (j > M) return;
+    int* khouot = arg->khouot;
+    int* mocj = arg->mocj;
+    int* cuoij = arg->cuoij;
+    int* dauj = arg->dauj;
+	int number_of_seg  = 0;
+	int start = 2;
+	int end = 0;
+	int offset = M + 3;
 	
-// 	if (j == M)
-// 		Interpolate_FS_d(M, M - 1, -1, arg);
-// 	while (start < N){
-// 		if (khouot[start * offset + j] != 0  ){
-// 			while ((khouot[start * offset + j]) && (start < N)) start++;
-// 		}
-// 		if (start + 1 == N) start = N;
-// 		if (khouot[start * offset + j] == 0 && start + 1 < N){
-// 			dauj[j * segment_limit + number_of_seg] = start;
-// 			end = start;
-// 			while ( (khouot[end * offset + j] == 0) && (end < N) ) {end++;}
+	if (j == M)
+		Interpolate_FS_d(M, M - 1, -1, arg);
+	while (start < N){
+		if (khouot[start * offset + j] != 0  ){
+			while ((khouot[start * offset + j]) && (start < N)) start++;
+		}
+		if (start + 1 == N) start = N;
+		if (khouot[start * offset + j] == 0 && start + 1 < N){
+			dauj[j * segment_limit + number_of_seg] = start;
+			end = start;
+			while ( (khouot[end * offset + j] == 0) && (end < N) ) {end++;}
 			
-// 			if ((khouot[end * offset + j] != 0) && ( end <= N)){
+			if ((khouot[end * offset + j] != 0) && ( end <= N)){
 				
-// 				// if (threadIdx.x == 0 && j == 3)
-// 				// 	printf(" khouot[%d %d], %d\n", end, j, khouot[end * offset + j]);
-// 				cuoij[j * segment_limit + number_of_seg] = end - 1;
-// 				number_of_seg++;
-// 				// if (j == 3 && threadIdx.x == 0) 
-// 				// 	printf("%d %d\n",end, number_of_seg );
-// 				start = end;
-// 			} else{
-// 				cuoij[j * segment_limit + number_of_seg] = N;
-// 				start = N;
-// 				// if (j == 3 && threadIdx.x == 0) 
-// 				// 	printf("%d %d\n",end, number_of_seg );
-// 				number_of_seg++;
-// 			}
-// 		}
-// 	}
-// 	// if (j == 3 && threadIdx.x == 0)
-// 	// 	printf(" khouot[%d %d], %d\n", end, j, khouot[end * offset + j]);
-// 	mocj[j] = number_of_seg;
+				// if (threadIdx.x == 0 && j == 3)
+				// 	printf(" khouot[%d %d], %d\n", end, j, khouot[end * offset + j]);
+				cuoij[j * segment_limit + number_of_seg] = end - 1;
+				number_of_seg++;
+				// if (j == 3 && threadIdx.x == 0) 
+				// 	printf("%d %d\n",end, number_of_seg );
+				start = end;
+			} else{
+				cuoij[j * segment_limit + number_of_seg] = N;
+				start = N;
+				// if (j == 3 && threadIdx.x == 0) 
+				// 	printf("%d %d\n",end, number_of_seg );
+				number_of_seg++;
+			}
+		}
+	}
+	// if (j == 3 && threadIdx.x == 0)
+	// 	printf(" khouot[%d %d], %d\n", end, j, khouot[end * offset + j]);
+	mocj[j] = number_of_seg;
 
-// }
+}
 
 
 // __global__ void Htuongdoi(Argument_Pointers* arg){

@@ -21,7 +21,7 @@ Created by Huong Nguyen
 
 __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 	__shared__ DOUBLE NANGDAY;
-	__shared__ DOUBLE g, 
+	__shared__ DOUBLE g; 
 	__shared__ DOUBLE mu_mn;
 	NANGDAY = coeffs->NANGDAY;
 	g = coeffs->g;

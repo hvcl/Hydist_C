@@ -1,4 +1,4 @@
-#include "Engine.h"
+#include "engine.h"
 using namespace std;
 
 
@@ -79,7 +79,8 @@ ce.g = 9.81; //gia toc trong truong = 9.81 m2/s
 // //lan truyen
 ce.Ks = 2.5 * ce.dm; // = 2.5 * dm
 // hoac bang Ks = 3 * d 90% 
-
+ce.Windx = 0.0013 * (0.00075 + 0.000067 * abs(ce.Wind)) * abs(ce.Wind) * ce.Wind * cos(ce.huonggio * (PI / 180));
+ce.Windy = 0.0013 * (0.00075 + 0.000067 * abs(ce.Wind)) * abs(ce.Wind) * ce.Wind * sin(ce.huonggio * (PI / 180));
 }
 
 

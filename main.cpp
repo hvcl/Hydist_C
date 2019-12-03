@@ -184,9 +184,6 @@ int main (int argc, char ** argv){
 	// if (!fail) 
 	// 		cout << "sucess! " << endl;
 
-	// what do I need: 
-	// a struct that contain addresses of pointers in host: done: host_ap
-	// a struct that contain addresses of pointer in device 
 
 	// test function : attribute_arrays_memory_alloc
 	h_argument_pointers = attribute_arrays_memory_alloc(0, host_ap, &d_argument_pointers);
@@ -196,27 +193,27 @@ int main (int argc, char ** argv){
 	gpu_h = (DOUBLE*) malloc(sizeof(DOUBLE) * host_ap.h.size());
 	cout << host_ap.h.size() << endl;
 	cudaError_t status = cudaMemcpy((void*) gpu_h, h_argument_pointers.h, sizeof(DOUBLE) * host_ap.h.size(), cudaMemcpyDeviceToHost);
-	// assert(status == cudaSuccess);
+	assert(status == cudaSuccess);
 
 
 	cout << "sucess!" << endl;
 
-	// h_arr_pointers = supporting_arrays_alloc(M, N, &d_arr_pointers);
+	h_arr_pointers = supporting_arrays_alloc(M, N, &d_arr_pointers);
 
 
 	// load coefficients used in Device code
-	// Constant_Coeffs  h_const_coeffs, *d_const_coeffs;
-	// Load_coeffs (h_const_coeffs);
+	Constant_Coeffs  h_const_coeffs, *d_const_coeffs;
+	Load_coeffs (h_const_coeffs);
 
-	// cudaMalloc((void**) &d_const_coeffs, sizeof(Constant_Coeffs));
-	// cudaMemcpy(d_const_coeffs, &h_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyHostToDevice);
+	cudaMalloc((void**) &d_const_coeffs, sizeof(Constant_Coeffs));
+	cudaMemcpy(d_const_coeffs, &h_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyHostToDevice);
 
 	// check struct values on GPU:
-	// Constant_Coeffs* coeffs;
-	// coeffs = (Constant_Coeffs*) malloc(sizeof(Constant_Coeffs));
-	// cudaMemcpy((void*) coeffs, d_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyDeviceToHost);
+	Constant_Coeffs* coeffs;
+	coeffs = (Constant_Coeffs*) malloc(sizeof(Constant_Coeffs));
+	cudaMemcpy((void*) coeffs, d_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyDeviceToHost);
 
-	// cout << coeffs->dX << "  " << coeffs->dY << " " << coeffs->Ks << endl;
+	cout << coeffs->dX << "  " << coeffs->dY << " " << coeffs->Ks << endl;
 
 	// check if values on device are the same with values on host, and if we has stored the right pointers
 	// done

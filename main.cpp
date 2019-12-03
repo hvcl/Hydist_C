@@ -195,9 +195,6 @@ int main (int argc, char ** argv){
 	cudaError_t status = cudaMemcpy((void*) gpu_h, h_argument_pointers.h, sizeof(DOUBLE) * host_ap.h.size(), cudaMemcpyDeviceToHost);
 	assert(status == cudaSuccess);
 
-
-	cout << "sucess!" << endl;
-
 	h_arr_pointers = supporting_arrays_alloc(M, N, &d_arr_pointers);
 
 
@@ -214,6 +211,7 @@ int main (int argc, char ** argv){
 	cudaMemcpy((void*) coeffs, d_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyDeviceToHost);
 
 	cout << coeffs->dX << "  " << coeffs->dY << " " << coeffs->Ks << endl;
+	cout << "data transfer Done" << endl;
 
 	// check if values on device are the same with values on host, and if we has stored the right pointers
 	// done

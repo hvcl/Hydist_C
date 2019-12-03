@@ -26,6 +26,8 @@ __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 	NANGDAY = coeffs->NANGDAY;
 	g = coeffs->g;
 	mu_mn = coeffs->mu_mn;
+	printf("Onetime_init Done\n" );
+	
 
 	int M = arg->M;
 	int N = arg->N;
@@ -65,7 +67,6 @@ __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 	if (h[(i - 1) * width + j] + h[i * width + j] != 0)
 		Ky1[i * width + j] = g * powf((h[(i - 1) * width + j] + h[i * width + j]) * 0.5, -2 * mu_mn) * powf((hsnham[(i - 1) * width + j] + hsnham[i * width + j]) * 0.5, 2);
 
-	printf("Onetime_init Done\n" );
 
 
 }

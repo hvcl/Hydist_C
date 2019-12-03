@@ -192,30 +192,30 @@ int main (int argc, char ** argv){
 	h_argument_pointers = attribute_arrays_memory_alloc(0, host_ap, &d_argument_pointers);
 
 	// gpu_h: the grid depth map on gou
-	DOUBLE* gpu_h; 
-	gpu_h = (DOUBLE*) malloc(host_ap.h.size());
-	cudaError_t status = cudaMemcpy((void*) gpu_h, h_argument_pointers.h, sizeof(DOUBLE) * host_ap.h.size(), cudaMemcpyDeviceToHost);
-	assert(status == cudaSuccess);
+	// DOUBLE* gpu_h; 
+	// gpu_h = (DOUBLE*) malloc(host_ap.h.size());
+	// cudaError_t status = cudaMemcpy((void*) gpu_h, h_argument_pointers.h, sizeof(DOUBLE) * host_ap.h.size(), cudaMemcpyDeviceToHost);
+	// assert(status == cudaSuccess);
 
 
 	cout << "sucess!" << endl;
 
-	h_arr_pointers = supporting_arrays_alloc(M, N, &d_arr_pointers);
+	// h_arr_pointers = supporting_arrays_alloc(M, N, &d_arr_pointers);
 
 
 	// load coefficients used in Device code
-	Constant_Coeffs  h_const_coeffs, *d_const_coeffs;
-	Load_coeffs (h_const_coeffs);
+	// Constant_Coeffs  h_const_coeffs, *d_const_coeffs;
+	// Load_coeffs (h_const_coeffs);
 
-	cudaMalloc((void**) &d_const_coeffs, sizeof(Constant_Coeffs));
-	cudaMemcpy(d_const_coeffs, &h_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyHostToDevice);
+	// cudaMalloc((void**) &d_const_coeffs, sizeof(Constant_Coeffs));
+	// cudaMemcpy(d_const_coeffs, &h_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyHostToDevice);
 
 	// check struct values on GPU:
-	Constant_Coeffs* coeffs;
-	coeffs = (Constant_Coeffs*) malloc(sizeof(Constant_Coeffs));
-	cudaMemcpy((void*) coeffs, d_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyDeviceToHost);
+	// Constant_Coeffs* coeffs;
+	// coeffs = (Constant_Coeffs*) malloc(sizeof(Constant_Coeffs));
+	// cudaMemcpy((void*) coeffs, d_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyDeviceToHost);
 
-	cout << coeffs->dX << "  " << coeffs->dY << " " << coeffs->Ks << endl;
+	// cout << coeffs->dX << "  " << coeffs->dY << " " << coeffs->Ks << endl;
 
 	// check if values on device are the same with values on host, and if we has stored the right pointers
 	// done

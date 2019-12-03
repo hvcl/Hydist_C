@@ -65,6 +65,9 @@ __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 	if (h[(i - 1) * width + j] + h[i * width + j] != 0)
 		Ky1[i * width + j] = g * powf((h[(i - 1) * width + j] + h[i * width + j]) * 0.5, -2 * mu_mn) * powf((hsnham[(i - 1) * width + j] + hsnham[i * width + j]) * 0.5, 2);
 
+	printf("Onetime_init Done\n", );
+
+
 }
 __global__ void update_h_moi(Argument_Pointers* arg){
 	int M = arg-> M ;

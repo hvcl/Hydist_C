@@ -192,10 +192,10 @@ int main (int argc, char ** argv){
 	h_argument_pointers = attribute_arrays_memory_alloc(0, host_ap, &d_argument_pointers);
 
 	// gpu_h: the grid depth map on gou
-	// DOUBLE* gpu_h; 
-	// gpu_h = (DOUBLE*) malloc(host_ap.h.size());
-	// cudaError_t status = cudaMemcpy((void*) gpu_h, h_argument_pointers.h, sizeof(DOUBLE) * host_ap.h.size(), cudaMemcpyDeviceToHost);
-	// assert(status == cudaSuccess);
+	DOUBLE* gpu_h; 
+	gpu_h = (DOUBLE*) malloc(host_ap.h.size());
+	cudaError_t status = cudaMemcpy((void*) gpu_h, h_argument_pointers.h, sizeof(DOUBLE) * host_ap.h.size(), cudaMemcpyDeviceToHost);
+	assert(status == cudaSuccess);
 
 
 	cout << "sucess!" << endl;

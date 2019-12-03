@@ -1,7 +1,7 @@
 ### Development Notes 
 - many changes happened in support_funcs.cpp, need to be carefull when check functions in UVZsolver.cpp since they call many kernels in support_funcs.cpp
 #### Done:
-- [x] Get rid of global constant
+- Get rid of global constant
  - [x] Load all inputs from files
  - [x] Tested Memcopy from host to device
  - [x] Rewrite makefile 

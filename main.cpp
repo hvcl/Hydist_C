@@ -219,15 +219,15 @@ int main (int argc, char ** argv){
 
 	// check if values on device are the same with values on host, and if we has stored the right pointers
 	// done
-	for (int i = 0; i < host_ap.h.size(); i++){
-		if (gpu_h[i] != host_ap.h[i]){
-			cout << "failed" << endl
-				<< "i = " << i << endl
-				<< "gpu: " << gpu_h[i] << endl
-				<< "cpu: " << host_ap.h[i] << endl;
+	// for (int i = 0; i < host_ap.h.size(); i++){
+	// 	if (gpu_h[i] != host_ap.h[i]){
+	// 		cout << "failed" << endl
+	// 			<< "i = " << i << endl
+	// 			<< "gpu: " << gpu_h[i] << endl
+	// 			<< "cpu: " << host_ap.h[i] << endl;
 
-		}
-	}
+	// 	}
+	// }
 
 	// grid size and block size 
 	dim3 block_2d(min(32, M + 3), 1, 1);

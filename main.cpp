@@ -227,11 +227,12 @@ int main (int argc, char ** argv){
 
 	// grid size and block size 
 	dim3 block_2d(min(32, M + 3), 1, 1);
-	dim3 grid_2d((M + 3) / min(32, M + 3) + 1,N + 3, 1);
-
-
+	//dim3 grid_2d((M + 3) / min(32, M + 3) + 1,N + 3, 1);
+	dim3 grid_2d(4, 30, 1);
+	cout << grid_2d.x << " " << grid_2d.y <<" " << grid_2d.z <<  " " << endl;
 	Onetime_init <<<grid_2d, block_2d >>>(d_argument_pointers,d_const_coeffs);
-	
+ 	
+	cudaDeviceSynchronize();	
 
 	// load initial condition
 

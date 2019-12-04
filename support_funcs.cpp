@@ -7,7 +7,6 @@ Created by Huong Nguyen
 
 #include "support_funcs.h"
 
-
 // __device__ void calculate_index(int *i, int *j, int M){
 //     int thrx = blockIdx.x * blockDim.x + threadIdx.x;
 //     int thry = blockIdx.y * blockDim.y + threadIdx.y;
@@ -26,9 +25,7 @@ __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 	NANGDAY = coeffs->NANGDAY;
 	g = coeffs->g;
 	mu_mn = coeffs->mu_mn;
-	// printf("Onetime_init Done\n" );
-
-
+	//cout << "test" << endl;
 	int M = arg->M;
 	int N = arg->N;
 	int* khouot = arg->khouot;
@@ -42,7 +39,8 @@ __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 	int width = M + 3;
 	int i = blockIdx.y * blockDim.y + threadIdx.y;
 	int j = blockIdx.x * blockDim.x + threadIdx.x;
-
+	if ((blockIdx.y < 20) && (blockIdx.x == 1) && (threadIdx.x == 0))	
+	printf("blockIdx.x = %d bIdx.y = %d thIdx.x = %d, thIdx.y = %d\n", blockIdx.x, blockIdx.y, threadIdx.x, threadIdx.y);
 	if (( i >= N + 3) || (j >= M + 3)) return;
 	// ATTENTION
 	khouot [i * width] = khouot [j] = 2;
@@ -68,6 +66,7 @@ __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 		Ky1[i * width + j] = g * powf((h[(i - 1) * width + j] + h[i * width + j]) * 0.5, -2 * mu_mn) * powf((hsnham[(i - 1) * width + j] + hsnham[i * width + j]) * 0.5, 2);
 
 
+	printf("Onetime_init Done\n" );
 
 }
 __global__ void update_h_moi(Argument_Pointers* arg){

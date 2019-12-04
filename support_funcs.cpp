@@ -26,8 +26,8 @@ __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 	NANGDAY = coeffs->NANGDAY;
 	g = coeffs->g;
 	mu_mn = coeffs->mu_mn;
-	printf("Onetime_init Done\n" );
-	
+	// printf("Onetime_init Done\n" );
+
 
 	int M = arg->M;
 	int N = arg->N;

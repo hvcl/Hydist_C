@@ -230,13 +230,14 @@ int main (int argc, char ** argv){
 	dim3 grid_2d((M + 3) / min(32, M + 3) + 1,N + 3, 1);
 
 
-	Onetime_init <<<grid_2d, block_2d >>>(d_argument_pointers,d_const_coeffs );
+	Onetime_init <<<grid_2d, block_2d >>>(d_argument_pointers,d_const_coeffs);
+	
 
 	// load initial condition
 
-	// Find_Calculation_limits_Horizontal <<<>>> ();
+	// Find_Calculation_limits_Horizontal <<<grid_size, block_size>>> ();
 
-	// Find_Calculation_limits_Vertical <<<>>> ();
+	// Find_Calculation_limits_Vertical <<<grid_size, block_size>>> ();
 
 
 	// gpu_Htuongdoi<<<>>> ();

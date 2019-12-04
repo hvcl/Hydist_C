@@ -232,7 +232,10 @@ int main (int argc, char ** argv){
 	cout << grid_2d.x << " " << grid_2d.y <<" " << grid_2d.z <<  " " << endl;
 	Onetime_init <<<grid_2d, block_2d >>>(d_argument_pointers,d_const_coeffs);
  	
-	cudaDeviceSynchronize();	
+	cudaDeviceSynchronize();
+	cudaError_t err = cudaGetLastError();
+	if (err != cudaSuccess)
+		cout << "not sucess" << endl;
 
 	// load initial condition
 

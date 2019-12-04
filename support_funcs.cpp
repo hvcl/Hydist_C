@@ -41,7 +41,6 @@ __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 	int j = blockIdx.x * blockDim.x + threadIdx.x;
 	if ((blockIdx.y < 129) && (blockIdx.x == 1) && (threadIdx.x == 0))	
 	printf("blockIdx.x = %d bIdx.y = %d thIdx.x = %d, thIdx.y = %d\n", blockIdx.x, blockIdx.y, threadIdx.x, threadIdx.y);
-	return;
 	if (( i >= N + 3) || (j >= M + 3)) return;
 	// ATTENTION
 	khouot [i * width] = khouot [j] = 2;
@@ -54,6 +53,8 @@ __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 		H_moi[i * width + j] = 0;
 		// htaiz[i * width + j];
 	}
+	return;
+	
 	// giatriHtaiZ
 	if (i > N || j > M)  return;
 	htaiz[i * width + j] = (h[(i - 1) * width + j - 1] + h[(i - 1) * width + j] + h[i *width + j - 1] + h[i * width + j]) * 0.25;

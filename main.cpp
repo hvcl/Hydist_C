@@ -235,7 +235,7 @@ int main (int argc, char ** argv){
 	cudaDeviceSynchronize();
 	cudaError_t err = cudaGetLastError();
 	if (err != cudaSuccess)
-		cout << "not sucess" << endl;
+		cout << "error: " <<  cudaGetErrorString(err) << endl;
 
 	// load initial condition
 

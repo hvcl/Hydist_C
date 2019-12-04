@@ -39,7 +39,7 @@ __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 	int width = M + 3;
 	int i = blockIdx.y * blockDim.y + threadIdx.y;
 	int j = blockIdx.x * blockDim.x + threadIdx.x;
-	if ((blockIdx.y < 129) && (blockIdx.x == 1) && (threadIdx.x == 0))	
+	if ((blockIdx.y < 129) && (threadIdx.x == 0))	
 	printf("blockIdx.x = %d bIdx.y = %d thIdx.x = %d, thIdx.y = %d\n", blockIdx.x, blockIdx.y, threadIdx.x, threadIdx.y);
 	if (( i >= N + 3) || (j >= M + 3)) return;
 	// ATTENTION
@@ -53,12 +53,13 @@ __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 		H_moi[i * width + j] = 0;
 		// htaiz[i * width + j];
 	}
-	return;
-	
+
 	// giatriHtaiZ
 	if (i > N || j > M)  return;
 	htaiz[i * width + j] = (h[(i - 1) * width + j - 1] + h[(i - 1) * width + j] + h[i *width + j - 1] + h[i * width + j]) * 0.25;
 	htaiz_bd[i * width + j] = htaiz[i * width + j];
+	return;
+	
 
 	// hesok
 	if ( h[i * width + j - 1 ] + h[i * width + j] != 0 )

@@ -39,7 +39,7 @@ __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 	int width = M + 3;
 	int i = blockIdx.y * blockDim.y + threadIdx.y;
 	int j = blockIdx.x * blockDim.x + threadIdx.x;
-	if ((blockIdx.y < 20) && (blockIdx.x == 1) && (threadIdx.x == 0))	
+	if ((blockIdx.y < 129) && (blockIdx.x == 1) && (threadIdx.x == 0))	
 	printf("blockIdx.x = %d bIdx.y = %d thIdx.x = %d, thIdx.y = %d\n", blockIdx.x, blockIdx.y, threadIdx.x, threadIdx.y);
 	return;
 	if (( i >= N + 3) || (j >= M + 3)) return;

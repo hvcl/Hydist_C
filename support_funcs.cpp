@@ -47,6 +47,8 @@ __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 	khouot [i * width] = khouot [j] = 2;
 	i++; j++;
 	khouot[i * width +  j] = 2;
+	return;
+	
 	if ((i > N + 1) || (j > M + 1)) return;
 	// khouot
 	if ((h[(i - 1) * width + j - 1] + h[(i - 1) * width + j] + h[i * width + j - 1] + h[i * width + j]) * 0.25 > NANGDAY){
@@ -54,7 +56,6 @@ __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 		H_moi[i * width + j] = 0;
 		// htaiz[i * width + j];
 	}
-	return;
 
 
 	// giatriHtaiZ

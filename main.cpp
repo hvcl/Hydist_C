@@ -203,7 +203,7 @@ int main (int argc, char ** argv){
 	Load_coeffs (h_const_coeffs);
 
 	cudaMalloc((void**) &d_const_coeffs, sizeof(Constant_Coeffs));
-	status cudaMemcpy(d_const_coeffs, &h_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyHostToDevice);
+	status = cudaMemcpy(d_const_coeffs, &h_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyHostToDevice);
 	assert(status == cudaSuccess);
 
 	// check struct values on GPU:

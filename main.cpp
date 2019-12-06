@@ -203,12 +203,14 @@ int main (int argc, char ** argv){
 	Load_coeffs (h_const_coeffs);
 
 	cudaMalloc((void**) &d_const_coeffs, sizeof(Constant_Coeffs));
-	cudaMemcpy(d_const_coeffs, &h_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyHostToDevice);
+	status cudaMemcpy(d_const_coeffs, &h_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyHostToDevice);
+	assert(status == cudaSuccess);
 
 	// check struct values on GPU:
 	Constant_Coeffs* coeffs;
 	coeffs = (Constant_Coeffs*) malloc(sizeof(Constant_Coeffs));
-	cudaMemcpy((void*) coeffs, d_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyDeviceToHost);
+	status = cudaMemcpy((void*) coeffs, d_const_coeffs, sizeof(Constant_Coeffs), cudaMemcpyDeviceToHost);
+	assert(status == cudaSuccess);
 
 	// cout << coeffs->dX << "  " << coeffs->dY << " " << coeffs->Ks << endl;
 	// cout << "data transfer Done" << endl;

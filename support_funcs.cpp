@@ -42,7 +42,8 @@ __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 	// if ((blockIdx.y < 129) && (blockIdx.x == 2) && (threadIdx.x == 0))	
 	// 	printf("blockIdx.x = %d bIdx.y = %d thIdx.x = %d, thIdx.y = %d\n", blockIdx.x, blockIdx.y, threadIdx.x, threadIdx.y);
 	if (i + j == 0) {printf("blockDim.x = %d, blockDim.y = %d\n", blockDim.x, blockDim.y);}
-	
+	return;
+
 	if (( i >= N + 3) || (j >= M + 3)) return;
 	// ATTENTION
 	khouot [i * width] = khouot [j] = 2;

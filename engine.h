@@ -1,5 +1,6 @@
 #ifndef ENGINE_H__
 #define ENGINE_H__
+#include <vector>
 #include "cuda.h"
 #include "cuda_runtime.h"
 using namespace std;

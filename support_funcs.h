@@ -1,4 +1,5 @@
 #include "cuda.h"
+#include <stdio.h>
 #include "engine.h"
 #define powf pow
 

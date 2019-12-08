@@ -3,6 +3,7 @@
 #include <vector>
 #include "engine.h"
 #include "support_funcs.h"
+#include "loader.h"
 #include <algorithm>
 #include <unistd.h>
 #include <stdlib.h>

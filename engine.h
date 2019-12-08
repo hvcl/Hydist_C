@@ -1,13 +1,6 @@
 #ifndef ENGINE_H__
 #define ENGINE_H__
 #include "cuda.h"
-#include <fstream>
-#include <string>
-#include <utility>
-#include <vector>
-#include <iostream>
-#include <sstream>
-#include <assert.h>
 #include "cuda_runtime.h"
 using namespace std;
 
@@ -26,7 +19,7 @@ struct Options{
 		sediment_start = sds;
 		bed_change_start = bcs;
 		kenhhepng = kn;
-		kenhhepd = kenhd;
+		kenhhepd = kenhd;s
 		ketdinh = cohesive;
 		channel = kenhd || kn;
 		debug = db;
@@ -49,7 +42,6 @@ struct Constant_Coeffs{
 
 };
 
-void Load_coeffs(Constant_Coeffs& ce);
 
 struct Argument_Pointers {
 	int M, N;
@@ -88,47 +80,12 @@ struct  Host_arrays
 
 
 
-template <typename T>
-pair<int, int> load_file(const char* filename, vector<T> &arr);
+
+void update_boundary_at_t();
+
+void Hydraulic_Calulcation(int Tmax, Argument_Pointers* d_arg_ptr, Array_Pointers* d_arg_ptr, Options ops);
 
 
-pair<int, int> load_inputs(string dir, vector<DOUBLE> &h,
-				vector<DOUBLE> &hsnham,
-				vector<DOUBLE> &VISCOIDX, 
-				vector <DOUBLE> &Fw,
-				vector<DOUBLE> &bc_up,
-				vector<DOUBLE> &bc_right,
-				vector<DOUBLE> &bc_left, 
-				vector<DOUBLE> &bc_down, 
-				vector<DOUBLE> &CC_u, 
-				vector<DOUBLE> &CC_d,
-				vector<DOUBLE> &CC_l,
-				vector<DOUBLE> &CC_r,
-				vector<int> &bienQ);
-
-// cudaError_t initialize(int device);
-void load_initial_condition(string dir, 
-							vector<DOUBLE> &u, 
-							vector<DOUBLE> &v,
-							vector<DOUBLE> &z,
-							vector<DOUBLE> &FS,
-							vector<int> &khouot);
-
-template <typename T>
-void device_copy(vector<T> &source, T* des);
-
-template <typename T>
-T* device_alloc(int nBytes);
-
-template <typename T>
-T* device_alloc_and_copy(vector<T> &h_array);
-
-Array_Pointers supporting_arrays_alloc(int M, int N, Array_Pointers** device_arr_ptr);
-
-Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Argument_Pointers** device_arg_ptr);
-// void update_boundary()
-
-// void simulate(Options ops);
 
 // solution for the constant thing:
 // keep constant on device known to device functions onky 

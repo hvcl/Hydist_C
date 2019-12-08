@@ -255,9 +255,9 @@ int main (int argc, char ** argv){
 	cudaDeviceSynchronize();
 	check_error();
 
-	// preprocess_data <<<>>> ();
-	// cudaDeviceSynchronize();
-	// check_error();
+	preprocess_data <<<(1, 1, 1), (32, 1,1 )>>> (d_argument_pointers, d_const_coeffs);
+	cudaDeviceSynchronize();
+	check_error();
 
 	// enter main loop here
 

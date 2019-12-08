@@ -282,14 +282,5 @@ int main (int argc, char ** argv){
 	*/
 
 
- //    if pick_up is True:
- //        load_intial_condition(dirs, pointers)
- //    Find_Calculation_limits_x(arg_struct_ptr, block=(32, 1, 1), grid=(1, N, 1))
- //    Find_Calculation_limits_y(arg_struct_ptr, block=(32, 1, 1), grid=(1, M, 1))
- //    gpu_Htuongdoi(arg_struct_ptr, block=block_2d, grid=grid_2d)
- //    ctx.synchronize()
- //    preprocess(arg_struct_ptr, block=(32, 1, 1), grid = (1, 1, 1))
-
-
 	return 0;
 }

@@ -250,7 +250,7 @@ int main (int argc, char ** argv){
 	Find_Calculation_limits_Vertical <<<(1, M, 1), (32, 1, 1)>>> (d_argument_pointers, d_const_coeffs);
 
 
-	// gpu_Htuongdoi<<<>>> ();
+	gpu_Htuongdoi<<<grid_2d, block_2d>>> (d_argument_pointers);
 
 	cudaDeviceSynchronize();
 	check_error();

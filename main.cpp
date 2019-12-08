@@ -19,7 +19,11 @@ using namespace std;
 
 
 // launch kernel
-
+void check_error(){
+	cudaError_t err = cudaGetLastError();
+	if (err != cudaSuccess)
+		cout << "error: " <<  cudaGetErrorString(err) << endl;
+}
 
 int main (int argc, char ** argv){
 	int M, N, total_time;
@@ -235,22 +239,25 @@ int main (int argc, char ** argv){
 	Onetime_init <<<grid_2d, block_2d >>>(d_argument_pointers,d_const_coeffs);
  	
 	cudaDeviceSynchronize();
-	cudaError_t err = cudaGetLastError();
-	if (err != cudaSuccess)
-		cout << "error: " <<  cudaGetErrorString(err) << endl;
+	check_error();
 
 	// load initial condition
+	if (load_initial_condition)
+		printf("need to write load initial condition here\n");
 
-	// Find_Calculation_limits_Horizontal <<<grid_size, block_size>>> ();
+	Find_Calculation_limits_Horizontal <<<(1, N, 1), (32, 1, 1)>>> (d_argument_pointers, d_const_coeffs);
 
-	// Find_Calculation_limits_Vertical <<<grid_size, block_size>>> ();
+	Find_Calculation_limits_Vertical <<<(1, M, 1), (32, 1, 1)>>> (d_argument_pointers, d_const_coeffs);
 
 
 	// gpu_Htuongdoi<<<>>> ();
 
-	// /// put barrier here
+	cudaDeviceSynchronize();
+	check_error()
 
 	// preprocess_data <<<>>> ();
+	// cudaDeviceSynchronize();
+	// check_error();
 
 	// enter main loop here
 
@@ -269,9 +276,6 @@ int main (int argc, char ** argv){
 	// call second set of kernels
 
 
-
-
-
 	}
 
 
@@ -285,30 +289,6 @@ int main (int argc, char ** argv){
  //    gpu_Htuongdoi(arg_struct_ptr, block=block_2d, grid=grid_2d)
  //    ctx.synchronize()
  //    preprocess(arg_struct_ptr, block=(32, 1, 1), grid = (1, 1, 1))
-
-	// // c. calculate presequiste coeffs on GPU 
-	// if (load_initial_condition)
-	// 	// call load initial condition here
-
-
-	// 
-	
-
-
-
-	// call initial function here 
-
-	// 4. enter main loop
-	// todo : write kernels on engine.h 
-
-
-
-
-
-
-
-
-
 
 
 	return 0;

@@ -253,7 +253,7 @@ int main (int argc, char ** argv){
 	// gpu_Htuongdoi<<<>>> ();
 
 	cudaDeviceSynchronize();
-	check_error()
+	check_error();
 
 	// preprocess_data <<<>>> ();
 	// cudaDeviceSynchronize();
@@ -272,7 +272,7 @@ int main (int argc, char ** argv){
 
 
 	t += 0.5 * delta_t;
-	
+
 	// call second set of kernels
 
 

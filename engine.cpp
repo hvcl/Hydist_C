@@ -207,6 +207,7 @@ Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Arg
 	// cuda mem alloc corresponding arrays
 	int M = ap.M;
 	int N = ap.N;
+	int	nBytes = ap.h.size() * sizeof(DOUBLE);
 	Argument_Pointers d_ap ;
 	d_ap.M = M;
 	d_ap.N = N;
@@ -238,17 +239,26 @@ Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Arg
 
 	// intitial conditions
 	// need to double check this, to do this only if initial condition is given
-	d_ap.u = device_alloc_and_copy<DOUBLE> (ap.u);
-	d_ap.v = device_alloc_and_copy<DOUBLE> (ap.v);
-	d_ap.z = device_alloc_and_copy<DOUBLE> (ap.z);
-	d_ap.FS = device_alloc_and_copy<DOUBLE> (ap.FS);
-	d_ap.khouot = device_alloc_and_copy<int> (ap.khouot);
+	if ((ap.u != NULL ) && (ap.v != NULL) && (ap.z != NULL) && (ap.khouot != NULL)){
+		d_ap.u = device_alloc_and_copy<DOUBLE> (ap.u);
+		d_ap.v = device_alloc_and_copy<DOUBLE> (ap.v);
+		d_ap.z = device_alloc_and_copy<DOUBLE> (ap.z);
+		d_ap.khouot = device_alloc_and_copy<int> (ap.khouot);
+	} else{
+		d_ap.u = device_alloc<DOUBLE> (nBytes);
+		d_ap.v = device_alloc<DOUBLE> (nBytes);
+		d_ap.z = device_alloc<DOUBLE> (nBytes);
+		d_ap.khouot = device_alloc<int> (ap.h.size() * sizeof(int));
 
-	d_ap.khouot = device_alloc_and_copy<int> (ap.khouot);
+	}
+	if (ap.FS != NULL) 
+		d_ap.FS = device_alloc_and_copy<DOUBLE> (ap.FS);
+	else
+		d_ap.FS = device_alloc<DOUBLE>(nBytes);
+	// d_ap.khouot = device_alloc_and_copy<int> (ap.khouot);
 
 	// cuda mem alloc arrays on device only
 
-	int nBytes = ap.u.size() * sizeof (DOUBLE);
 	d_ap.t_u = device_alloc<DOUBLE> (nBytes);
 	d_ap.t_v = device_alloc<DOUBLE> (nBytes);
 	d_ap.t_z = device_alloc<DOUBLE> (nBytes);

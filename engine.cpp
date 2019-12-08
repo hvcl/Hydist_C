@@ -239,7 +239,7 @@ Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Arg
 
 	// intitial conditions
 	// need to double check this, to do this only if initial condition is given
-	if ((ap.u != NULL ) && (ap.v != NULL) && (ap.z != NULL) && (ap.khouot != NULL)){
+	if ((ap.u.empty() != true ) && (ap.v.empty() != true) && (ap.z.empty() != true) && (ap.khouot.empty() != true)){
 		d_ap.u = device_alloc_and_copy<DOUBLE> (ap.u);
 		d_ap.v = device_alloc_and_copy<DOUBLE> (ap.v);
 		d_ap.z = device_alloc_and_copy<DOUBLE> (ap.z);
@@ -251,7 +251,7 @@ Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Arg
 		d_ap.khouot = device_alloc<int> (ap.h.size() * sizeof(int));
 
 	}
-	if (ap.FS != NULL) 
+	if (ap.FS.empty() != 1) 
 		d_ap.FS = device_alloc_and_copy<DOUBLE> (ap.FS);
 	else
 		d_ap.FS = device_alloc<DOUBLE>(nBytes);

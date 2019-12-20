@@ -52,6 +52,7 @@ int main (int argc, char ** argv){
 	string dir;
 	int hour(1), minute(0), sec(0), sediment_start(20), bed_change_start(500), bed_change_end(1000);
 	int save_interval(60), sediment_end(40);
+	int t_start(0);
 	bool kenhhepd(0), kenhhepng(0), cohesive(1);
 	bool plot(true), visualize(true), debug(false), load_initial_condition(false);
 	int c;
@@ -110,7 +111,7 @@ int main (int argc, char ** argv){
 
 	int Tmax = hour * 3600 + minute * 60 + sec;
 	
-	Options ops(Tmax, save_interval, sediment_start, bed_change_start, cohesive, kenhhepng, kenhhepd, debug, plot);
+	Options ops(Tmax, t_start, save_interval, sediment_start, bed_change_start, cohesive, kenhhepng, kenhhepd, debug, plot);
 
 	// cout << "dir " << dir << endl
 	// 	<< "hour " << hour << endl
@@ -134,12 +135,14 @@ int main (int argc, char ** argv){
 
 	
 	pair <int, int> mesh_size =  load_inputs(dir, h, hsnham, VISCOIDX, Fw, bc_up, bc_down, bc_left, bc_right,
-				CC_u, CC_d, CC_l, CC_r,  bienQ);
+				CC_u, CC_d, CC_l, CC_r,  bienQ, &total_time);
 	cout << mesh_size.first << " " << mesh_size.second << endl;
 	M = mesh_size.first;
 	N = mesh_size.second;
 	ops.M = M;
 	ops.N = N;
+	ops.total_time = total_time;
+
 
 	// b. alocate memory on GPU and transfer data to GPU
 

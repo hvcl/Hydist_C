@@ -27,7 +27,8 @@ pair<int, int> load_inputs(string dir, vector<DOUBLE> &h,
 				vector<DOUBLE> &CC_d,
 				vector<DOUBLE> &CC_l,
 				vector<DOUBLE> &CC_r,
-				vector<int> &bienQ);
+				vector<int> &bienQ,
+				int* total_time);
 
 // cudaError_t initialize(int device);
 void load_initial_condition(string dir, 

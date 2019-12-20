@@ -7,7 +7,7 @@ using namespace std;
 
 
 
-void update_boundary_at_t(float t, Argument_Pointers* d_arg_ptr, Constant_Coeffs* coeffs, bool channel)
+void update_boundary_at_t(float t, Argument_Pointers* d_arg_ptr, Constant_Coeffs* coeffs, bool channel, int total_time)
 {
 	if (channel){
 		// int offset = M + 3;
@@ -17,8 +17,7 @@ void update_boundary_at_t(float t, Argument_Pointers* d_arg_ptr, Constant_Coeffs
 		// boundary_right(t, d_arg_ptr, coeffs);
 
 	} else{
-		int total_time = coeffs->total_time;
-		Update_Boundary_Value<<<(1, 1024, 1), (1, max(M, N) / 1024 + 1)>>>(t, total_time);
+		Update_Boundary_Value<<<(1, 1024, 1), (1, max(M, N) / 1024 + 1)>>>(t, total_time, d_arg_ptr);
 	}
 }
 
@@ -26,8 +25,10 @@ void update_boundary_at_t(float t, Argument_Pointers* d_arg_ptr, Constant_Coeffs
 void Hydraulic_Calculation(int Tmax, Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, Constant_Coeffs* coeffs, Options ops){
 	// note: blocksize in this case is fixed to be 1024 threads, can change later
 	int blocksize = 1024;
-	int M1 = ops.M + 3;
-	int N1 = ops.N + 3;
+	int M = ops.M; 
+	int N = ops.N;
+	int M1 = M + 3;
+	int N1 = N + 3;
 	dim3 block_u = (min(M1, blocksize), 1, 1);
 	dim3 grid_u = ( M1 / block_u.x + 1, 1, 1);
 	dim3 block_v = (min(N1, blocksize), 1, 1);
@@ -41,7 +42,7 @@ void Hydraulic_Calculation(int Tmax, Argument_Pointers* d_arg_ptr, Array_Pointer
 		t += 0.5 * t;
 
 		// update boundary conditionmake
-		update_boundary_at_t(t, d_arg_ptr, coeffs, channel);
+		update_boundary_at_t(t, d_arg_ptr, coeffs, channel, ops.total_time);
 
 		// set start/ end index for kernels
 		// start_idx = 2;

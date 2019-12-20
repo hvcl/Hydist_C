@@ -13,12 +13,13 @@ using namespace std;
 #define PI 3.14159265358979323846
 
 struct Options{
-	int Tmax, interval, sediment_start, bed_change_start, kenhhepd, kenhhepng;
+	int Tmax, t_start, interval, sediment_start, bed_change_start, kenhhepd, kenhhepng;
 	int M, N;
 	bool ketdinh, channel, debug, plot;
-	Options(int T, int itv, int sds, int bcs, int cohesive, int kn,
+	Options(int Tmx, int ts, int itv, int sds, int bcs, int cohesive, int kn,
 			bool kenhd, bool db, bool plt){
-		Tmax = T;
+		Tmax = Tmx;
+		t_start = ts;
 		interval = itv;
 		sediment_start = sds;
 		bed_change_start = bcs;
@@ -32,7 +33,6 @@ struct Options{
 };
 
 struct Constant_Coeffs{
-	int total_time;
 	DOUBLE dX, dY, dT, dXbp, dYbp, dX2, dY2, dTchia2dX, dTchia2dY, HaiChiadT;
 	DOUBLE QuyDoiTime, QuyDoiPi;
 	DOUBLE NANGDAY, H_TINH, heso, mu_mn;

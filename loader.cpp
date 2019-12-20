@@ -141,17 +141,16 @@ pair<int, int> load_inputs(string dir,
 	load_file<DOUBLE> ((dir + "Fw_map.txt").c_str(), Fw);
 	cout << size.first << " " << size.second << endl;
 
-
-	bc_shapeu = load_file<DOUBLE> ((dir + "bienduoi.txt").c_str(), bc_down);
-	bc_shaped = load_file<DOUBLE> ((dir + "bientren.txt").c_str(), bc_up);
+	bc_shapeu = load_file<DOUBLE> ((dir + "bientren.txt").c_str(), bc_up);
+	bc_shaped = load_file<DOUBLE> ((dir + "bienduoi.txt").c_str(), bc_down);
 	bc_shapel = load_file<DOUBLE> ((dir + "bientrai.txt").c_str(), bc_left);
 	bc_shaper = load_file<DOUBLE> ((dir + "bienphai.txt").c_str(), bc_right);
 	load_file<DOUBLE> ((dir + "FS_bientren.txt").c_str(), CC_u);
 	load_file<DOUBLE> ((dir + "FS_bienduoi.txt").c_str(), CC_d);
 	load_file<DOUBLE> ((dir + "FS_bientrai.txt").c_str(), CC_l);
 	load_file<DOUBLE> ((dir + "FS_bienphai.txt").c_str(), CC_r);
-	 load_file<int> ((dir + "boundary_type.txt").c_str(), bienQ);
-	*total_time = bc_shapeu.first;
+	load_file<int> ((dir + "boundary_type.txt").c_str(), bienQ);
+	*total_time = bc_shaped.first;
 	cout <<"total_time = " <<  *total_time << endl;
 	return size;
 }

@@ -183,20 +183,20 @@ int main (int argc, char ** argv){
 
 
 	cout << "checking vector assignment: " << endl
-		 << "size in GPU : " << host_ap.bc_up.size() 
-		 << "  size in CPU" << bc_up.size() << endl
-		 << "first 2 elem:  " << bc_up[ M * 2 + 100] << " " << bc_up[M * 2 + 100] << endl
-		 << " " << host_ap.bc_up[M * 2 + 100] << " " << host_ap.bc_up[M * 2 + 100] << endl;
+		 << "size in GPU : " << host_ap.bc_left.size() 
+		 << "  size in CPU" << bc_left.size() << endl
+		 << "first 2 elem:  " << bc_left[ M * 2 + 100] << " " << bc_left[M * 2 + 100] << endl
+		 << " " << host_ap.bc_left[M * 2 + 100] << " " << host_ap.bc_left[M * 2 + 100] << endl;
 
 	bool fail = false;
 
-	for (int i = 0; i < bc_up.size(); i++){
-		if (bc_up[i] != 0){
-			cout << bc_up[i] << endl; 
-			if (host_ap.bc_up[i] != bc_up[i]){
+	for (int i = 0; i < bc_left.size(); i++){
+		if (bc_left[i] != 0){
+			cout << bc_left[i] << endl; 
+			if (host_ap.bc_left[i] != bc_left[i]){
 				fail = true;
 				cout << "test failed"
-					<< bc_up[i] << " != " << host_ap.bc_up[i] << endl;
+					<< bc_left[i] << " != " << host_ap.bc_left[i] << endl;
 				break;
 			}
 		}
@@ -212,7 +212,7 @@ int main (int argc, char ** argv){
 	// gpu_h: the grid depth map on gou
 	DOUBLE* gpu_h; 
 	gpu_h = (DOUBLE*) malloc(sizeof(DOUBLE) * host_ap.h.size());
-	cout << host_ap.h.size() << endl;
+	// cout << host_ap.h.size() << endl;
 	cudaError_t status = cudaMemcpy((void*) gpu_h, h_argument_pointers.h, sizeof(DOUBLE) * host_ap.h.size(), cudaMemcpyDeviceToHost);
 	assert(status == cudaSuccess);
 

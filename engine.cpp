@@ -7,7 +7,7 @@ using namespace std;
 
 
 
-void update_boundary_at_t(float t, Argument_Pointers* d_arg_ptr, Constant_Coeffs* coeffs, bool channel, int total_time)
+void update_boundary_at_t(int M, int N, float t, bool channel, int total_time, Argument_Pointers* d_arg_ptr, Constant_Coeffs* coeffs)
 {
 	if (channel){
 		// int offset = M + 3;
@@ -42,7 +42,7 @@ void Hydraulic_Calculation(int Tmax, Argument_Pointers* d_arg_ptr, Array_Pointer
 		t += 0.5 * t;
 
 		// update boundary conditionmake
-		update_boundary_at_t(t, d_arg_ptr, coeffs, channel, ops.total_time);
+		update_boundary_at_t(M, N, t, channel, ops.total_time, d_arg_ptr, coeffs);
 
 		// set start/ end index for kernels
 		// start_idx = 2;

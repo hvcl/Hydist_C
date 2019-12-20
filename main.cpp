@@ -138,7 +138,7 @@ int main (int argc, char ** argv){
 				CC_u, CC_d, CC_l, CC_r,  bienQ, boundary_type, &total_time);
 	cout << mesh_size.first << " " << mesh_size.second << endl;
 
-	
+
 	// ATENDTION: input files that store 2d meshes must be preprocess so that the coordinates align with python indexing
 	// i.e bottom left origin must be tranpose, flip and pad to make the padded array in top left origin 
 	M = mesh_size.first - 3;
@@ -188,7 +188,7 @@ int main (int argc, char ** argv){
 
 	cout << "checking vector assignment: " << endl
 		 << "size in GPU : " << host_ap.boundary_type.size() 
-		 << "  size in CPU: " << boundary_type.size() << endl
+		 << "  size in CPU: " << boundary_type.size() << endl;
 		 // << "first 2 elem:  " << boundary_type[ M * 2 + 100] << " " << boundary_type[M * 2 + 100] << endl
 		 // << " " << host_ap.boundary_type[M * 2 + 100] << " " << host_ap.boundary_type[M * 2 + 100] << endl;
 

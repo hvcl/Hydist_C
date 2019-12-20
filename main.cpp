@@ -135,7 +135,7 @@ int main (int argc, char ** argv){
 
 	
 	pair <int, int> mesh_size =  load_inputs(dir, h, hsnham, VISCOIDX, Fw, bc_up, bc_down, bc_left, bc_right,
-				CC_u, CC_d, CC_l, CC_r,  bienQ, &total_time);
+				CC_u, CC_d, CC_l, CC_r,  bienQ, boundary_type, &total_time);
 	cout << mesh_size.first << " " << mesh_size.second << endl;
 	M = mesh_size.first;
 	N = mesh_size.second;

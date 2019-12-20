@@ -127,7 +127,8 @@ pair<int, int> load_inputs(string dir,
 				vector<DOUBLE> &CC_d,
 				vector<DOUBLE> &CC_l,
 				vector<DOUBLE> &CC_r,
-				vector<int> &bienQ, 
+				vector<int> &bienQ,
+				vector<int> &boundary_type, 
 				int* total_time)
 {
 	pair<int, int > size, bc_shapel, bc_shapeu, bc_shaped,  bc_shaper;
@@ -149,7 +150,14 @@ pair<int, int> load_inputs(string dir,
 	load_file<DOUBLE> ((dir + "FS_bienduoi.txt").c_str(), CC_d);
 	load_file<DOUBLE> ((dir + "FS_bientrai.txt").c_str(), CC_l);
 	load_file<DOUBLE> ((dir + "FS_bienphai.txt").c_str(), CC_r);
-	load_file<int> ((dir + "boundary_type.txt").c_str(), bienQ);
+	load_file<int> ((dir + "boundary_type.txt").c_str(), boundary_type);
+	for (int i = 0; i < boundary_type.size(); i++){
+		int val = boundary_type[i];
+		if (val == 2)
+			bienQ.push_back(1);
+		else bienQ.push_back(0);
+	}
+
 	*total_time = bc_shaped.first;
 	cout <<"total_time = " <<  *total_time << endl;
 	return size;

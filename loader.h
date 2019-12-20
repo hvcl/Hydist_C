@@ -28,6 +28,7 @@ pair<int, int> load_inputs(string dir, vector<DOUBLE> &h,
 				vector<DOUBLE> &CC_l,
 				vector<DOUBLE> &CC_r,
 				vector<int> &bienQ,
+				vector<int> &boundary_type,
 				int* total_time);
 
 // cudaError_t initialize(int device);

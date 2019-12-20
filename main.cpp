@@ -186,28 +186,28 @@ int main (int argc, char ** argv){
 
 
 
-	cout << "checking vector assignment: " << endl
-		 << "size in GPU : " << host_ap.bienQ.size() 
-		 << "  size in CPU: " << bienQ.size() << endl;
-		 // << "first 2 elem:  " << boundary_type[ M * 2 + 100] << " " << boundary_type[M * 2 + 100] << endl
-		 // << " " << host_ap.boundary_type[M * 2 + 100] << " " << host_ap.boundary_type[M * 2 + 100] << endl;
+	// cout << "checking vector assignment: " << endl
+	// 	 << "size in GPU : " << host_ap.bienQ.size() 
+	// 	 << "  size in CPU: " << bienQ.size() << endl;
+	// 	 // << "first 2 elem:  " << boundary_type[ M * 2 + 100] << " " << boundary_type[M * 2 + 100] << endl
+	// 	 // << " " << host_ap.boundary_type[M * 2 + 100] << " " << host_ap.boundary_type[M * 2 + 100] << endl;
 
-	bool fail = false;
+	// bool fail = false;
 
-	for (int i = 0; i < bienQ.size(); i++){
-		if (bienQ[i] != 0){
-			cout << bienQ[i] << endl; 
-			if (host_ap.bienQ[i] != bienQ[i]){
-				fail = true;
-				cout << "test failed"
-					<< bienQ[i] << " != " << host_ap.bienQ[i] << endl;
-				break;
-			}
-		}
+	// for (int i = 0; i < bienQ.size(); i++){
+	// 	if (bienQ[i] != 0){
+	// 		cout << bienQ[i] << endl; 
+	// 		if (host_ap.bienQ[i] != bienQ[i]){
+	// 			fail = true;
+	// 			cout << "test failed"
+	// 				<< bienQ[i] << " != " << host_ap.bienQ[i] << endl;
+	// 			break;
+	// 		}
+	// 	}
 
-	}
-	if (!fail) 
-			cout << "sucess! " << endl;
+	// }
+	// if (!fail) 
+	// 		cout << "sucess! " << endl;
 
 
 	// test function : attribute_arrays_memory_alloc
@@ -242,15 +242,15 @@ int main (int argc, char ** argv){
 
 	// check if values on device are the same with values on host, and if we has stored the right pointers
 	// done
-	// for (int i = 0; i < host_ap.h.size(); i++){
-	// 	if (gpu_h[i] != host_ap.h[i]){
-	// 		cout << "failed" << endl
-	// 			<< "i = " << i << endl
-	// 			<< "gpu: " << gpu_h[i] << endl
-	// 			<< "cpu: " << host_ap.h[i] << endl;
+	for (int i = 0; i < host_ap.h.size(); i++){
+		if (gpu_h[i] != host_ap.h[i]){
+			cout << "failed" << endl
+				<< "i = " << i << endl
+				<< "gpu: " << gpu_h[i] << endl
+				<< "cpu: " << host_ap.h[i] << endl;
 
-	// 	}
-	// }
+		}
+	}
 
 	// grid size and block size 
 	dim3 block_2d(min(32, M + 3), 1, 1);

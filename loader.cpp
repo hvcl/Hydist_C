@@ -103,7 +103,6 @@ pair<int, int> load_file(const char* filename, vector<T> &arr){
 			M++;
 			arr.push_back(x);
 		}
-		arr.push_back(arr[arr.size() - 1]); // pad edge
 	}
 	return pair<int, int>(N, M);
 }
@@ -159,7 +158,6 @@ pair<int, int> load_inputs(string dir,
 			bienQ.push_back(1);
 		else bienQ.push_back(0);
 	}
-
 	*total_time = bc_shaped.first;
 	cout <<"total_time = " <<  *total_time << endl;
 	return size;

@@ -130,7 +130,7 @@ pair<int, int> load_inputs(string dir,
 				vector<int> &bienQ, 
 				int* total_time)
 {
-	pair<int, int > size, bc_shapel, bc_shapeu, bc_shaped, bc_shapel, bc_shaper;
+	pair<int, int > size, bc_shapel, bc_shapeu, bc_shaped,  bc_shaper;
 	size = load_file<DOUBLE> ((dir + "bandodosau.txt").c_str(), h);
 	cout << size.first << " " << size.second << endl;
 	size = load_file<DOUBLE> ((dir + "hsnham.txt").c_str(), hsnham);
@@ -140,13 +140,13 @@ pair<int, int> load_inputs(string dir,
 
 	load_file<DOUBLE> ((dir + "Fw_map.txt").c_str(), Fw);
 	cout << size.first << " " << size.second << endl;
-	
+
 
 	bc_shapeu = load_file<DOUBLE> ((dir + "bienduoi.txt").c_str(), bc_down);
 	bc_shaped = load_file<DOUBLE> ((dir + "bientren.txt").c_str(), bc_up);
 	bc_shapel = load_file<DOUBLE> ((dir + "bientrai.txt").c_str(), bc_left);
-	bc_shapel = load_file<DOUBLE> ((dir + "bienphai.txt").c_str(), bc_right);
-	bc_shaper = load_file<DOUBLE> ((dir + "FS_bientren.txt").c_str(), CC_u);
+	bc_shaper = load_file<DOUBLE> ((dir + "bienphai.txt").c_str(), bc_right);
+	load_file<DOUBLE> ((dir + "FS_bientren.txt").c_str(), CC_u);
 	load_file<DOUBLE> ((dir + "FS_bienduoi.txt").c_str(), CC_d);
 	load_file<DOUBLE> ((dir + "FS_bientrai.txt").c_str(), CC_l);
 	load_file<DOUBLE> ((dir + "FS_bienphai.txt").c_str(), CC_r);

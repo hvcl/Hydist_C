@@ -16,6 +16,7 @@ struct Options{
 	int Tmax, t_start, interval, sediment_start, bed_change_start, kenhhepd, kenhhepng;
 	int M, N;
 	bool ketdinh, channel, debug, plot;
+	int total_time;
 	Options(int Tmx, int ts, int itv, int sds, int bcs, int cohesive, int kn,
 			bool kenhd, bool db, bool plt){
 		Tmax = Tmx;

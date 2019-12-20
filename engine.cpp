@@ -18,7 +18,7 @@ void update_boundary_at_t(float t, Argument_Pointers* d_arg_ptr, Constant_Coeffs
 
 	} else{
 		int total_time = coeffs->total_time;
-		Update_Boundary_Value(t, total_time)
+		Update_Boundary_Value<<<(1, 1024, 1), (1, max(M, N) / 1024 + 1)>>>(t, total_time);
 	}
 }
 

@@ -6,7 +6,7 @@
 #include <iostream>
 #include <sstream>
 #include <assert.h>
-#include <math.h>
+#include <cmath>
 
 void Load_coeffs(Constant_Coeffs& ce);
 

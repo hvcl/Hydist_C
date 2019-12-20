@@ -259,8 +259,7 @@ int main (int argc, char ** argv){
 	if (load_initial_condition)
 		printf("need to write load initial condition here\n");
 
-	Find_Calculation_limits_Horizontal <<<block_2d, grid_2d>>> (d_argument_pointers, d_const_coeffs);
-	// Find_Calculation_limits_Horizontal <<<(1, N, 1), (32, 1, 1)>>> (d_argument_pointers, d_const_coeffs);
+	Find_Calculation_limits_Horizontal <<<(1, N, 1), (32, 1, 1)>>> (d_argument_pointers, d_const_coeffs);
 
 	Find_Calculation_limits_Vertical <<<(1, M, 1), (32, 1, 1)>>> (d_argument_pointers, d_const_coeffs);
 

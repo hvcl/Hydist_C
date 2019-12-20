@@ -1,6 +1,8 @@
 #ifndef ENGINE_H__
 #define ENGINE_H__
 #include <vector>
+#include <algorithm>
+#include <cmath>
 #include "cuda.h"
 #include "cuda_runtime.h"
 using namespace std;
@@ -30,6 +32,7 @@ struct Options{
 };
 
 struct Constant_Coeffs{
+	int total_time;
 	DOUBLE dX, dY, dT, dXbp, dYbp, dX2, dY2, dTchia2dX, dTchia2dY, HaiChiadT;
 	DOUBLE QuyDoiTime, QuyDoiPi;
 	DOUBLE NANGDAY, H_TINH, heso, mu_mn;

@@ -112,6 +112,8 @@ template pair<int, int> load_file<double>(const char* filename, std::vector<doub
 template pair<int, int> load_file<float>(const char* filename, std::vector<float> &arr);
 
 
+
+// note: 
 pair<int, int> load_inputs(string dir,
 				vector<DOUBLE> &h,
 				vector<DOUBLE> &hsnham,
@@ -128,26 +130,28 @@ pair<int, int> load_inputs(string dir,
 				vector<int> &bienQ, 
 				int* total_time)
 {
-	pair<int, int > size;
+	pair<int, int > size, bc_shapel, bc_shapeu, bc_shaped, bc_shapel, bc_shaper;
 	size = load_file<DOUBLE> ((dir + "bandodosau.txt").c_str(), h);
 	cout << size.first << " " << size.second << endl;
-	load_file<DOUBLE> ((dir + "hsnham.txt").c_str(), hsnham);
+	size = load_file<DOUBLE> ((dir + "hsnham.txt").c_str(), hsnham);
 
 	cout << size.first << " " << size.second << endl;
 	load_file<DOUBLE> ((dir + "hsnhotroiA.txt").c_str(), VISCOINDX);
 
 	load_file<DOUBLE> ((dir + "Fw_map.txt").c_str(), Fw);
+	cout << size.first << " " << size.second << endl;
+	
 
-	load_file<DOUBLE> ((dir + "bientren.txt").c_str(), bc_up);
-	load_file<DOUBLE> ((dir + "bienduoi.txt").c_str(), bc_down);
-	load_file<DOUBLE> ((dir + "bientrai.txt").c_str(), bc_left);
-	load_file<DOUBLE> ((dir + "bienphai.txt").c_str(), bc_right);
-	load_file<DOUBLE> ((dir + "FS_bientren.txt").c_str(), CC_u);
+	bc_shapeu = load_file<DOUBLE> ((dir + "bienduoi.txt").c_str(), bc_down);
+	bc_shaped = load_file<DOUBLE> ((dir + "bientren.txt").c_str(), bc_up);
+	bc_shapel = load_file<DOUBLE> ((dir + "bientrai.txt").c_str(), bc_left);
+	bc_shapel = load_file<DOUBLE> ((dir + "bienphai.txt").c_str(), bc_right);
+	bc_shaper = load_file<DOUBLE> ((dir + "FS_bientren.txt").c_str(), CC_u);
 	load_file<DOUBLE> ((dir + "FS_bienduoi.txt").c_str(), CC_d);
 	load_file<DOUBLE> ((dir + "FS_bientrai.txt").c_str(), CC_l);
 	load_file<DOUBLE> ((dir + "FS_bienphai.txt").c_str(), CC_r);
-	pair<int, int> bc_shape = load_file<int> ((dir + "boundary_type.txt").c_str(), bienQ);
-	*total_time = bc_shape.first;
+	 load_file<int> ((dir + "boundary_type.txt").c_str(), bienQ);
+	*total_time = bc_shapeu.first;
 	cout <<"total_time = " <<  *total_time << endl;
 	return size;
 }

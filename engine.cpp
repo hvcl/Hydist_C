@@ -7,7 +7,7 @@ using namespace std;
 
 
 
-void update_boundary_at_t(float t, Argument_Pointers* d_arg_ptr, Constant_Coeffs* coeffs, bool channel);
+void update_boundary_at_t(float t, Argument_Pointers* d_arg_ptr, Constant_Coeffs* coeffs, bool channel)
 {
 	if (channel){
 		// int offset = M + 3;
@@ -18,7 +18,7 @@ void update_boundary_at_t(float t, Argument_Pointers* d_arg_ptr, Constant_Coeffs
 
 	} else{
 		int total_time = coeffs->total_time;
-		Update_Boundary_Value(t, total_time,  )
+		Update_Boundary_Value(t, total_time)
 	}
 }
 
@@ -44,13 +44,13 @@ void Hydraulic_Calculation(int Tmax, Argument_Pointers* d_arg_ptr, Array_Pointer
 		update_boundary_at_t(t, d_arg_ptr, coeffs, channel);
 
 		// set start/ end index for kernels
-		start_idx = 2;
-		end_idx = M;
-		jump_step = 2;
-		if ((channel) && (ops.kenhhepd)){
-			start_idx = 3;
-			end_idx = M - 1;
-		}
+		// start_idx = 2;
+		// end_idx = M;
+		// jump_step = 2;
+		// if ((channel) && (ops.kenhhepd)){
+		// 	start_idx = 3;
+		// 	end_idx = M - 1;
+		// }
 		// is U 
 		// jump_step
 		
@@ -65,3 +65,7 @@ void Hydraulic_Calculation(int Tmax, Argument_Pointers* d_arg_ptr, Array_Pointer
 
 	}
 }
+
+
+
+

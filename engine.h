@@ -12,6 +12,7 @@ using namespace std;
 
 struct Options{
 	int Tmax, interval, sediment_start, bed_change_start, kenhhepd, kenhhepng;
+	int M, N;
 	bool ketdinh, channel, debug, plot;
 	Options(int T, int itv, int sds, int bcs, int cohesive, int kn,
 			bool kenhd, bool db, bool plt){

@@ -37,6 +37,7 @@ void load_initial_condition(string dir,
 							vector<DOUBLE> &FS,
 							vector<int> &khouot);
 
+
 template <typename T>
 void device_copy(vector<T> &source, T* des);
 

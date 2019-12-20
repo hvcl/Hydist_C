@@ -255,13 +255,13 @@ Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Arg
 	// intitial conditions
 	// need to double check this, to do this only if initial condition is given
 	if ((ap.u.empty() != true ) && (ap.v.empty() != true) && (ap.z.empty() != true) && (ap.khouot.empty() != true)){
-		cout << "no initial condition" << endl;
+		cout << "have initial condition" << endl;
 		d_ap.u = device_alloc_and_copy<DOUBLE> (ap.u);
 		d_ap.v = device_alloc_and_copy<DOUBLE> (ap.v);
 		d_ap.z = device_alloc_and_copy<DOUBLE> (ap.z);
 		d_ap.khouot = device_alloc_and_copy<int> (ap.khouot);
 	} else{
-		cout << "have initial condition" << endl;
+		cout << "no initial condition" << endl;
 		d_ap.u = device_alloc<DOUBLE> (nBytes);
 		d_ap.v = device_alloc<DOUBLE> (nBytes);
 		d_ap.z = device_alloc<DOUBLE> (nBytes);

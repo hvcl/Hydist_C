@@ -180,7 +180,6 @@ int main (int argc, char ** argv){
 	host_ap.u = u;
 	host_ap.v = v;
 	host_ap.z = z;
-	cout << host_ap.u.empty() << " " << host_ap.v.empty() << " " << host_ap.z.empty() << " " << host_ap.khouot.empty() << endl;
 	host_ap.khouot = khouot;
 	host_ap.bienQ = bienQ;
 	host_ap.boundary_type = boundary_type;

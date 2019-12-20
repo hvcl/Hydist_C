@@ -56,9 +56,6 @@ __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 		// htaiz[i * width + j];
 	}
 	// printf("khouot[%d][%d] = %d\n",i, j, khouot[i * width + j] );
-	
-
-
 	// giatriHtaiZ
 	if (i > N || j > M)  return;
 	htaiz[i * width + j] = (h[(i - 1) * width + j - 1] + h[(i - 1) * width + j] + h[i *width + j - 1] + h[i * width + j]) * 0.25;

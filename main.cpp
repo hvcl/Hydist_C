@@ -141,8 +141,8 @@ int main (int argc, char ** argv){
 
 	// ATENDTION: input files that store 2d meshes must be preprocess so that the coordinates align with python indexing
 	// i.e bottom left origin must be tranpose, flip and pad to make the padded array in top left origin 
-	M = mesh_size.first - 3;
-	N = mesh_size.second - 3;
+	N = mesh_size.first - 3;
+	M = mesh_size.second - 3;
 	ops.M = M;
 	ops.N = N;
 	ops.total_time = total_time;

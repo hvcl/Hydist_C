@@ -183,20 +183,20 @@ int main (int argc, char ** argv){
 
 
 	cout << "checking vector assignment: " << endl
-		 << "size in GPU : " << host_ap.bc_left.size() 
-		 << "  size in CPU" << bc_left.size() << endl
-		 << "first 2 elem:  " << bc_left[ M * 2 + 100] << " " << bc_left[M * 2 + 100] << endl
-		 << " " << host_ap.bc_left[M * 2 + 100] << " " << host_ap.bc_left[M * 2 + 100] << endl;
+		 << "size in GPU : " << host_ap.boundary_type.size() 
+		 << "  size in CPU" << boundary_type.size() << endl
+		 << "first 2 elem:  " << boundary_type[ M * 2 + 100] << " " << boundary_type[M * 2 + 100] << endl
+		 << " " << host_ap.boundary_type[M * 2 + 100] << " " << host_ap.boundary_type[M * 2 + 100] << endl;
 
 	bool fail = false;
 
-	for (int i = 0; i < bc_left.size(); i++){
-		if (bc_left[i] != 0){
-			cout << bc_left[i] << endl; 
-			if (host_ap.bc_left[i] != bc_left[i]){
+	for (int i = 0; i < boundary_type.size(); i++){
+		if (boundary_type[i] != 0){
+			cout << boundary_type[i] << endl; 
+			if (host_ap.boundary_type[i] != boundary_type[i]){
 				fail = true;
 				cout << "test failed"
-					<< bc_left[i] << " != " << host_ap.bc_left[i] << endl;
+					<< boundary_type[i] << " != " << host_ap.boundary_type[i] << endl;
 				break;
 			}
 		}

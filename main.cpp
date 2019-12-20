@@ -52,11 +52,12 @@ int main (int argc, char ** argv){
 	string dir;
 	int hour(1), minute(0), sec(0), sediment_start(20), bed_change_start(500), bed_change_end(1000);
 	int save_interval(60), sediment_end(40);
+	bool kenhhepd(0), kenhhepng(0), cohesive(1);
 	bool plot(true), visualize(true), debug(false), load_initial_condition(false);
 	int c;
 
 
-	while ((c = getopt(argc, argv, "f:h:m:s::p::d::v::b::B::e::E::i::c::")) != -1){
+	while ((c = getopt(argc, argv, "f:h:m:s::p::d::v::b::B::e::E::i::c::k::n::")) != -1){
 		switch (c)
 		{
 			case('f'):
@@ -98,8 +99,18 @@ int main (int argc, char ** argv){
 			case ('c'):
 				load_initial_condition = atoi(optarg);
 				continue;
+			case('k'):
+				kenhhepd = atoi(optarg);
+				continue;
+			case('n'):
+				kenhhepng = atoi(optarg);
+				continue;
 		}
 	}
+
+	int Tmax = hour * 3600 + minute * 60 + sec;
+	
+	Options ops(Tmax, save_interval, sediment_start, bed_change_start, cohesive, kenhhepng, kenhhepd, debug, plot);
 
 	// cout << "dir " << dir << endl
 	// 	<< "hour " << hour << endl
@@ -259,6 +270,7 @@ int main (int argc, char ** argv){
 	preprocess_data <<<(1, 1, 1), (32, 1,1 )>>> (d_argument_pointers, d_const_coeffs);
 	cudaDeviceSynchronize();
 	check_error();
+
 
 	// enter main loop here
 

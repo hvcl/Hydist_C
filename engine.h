@@ -80,12 +80,9 @@ struct  Host_arrays
 };
 
 
-
-
 void update_boundary_at_t();
 
-void Hydraulic_Calulcation(int Tmax, Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, Options ops);
-
+void Hydraulic_Calculation(int Tmax, Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, Options ops);
 
 
 // solution for the constant thing:

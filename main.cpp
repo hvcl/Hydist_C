@@ -273,7 +273,7 @@ int main (int argc, char ** argv){
 	status = cudaMemcpy((void*) arr, h_argument_pointers.khouot, sizeof(int) * host_ap.h.size(), cudaMemcpyDeviceToHost);
 	assert(status == cudaSuccess);
 	ofstream ofs;
-	ofs.open("Outputs/khouot.txt")
+	ofs.open("Outputs/khouot.txt");
 	for (int i= 0; i < N + 3; i ++){
 			for (int j = 0; j < M + 3; j ++){
 				ofs << arr[i * (M + 3) + j] << " ";

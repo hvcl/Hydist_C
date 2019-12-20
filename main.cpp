@@ -208,14 +208,14 @@ int main (int argc, char ** argv){
 	// }
 	// if (!fail) 
 	// 		cout << "sucess! " << endl;
-
+	DOUBLE* gpu_h; 
+	gpu_h = (DOUBLE*) malloc(sizeof(DOUBLE) * host_ap.h.size());
 
 	// test function : attribute_arrays_memory_alloc
 	h_argument_pointers = attribute_arrays_memory_alloc(0, host_ap, &d_argument_pointers);
 
 	// gpu_h: the grid depth map on gou
-	DOUBLE* gpu_h; 
-	gpu_h = (DOUBLE*) malloc(sizeof(DOUBLE) * host_ap.h.size());
+	
 	// cout << host_ap.h.size() << endl;
 	cudaError_t status = cudaMemcpy((void*) gpu_h, h_argument_pointers.h, sizeof(DOUBLE) * host_ap.h.size(), cudaMemcpyDeviceToHost);
 	assert(status == cudaSuccess);
@@ -242,6 +242,7 @@ int main (int argc, char ** argv){
 
 	// check if values on device are the same with values on host, and if we has stored the right pointers
 	// done
+	
 	for (int i = 0; i < host_ap.h.size(); i++){
 		if (gpu_h[i] != host_ap.h[i]){
 			cout << "failed" << endl
@@ -258,9 +259,30 @@ int main (int argc, char ** argv){
 	// dim3 grid_2d(4, 30, 1);
 	cout << grid_2d.x << " " << grid_2d.y <<" " << grid_2d.z <<  " " << endl;
 	Onetime_init <<<grid_2d, block_2d >>>(d_argument_pointers,d_const_coeffs);
+
  	
 	cudaDeviceSynchronize();
 	check_error();
+
+
+
+
+
+	int* arr;
+	arr = (int*) malloc(sizeof(int) * host_ap.h.size());
+	status = cudaMemcpy((void*) arr, h_argument_pointers.khouot, sizeof(int) * host_ap.h.size(), cudaMemcpyDeviceToHost);
+	assert(status == cudaSuccess);
+	ofstream ofs;
+	ofs.open("Outputs/khouot.txt")
+	for (int i= 0; i < N + 3; i ++){
+			for (int j = 0; j < M + 3; j ++){
+				ofs << arr[i * (M + 3) + j] << " ";
+	
+			}
+		ofs << endl;
+	}
+
+
 
 	// load initial condition
 	if (load_initial_condition)

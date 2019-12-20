@@ -151,8 +151,10 @@ pair<int, int> load_inputs(string dir,
 	load_file<DOUBLE> ((dir + "FS_bientrai.txt").c_str(), CC_l);
 	load_file<DOUBLE> ((dir + "FS_bienphai.txt").c_str(), CC_r);
 	load_file<int> ((dir + "boundary_type.txt").c_str(), boundary_type);
+	cout << "boundary_type: ";
 	for (int i = 0; i < boundary_type.size(); i++){
 		int val = boundary_type[i];
+		cout << val << " ";
 		if (val == 2)
 			bienQ.push_back(1);
 		else bienQ.push_back(0);

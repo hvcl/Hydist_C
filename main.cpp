@@ -184,7 +184,7 @@ int main (int argc, char ** argv){
 
 	cout << "checking vector assignment: " << endl
 		 << "size in GPU : " << host_ap.boundary_type.size() 
-		 << "  size in CPU" << boundary_type.size() << endl
+		 << "  size in CPU: " << boundary_type.size() << endl
 		 << "first 2 elem:  " << boundary_type[ M * 2 + 100] << " " << boundary_type[M * 2 + 100] << endl
 		 << " " << host_ap.boundary_type[M * 2 + 100] << " " << host_ap.boundary_type[M * 2 + 100] << endl;
 

@@ -147,7 +147,7 @@ pair<int, int> load_inputs(string dir,
 	load_file<DOUBLE> ((dir + "FS_bientrai.txt").c_str(), CC_l);
 	load_file<DOUBLE> ((dir + "FS_bienphai.txt").c_str(), CC_r);
 	pair<int, int> bc_shape = load_file<int> ((dir + "boundary_type.txt").c_str(), bienQ);
-	*total_time = pair.first;
+	*total_time = bc_shape.first;
 	cout <<"total_time = " <<  *total_time << endl;
 	return size;
 }

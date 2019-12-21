@@ -259,6 +259,10 @@ __device__ void _calculate_abcd(int i, int j, int first, int last, DOUBLE f4, in
     f3 = &(arr->f3[i * support_array_width]);
     f5 = &(arr->f5[i * support_array_width]);
 
+
+    printf("a1 %x, a2 %x, b1 %x, c1 %x, c2 %x, d1 %x, d2 %x\n",a1, a2, b1, c1, c2, d1, d2);
+    // printf("AA %x, BB %x, CC %x, DD %x\n",AA, BB, CC, DD);
+
     if (last - 1 > first){
             {
                 a1[j] = f4 - f1[j] / a2[j];

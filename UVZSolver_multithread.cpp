@@ -247,7 +247,8 @@ __device__ void _calculate_abcd(int i, int j, int first, int last, DOUBLE f4, in
     
     if ((first > last) || (j < first) || ( j > last)) return;
     printf("i %d j %d first %d last %d\n", i, j , first, last );
-    
+    return;
+
     __shared__ DOUBLE *a1, *b1, *c1, *d1, *a2, *c2, *d2, *f1, *f2, *f3, *f5;
     a1 = &(arr->a1[i * support_array_width]);
     b1 = &(arr->b1[i * support_array_width]);

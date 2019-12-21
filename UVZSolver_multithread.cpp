@@ -335,9 +335,6 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
     int sn = 2 * (last - first);
     bool isBienran;
 
-    printf("i %d, j %d, first %d, last %d\n",i, j, first, last );
-    return;
-
 
     // if (j == first)
     //     printf("debug %d %x\n", i, BB);
@@ -434,6 +431,8 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
         }
     }
     
+    printf("i %d, j %d, first %d, last %d\n",i, j, first, last );
+    return;
     if (j == last)
         arr->SN[i * segment_limit + seg_no] = sn;
 }

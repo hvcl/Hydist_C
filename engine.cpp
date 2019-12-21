@@ -73,9 +73,11 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 		jump_step = 2;
 
 		// set block size
-		block_shape = dim3(1, 1024, 1);
-		grid_shape = dim3(M1, 1, 1);
-		// grid_shape = (M1, (int) ceil( N / 1024.0), 1);
+		// block_shape = dim3(1, 1024, 1);
+		// grid_shape = dim3(M1, 1, 1);
+
+		block_shape = (1, 1024, 1);
+		grid_shape = (M, (int) ceil( N / 1024.0), 1);
 
 		cout << "block_shape: " << block_shape.x << " " << block_shape.y <<  " " << block_shape.z << endl;
 		cout << grid_shape.x << " " << grid_shape.y << " " << grid_shape.z << endl;
@@ -85,8 +87,8 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 		synch_and_check();
 		UZSolver_calculate_abcd<<<grid_shape, block_shape>>>(start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
 		synch_and_check();
-		// UZSolver_calculate_matrix_coeff<<<grid_shape, block_shape>>>(start_idx, end_idx, NANGDAY, d_arg_ptr, d_arr_ptr);
-		// synch_and_check();
+		UZSolver_calculate_matrix_coeff<<<grid_shape, block_shape>>>(start_idx, end_idx, NANGDAY, d_arg_ptr, d_arr_ptr);
+		synch_and_check();
 
 		// tridiagSolver<<<(1, M-1, 1), (32, 1, 1)>>> (false,isU, start_idx, end_idx, jump_step, 2 * N + 1, d_arg_ptr, d_arr_ptr);
 		// synch_and_check();

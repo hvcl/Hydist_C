@@ -95,7 +95,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 		update_buffer <<<grid_2d, block_2d>>>(isU, d_arg_ptr, d_arr_ptr);
 		synch_and_check();
 
-		solveV <<<grid_shape, block_shape>>>(t, 2, N, d_arg_ptr, d_arr_ptr, coeffs);
+		solveV <<<grid_shape, block_shape>>>(t, 2, N, d_arg_ptr, coeffs);
 		synch_and_check();
 		update_margin_elem_V<<<(1, N, 1), (32, 1, 1)>>> (2, N, NANGDAY, d_arg_ptr);
 		synch_and_check();

@@ -820,7 +820,7 @@ __global__ void
 UZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
-    if ((i == 2) &&  (j ==startidx)){
+    if ((i == 2) &&  (j == startidx)){
         printf("Blocksize: %d %d %d\n", blockDim.x, blockDim.y, blockDim.z);
         printf("endidx = %d\n", endidx );
     }
@@ -833,8 +833,8 @@ UZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argume
     int seg_no = locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
     
     
-    if (i > 10) 
-        printf("i %d, j %d, first = %d last = %d\n",i, j, first, last );
+    if ((i > 10) && (j > 2)) 
+        printf("i %d, j %d, first = %d last = %d, endidx = %d\n",i, j, first, last, endidx );
 
     _calculate_matrix_coeff(true, j, i, arg->N + 2, 2 * (arg->N) + 1, first, last, seg_no, bienran1, bienran2,
                           arg->ubt[j], arg->ubp[j], arg->t_z[last * (arg->M + 3) + j], arg->t_z[first * (arg->M + 3) + j], arg->bienQ[2], arg->bienQ[3], arg->N ,arg,arr);

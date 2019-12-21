@@ -709,7 +709,7 @@ VZSolver_calculate_preindex( int startidx, int endidx, Argument_Pointers* arg, A
     // locate segment 
     int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
     int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
-    if (i > endidx ) return;
+    if ((i > endidx) || (j > arg->M)) return;
     bool bienran1 = false;
     bool bienran2 = false;
     int first = 0; int last = 0;
@@ -723,7 +723,7 @@ __global__ void
 VZSolver_calculate_abcd(int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
     int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
     int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
-    if (i > endidx) return;
+    if ((i > endidx) || (j > arg->M)) return;
 
     bool bienran1 = false;
     bool bienran2 = false;
@@ -741,7 +741,7 @@ __global__ void
 VZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
     int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
     int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
-    if (i > endidx) return;
+    if ((i > endidx) || (j > arg->M)) return;
     bool bienran1 = false;
     bool bienran2 = false;
     int first = 0; int last = 0;
@@ -757,7 +757,7 @@ VZSolver_extract_solution(int startidx, int endidx, DOUBLE NANGDAY, Argument_Poi
     int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
     int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
 
-    if (i > endidx) return;
+    if ((j > endidx) || (i > arg->N)) return;
     bool bienran1 = false;
     bool bienran2 = false;
     int first = 0; int last = 0;
@@ -771,7 +771,7 @@ __global__ void
 UZSolver_extract_solution(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
-    if (j > endidx) return;
+    if ((j > endidx) || (i > arg->N)) return;
     bool bienran1 = false;
     bool bienran2 = false;
     int first = 0; int last = 0;
@@ -789,7 +789,7 @@ UZSolver_calculate_preindex(int startidx, int endidx, Argument_Pointers* arg, Ar
     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
 
-    if (j > endidx ) return;
+    if ((j > endidx) || (i > arg->N)) return;
     bool bienran1 = false;
     bool bienran2 = false;
     int first = 0; int last = 0;
@@ -806,7 +806,7 @@ UZSolver_calculate_abcd(int startidx, int endidx, Argument_Pointers* arg, Array_
     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
  
     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
-    if (j > endidx) return;
+    if ((j > endidx) || (i > arg->N)) return;
     bool bienran1 = false;
     bool bienran2 = false;
     int first = 0; int last = 0;
@@ -829,7 +829,7 @@ UZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argume
         printf("Blocksize: %d %d %d\n", blockDim.x, blockDim.y, blockDim.z);
         printf("endidx = %d\n", endidx );
     }
-    if (j > endidx) return;
+    if ((j > endidx) || (i > N)) return;
     printf("i = %d j = %d\n", i, j );
 
     

@@ -284,16 +284,16 @@ int main (int argc, char ** argv){
 	if (load_initial_condition)
 		printf("need to write load initial condition here\n");
 
-	Find_Calculation_limits_Horizontal <<<(1, N, 1), (32, 1, 1)>>> (d_argument_pointers, d_const_coeffs);
+	Find_Calculation_limits_Horizontal <<<dim3(1, N, 1), 32>> (d_argument_pointers, d_const_coeffs);
 
-	Find_Calculation_limits_Vertical <<<(1, M, 1), (32, 1, 1)>>> (d_argument_pointers, d_const_coeffs);
+	Find_Calculation_limits_Vertical <<<dim3(1, M, 1), 32>>> (d_argument_pointers, d_const_coeffs);
 
 
 	Htuongdoi<<<grid_2d, block_2d>>> (d_argument_pointers);
 
 	synch_and_check();
 
-	preprocess_data <<<(1, 1, 1), (32, 1,1 )>>> (d_argument_pointers, d_const_coeffs);
+	preprocess_data <<<1, 32>>> (d_argument_pointers, d_const_coeffs);
 	synch_and_check();
 
 

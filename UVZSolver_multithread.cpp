@@ -803,10 +803,12 @@ UZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argume
     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
     if ((i == 2) &&  (j ==startidx)){
-        printf("Blocksize: %d %d %d Grid size : %d %d %d\n", blockDim.x, blockDim.y, blockDim.z, blockIdx.x, blockIdx.y, blockIdx.z );
+        printf("Blocksize: %d %d %d\n", blockDim.x, blockDim.y, blockDim.z);
         printf("endidx = %d\n", endidx );
     }
     if (j > endidx) return;
+    printf("i = %d j = %d\n", i, j );
+
     
     bool bienran1 = false;
     bool bienran2 = false;

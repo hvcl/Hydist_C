@@ -29,13 +29,14 @@ void update_boundary_at_t(int M, int N, float t, bool channel, int total_time, A
 }
 
 
-void Hydraulic_Calculation(Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, Constant_Coeffs* coeffs, Options ops){
+void Hydraulic_Calculation(DOUBLE dT, Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, Constant_Coeffs* coeffs, Options ops){
 	// note: blocksize in this case is fixed to be 1024 threads, can change later
 	int blocksize = 1024;
 	int M = ops.M; 
 	int N = ops.N;
 	int M1 = M + 3;
 	int N1 = N + 3;
+
 	dim3 block_u = (min(M1, blocksize), 1, 1);
 	dim3 grid_u = ( M1 / block_u.x + 1, 1, 1);
 	dim3 block_v = (min(N1, blocksize), 1, 1);
@@ -49,7 +50,7 @@ void Hydraulic_Calculation(Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_p
 	DOUBLE Tmax = 0.5;
 	cout << "t = " << t << endl;
 	while (t < Tmax){
-		t += 0.5 * t;
+		t += 0.5 * dT;
 		cout << "Tmax = " << ops.Tmax << endl;
 
 		// update boundary conditionmake

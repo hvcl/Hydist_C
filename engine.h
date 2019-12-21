@@ -12,18 +12,19 @@ using namespace std;
 #define PI 3.14159265358979323846
 
 struct Options{
-	int Tmax, t_start, interval, sediment_start, bed_change_start, kenhhepd, kenhhepng;
+	DOUBLE Tmax, t_start, interval, sediment_start, bed_change_start;
+	bool kenhhepd, kenhhepng;
 	int M, N;
 	bool ketdinh, channel, debug, plot;
 	int total_time;
-	Options(int Tmx, int ts, int itv, int sds, int bcs, int cohesive, int kn,
+	Options(DOUBLE Tmx, DOUBLE ts, DOUBLE itv, DOUBLE sds, DOUBLE bcs, bool cohesive, bool kenhng,
 			bool kenhd, bool db, bool plt){
 		Tmax = Tmx;
 		t_start = ts;
 		interval = itv;
 		sediment_start = sds;
 		bed_change_start = bcs;
-		kenhhepng = kn;
+		kenhhepng = kenhng;
 		kenhhepd = kenhd;
 		ketdinh = cohesive;
 		channel = kenhd || kn;

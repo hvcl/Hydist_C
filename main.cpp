@@ -46,9 +46,10 @@ int main (int argc, char ** argv){
 	   -i : save interval - in minute
 	*/
 	string dir;
-	int hour(1), minute(0), sec(0), sediment_start(20), bed_change_start(500), bed_change_end(1000);
-	int save_interval(60), sediment_end(40);
-	int t_start(0);
+	int hour(1), minute(0), sec(0);
+	DOUBLE sediment_start(20), bed_change_start(500), bed_change_end(1000);
+	DOUBLE save_interval(60), sediment_end(40);
+	DOUBLE t_start(0);
 	bool kenhhepd(0), kenhhepng(0), cohesive(1);
 	bool plot(true), visualize(true), debug(false), load_initial_condition(false);
 	int c;
@@ -108,7 +109,7 @@ int main (int argc, char ** argv){
 		}
 	}
 
-	int Tmax = hour * 3600 + minute * 60 + sec;
+	DOUBLE Tmax = hour * 3600 + minute * 60 + sec;
 	
 	Options ops(Tmax, t_start, save_interval, sediment_start, bed_change_start, cohesive, kenhhepng, kenhhepd, debug, plot);
 

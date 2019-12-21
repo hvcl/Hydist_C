@@ -40,7 +40,8 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 	dim3 block_2d = (min(blocksize, M1), 1, 1);
 	dim3 grid_2d = ((int) ceil((DOUBLE)(M1) / min(blocksize, M1)), N1, 1) ;
 
-	dim3 block_shape, grid_shape;
+	dim3 block_shape;
+	dim3 grid_shape;
 
 	int start_idx, end_idx, jump_step;
 	bool isU;
@@ -72,8 +73,8 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 		jump_step = 2;
 
 		// set block size
-		block_shape = (1, 1024, 1);
-		grid_shape = (M1, 1, 1);
+		block_shape = dim3(1, 1024, 1);
+		grid_shape = dim3(M1, 1, 1);
 		// grid_shape = (M1, (int) ceil( N / 1024.0), 1);
 
 		cout << "block_shape: " << block_shape.x << " " << block_shape.y <<  " " << block_shape.z << endl;

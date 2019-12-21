@@ -898,7 +898,7 @@ __global__ void update_margin_elem_U(int startidx, int endidx, DOUBLE NANGDAY, A
     }
 }
 
-__global__ void update_margin_elem_V(DOUBLE t, int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg){
+__global__ void update_margin_elem_V( int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg){
     int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
     int M = arg->M;
     if (i > endidx) return;

@@ -92,22 +92,22 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 
 		Normalize<<<grid_2d, block_2d>>> (isU,d_arg_ptr, d_arr_ptr, coeffs);
 		synch_and_check();
-		update_buffer <<<grid_2d, block_2d>>>(isU, d_arg_ptr, d_arr_ptr, );
+		update_buffer <<<grid_2d, block_2d>>>(isU, d_arg_ptr, d_arr_ptr);
 		synch_and_check();
 
 		solveV <<<grid_shape, block_shape>>>(t, 2, N, d_arg_ptr, d_arr_ptr, coeffs);
 		synch_and_check();
-		update_margin_elem_V<<<(1, N, 1), (32, 1, 1)>>> (t, 2, N, NANGDAY, d_arg_ptr);
+		update_margin_elem_V<<<(1, N, 1), (32, 1, 1)>>> (2, N, NANGDAY, d_arg_ptr);
 		synch_and_check();
 
 		// note that isU here is false since it normalize value of v after solving for v
 		Normalize<<<grid_2d, block_2d>>> (false,d_arg_ptr, d_arr_ptr, coeffs);
 		synch_and_check();
-		update_buffer <<<grid_2d, block_2d>>>(false, d_arg_ptr, d_arr_ptr, );
+		update_buffer <<<grid_2d, block_2d>>>(false, d_arg_ptr, d_arr_ptr);
 		synch_and_check();
 
 
-		update_h_moi <<<grid_2d, block_2d>>> (32, 1, 1)>>> (d_arg_ptr, coeffs);
+		update_h_moi <<<grid_2d, block_2d>>> (d_arg_ptr);
         synch_and_check();;
 
 
@@ -143,7 +143,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         end_idx = N;
         jump_step = 2;
         isU = false;
-        if ((channel) && (kenhhepng == 1)){
+        if ((ops.channel) && (ops.kenhhepng)){
             start_idx = 3;
             end_idx = N;
         }
@@ -172,7 +172,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 
         solveU<<<grid_2d, block_2d>>> (t, 2, M, d_arg_ptr, coeffs);
         synch_and_check();
-        update_margin_elem_U<<<(1, M, 1),(32, 1, 1)>>> (t, 2, M, NANGDAY, d_arg_ptr);
+        update_margin_elem_U<<<(1, M, 1),(32, 1, 1)>>> (2, M, NANGDAY, d_arg_ptr);
         synch_and_check();
 
         // similar to first haft, isU here is true, since it normalize u value after solving for u

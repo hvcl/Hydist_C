@@ -311,7 +311,6 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
     
 
     if ((first > last) || (j < first) || ( j > last)) return;
-    return;
 
 
 

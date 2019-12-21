@@ -295,6 +295,7 @@ __global__ void Find_Calculation_limits_Horizontal( Argument_Pointers *arg, Cons
 		} 
 	}
 	moci[i] = number_of_seg;
+	printf("moci[%d] = %d \n",i, moci[i]);
 }
 
 
@@ -349,6 +350,7 @@ __global__ void Find_Calculation_limits_Vertical(Argument_Pointers *arg, Constan
 	// if (j == 3 && threadIdx.x == 0)
 	// 	printf(" khouot[%d %d], %d\n", end, j, khouot[end * offset + j]);
 	mocj[j] = number_of_seg;
+	printf("mocj[%d] = %d \n",j, mocj[j]);
 
 }
 

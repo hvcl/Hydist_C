@@ -307,7 +307,6 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
     DOUBLE ubt_or_vbd, DOUBLE ubp_or_vbt,  DOUBLE TZ_r, DOUBLE TZ_l, bool dkBienQ_1, bool dkBienQ_2, int dkfr, Argument_Pointers* arg, Array_Pointers *arr){
     //DOUBLE *a1, DOUBLE *b1, DOUBLE *c1, DOUBLE *d1, DOUBLE *a2, DOUBLE *b2, DOUBLE *c2, DOUBLE *d2, DOUBLE* AA, DOUBLE* BB, DOUBLE* CC, DOUBLE* DD){
     
-    printf("i %d, j %d, first %d, last %d\n",i, j, first, last );
 
 
     if ((first > last) || (j < first) || ( j > last)) {
@@ -316,7 +315,6 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
         return;
     }
 
-    return;
 
     // int array_width = arg->M + 2;
     // int tridiag_coeff_width = 2 * arg->M  + 1;
@@ -336,6 +334,10 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
     DD = &(arr->DD[i * tridiag_coeff_width]);
     int sn = 2 * (last - first);
     bool isBienran;
+
+    printf("i %d, j %d, first %d, last %d\n",i, j, first, last );
+    return;
+
 
     // if (j == first)
     //     printf("debug %d %x\n", i, BB);

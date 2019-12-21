@@ -847,7 +847,7 @@ __device__ int locate_segment_u(int N, int M, bool* bienran1, bool* bienran2, in
     
     // printf("mocj[%d] = %d\n",col, mocj[col]);
     for (int k = 0; k < mocj[col]; k++){
-    	printf("dau = %d, cuoi = %d\n",dauj[col * segment_limit +  k] , cuoij[col * segment_limit + k] );
+    	printf("dau = %d, cuoi = %d row= %d, col = %d\n",dauj[col * segment_limit +  k] , cuoij[col * segment_limit + k], row, col );
         int width = segment_limit;
         if ((dauj[col * width +  k] <= row) && (row <= cuoij[col * width + k])) 
         {

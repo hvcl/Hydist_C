@@ -801,6 +801,7 @@ __global__ void
 UZSolver_calculate_abcd(int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
     // i runs from start index to M 
     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
+
     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
     if (j > endidx) return;
     bool bienran1 = false;
@@ -810,7 +811,7 @@ UZSolver_calculate_abcd(int startidx, int endidx, Argument_Pointers* arg, Array_
     dTchia2dX = coeffs->dTchia2dX;
     g = coeffs->g;
     NANGDAY= coeffs->NANGDAY;
-    printf("i %d, j %d, g %lf, NANGDAY %lf\n", i, j, g,NANGDAY );
+    printf("i %d, j %d, blockIdx.x %d, blockIdx.y %d, g %lf, NANGDAY %lf\n", i, j, blockIdx.x, blockIdx.y, g,NANGDAY );
     locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
     // _calculate_abcd(j, i, first, last, 2 * g * dTchia2dX, arg->N + 2, bienran1 , bienran2, arr);
 

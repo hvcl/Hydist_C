@@ -27,7 +27,7 @@ struct Options{
 		kenhhepng = kenhng;
 		kenhhepd = kenhd;
 		ketdinh = cohesive;
-		channel = kenhd || kn;
+		channel = kenhd || kenhng;
 		debug = db;
 		plot = plt;
 	}

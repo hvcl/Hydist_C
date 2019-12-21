@@ -317,9 +317,9 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
 
 
     if ((first > last) || (j < first) || ( j > last)) {
-        printf("device_func i %d, j %d, first %d, last %d\n",i, j, first, last );
         return;
     }
+        printf("device_func i %d, j %d, first %d, last %d\n",i, j, first, last );
 
     return;
     // int array_width = arg->M + 2;

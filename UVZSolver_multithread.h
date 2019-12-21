@@ -35,7 +35,7 @@ __device__ void uSolver(DOUBLE t, int offset, int N, int first, int last, int ro
 
 
 
-__global__ void VZSolver_calculate_preindex(DOUBLE t, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs);
+__global__ void VZSolver_calculate_preindex(int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs);
 __global__ void VZSolver_calculate_abcd(int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs);
 __global__ void VZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr);
 __global__ void VZSolver_extract_solution(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr);

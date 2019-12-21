@@ -807,7 +807,7 @@ __global__ void update_buffer(bool updateU, Argument_Pointers* arg, Array_Pointe
 	val_buffer[grid_pos] = tmp_buffer[grid_pos];
 }
 
-__global__ void Normalize(DOUBLE isU, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
+__global__ void Normalize(bool isU, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
 	if (isU)
 		_normalize(coeffs->heso, arg->N, arg->M, arg->M + 3, 1, arr->AA, arg->t_u, arg->khouot);
 	else

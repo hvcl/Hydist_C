@@ -29,7 +29,7 @@ void update_boundary_at_t(int M, int N, float t, bool channel, int total_time, A
 }
 
 
-void Hydraulic_Calculation(DOUBLE dT, Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, Constant_Coeffs* coeffs, Options ops){
+void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, Constant_Coeffs* coeffs, Options ops){
 	// note: blocksize in this case is fixed to be 1024 threads, can change later
 	int blocksize = 1024;
 	int M = ops.M; 
@@ -37,15 +37,17 @@ void Hydraulic_Calculation(DOUBLE dT, Argument_Pointers* d_arg_ptr, Array_Pointe
 	int M1 = M + 3;
 	int N1 = N + 3;
 
-	dim3 block_u = (min(M1, blocksize), 1, 1);
-	dim3 grid_u = ( M1 / block_u.x + 1, 1, 1);
-	dim3 block_v = (min(N1, blocksize), 1, 1);
-	dim3 grid_v = (N1 / block_v.x, 1, 1);
 	dim3 block_2d = (min(blocksize, M1), 1, 1);
 	dim3 grid_2d = ((int) ceil((DOUBLE)(M1) / min(blocksize, M1)), N1, 1) ;
+
+	dim3 block_shape, grid_shape;
+
 	int start_idx, end_idx, jump_step;
-	bool channel = ops.kenhhepng xor ops.kenhhepd;
-	int t = ops.t_start;
+	bool isU;
+
+	bool channel = ops.channel;
+
+	DOUBLE t = ops.t_start;
 	// int Tmax = ops.Tmax;
 	DOUBLE Tmax = 0.5;
 	cout << "t = " << t << endl;
@@ -58,21 +60,144 @@ void Hydraulic_Calculation(DOUBLE dT, Argument_Pointers* d_arg_ptr, Array_Pointe
 		synch_and_check();
 
 		// set start/ end index for kernels
-		// start_idx = 2;
-		// end_idx = M;
-		// jump_step = 2;
-		// if ((channel) && (ops.kenhhepd)){
-		// 	start_idx = 3;
-		// 	end_idx = M - 1;
-		// }
-		// is U 
-		// jump_step
-		
+		start_idx = 2;
+		end_idx = M;
+		jump_step = 2;
+		if ((channel) && (ops.kenhhepd)){
+			start_idx = 3;
+			end_idx = M - 1;
+		}
+
+		isU = true;
+		jump_step = 2;
 
 		// set block size
+		block_shape = (1, 1024, 1);
+		grid_shape = (M1, (int) ceil( N / 1024.0), 1);
 
-		// call kernels
 
+		UZSolver_calculate_preindex <<<grid_shape, block_shape>>> (start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
+		synch_and_check();
+		UZSolver_calculate_abcd<<<grid_shape, block_shape>>>(start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
+		synch_and_check();
+		UZSolver_calculate_matrix_coeff<<<grid_shape, block_shape>>>(start_idx, end_idx, NANGDAY, d_arg_ptr, d_arr_ptr);
+		synch_and_check();
+
+		tridiagSolver<<<(1, M-1, 1), (32, 1, 1)>>> (false,isU, start_idx, end_idx, jump_step, 2 * N + 1, d_arg_ptr, d_arr_ptr);
+		synch_and_check();
+
+
+		UZSolver_extract_solution <<<grid_shape, block_shape>>>(start_idx, end_idx, NANGDAY, d_arg_ptr, d_arr_ptr);
+		synch_and_check();
+
+		Normalize<<<grid_2d, block_2d>>> (isU,d_arg_ptr, d_arr_ptr, coeffs);
+		synch_and_check();
+		update_buffer <<<grid_2d, block_2d>>>(isU, d_arg_ptr, d_arr_ptr, );
+		synch_and_check();
+
+		solveV <<<grid_shape, block_shape>>>(t, 2, N, d_arg_ptr, d_arr_ptr, coeffs);
+		synch_and_check();
+		update_margin_elem_V<<<(1, N, 1), (32, 1, 1)>>> (t, 2, N, NANGDAY, d_arg_ptr);
+		synch_and_check();
+
+		// note that isU here is false since it normalize value of v after solving for v
+		Normalize<<<grid_2d, block_2d>>> (false,d_arg_ptr, d_arr_ptr, coeffs);
+		synch_and_check();
+		update_buffer <<<grid_2d, block_2d>>>(false, d_arg_ptr, d_arr_ptr, );
+		synch_and_check();
+
+
+		update_h_moi <<<grid_2d, block_2d>>> (32, 1, 1)>>> (d_arg_ptr, coeffs);
+        synch_and_check();;
+
+
+        update_uvz <<<grid_2d, block_2d>>> (d_arg_ptr, coeffs);
+        synch_and_check();
+   
+
+        Find_Calculation_limits_Horizontal <<<(1, N, 1), (32, 1, 1)>>> (d_arg_ptr, coeffs);
+        Find_Calculation_limits_Vertical <<<(1, M, 1), (32, 1, 1)>>>(d_arg_ptr, coeffs);
+        Htuongdoi <<<grid_2d, block_2d>>> (d_arg_ptr);
+        synch_and_check();
+
+        // get result from device here and check
+
+
+        // sediment transport simulation condition start here
+
+
+        // second half of the simulation
+
+
+        t += dT * 0.5;
+
+
+		update_boundary_at_t(M, N, t, channel, ops.total_time, d_arg_ptr, coeffs);        
+        synch_and_check();
+
+        
+
+        block_shape = (1024, 1, 1) ;
+        grid_shape = ((int) (ceil(M / 1024.0)), N, 1);
+        start_idx = 2;
+        end_idx = N;
+        jump_step = 2;
+        isU = false;
+        if ((channel) && (kenhhepng == 1)){
+            start_idx = 3;
+            end_idx = N;
+        }
+
+
+        VZSolver_calculate_preindex <<<grid_shape,block_shape>>> (start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
+        synch_and_check();
+            
+        VZSolver_calculate_abcd<<<grid_shape,block_shape>>> (start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
+        synch_and_check();
+        VZSolver_calculate_matrix_coeff<<<grid_shape,block_shape>>> (start_idx, end_idx, NANGDAY, d_arg_ptr, d_arr_ptr);
+        synch_and_check();
+
+
+        tridiagSolver<<<(1, N - 1, 1), (32, 1, 1)>>> (false, isU, start_idx, end_idx, jump_step, 2 * M + 1, d_arg_ptr, d_arr_ptr);
+        synch_and_check();
+
+        VZSolver_extract_solution<<<grid_shape,block_shape>>> (start_idx, end_idx, NANGDAY, d_arg_ptr, d_arr_ptr);
+        synch_and_check();      
+
+
+        Normalize<<<grid_2d, block_2d>>> (isU, d_arg_ptr, d_arr_ptr, coeffs);
+        synch_and_check();
+        update_buffer<<<grid_2d, block_2d>>> (isU, d_arg_ptr, d_arr_ptr);
+        synch_and_check();
+
+        solveU<<<grid_2d, block_2d>>> (t, 2, M, d_arg_ptr, coeffs);
+        synch_and_check();
+        update_margin_elem_U<<<(1, M, 1),(32, 1, 1)>>> (t, 2, M, NANGDAY, d_arg_ptr);
+        synch_and_check();
+
+        // similar to first haft, isU here is true, since it normalize u value after solving for u
+        Normalize<<<grid_2d, block_2d>>> (true, d_arg_ptr, d_arr_ptr, coeffs);
+		synch_and_check();
+		update_buffer <<<grid_2d, block_2d>>>(true, d_arg_ptr, d_arr_ptr );
+		synch_and_check();
+
+
+		update_h_moi <<<grid_2d, block_2d>>> (d_arg_ptr);
+        synch_and_check();
+        Reset_states_vertical <<<(M, 1, 1), (1, 32, 1)>>> (d_arg_ptr, coeffs);
+        synch_and_check();;
+
+
+        update_uvz <<<grid_2d, block_2d>>> (d_arg_ptr, coeffs);
+        synch_and_check();
+   
+
+        Find_Calculation_limits_Horizontal <<<(1, N, 1), (32, 1, 1)>>> (d_arg_ptr, coeffs);
+        Find_Calculation_limits_Vertical <<<(1, M, 1), (32, 1, 1)>>>(d_arg_ptr, coeffs);
+        Htuongdoi <<<grid_2d, block_2d>>> (d_arg_ptr);
+        synch_and_check();
+
+       // sediment transport simulation here
 
 
 	}

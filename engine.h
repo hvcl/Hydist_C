@@ -27,7 +27,7 @@ struct Options{
 		kenhhepng = kenhng;
 		kenhhepd = kenhd;
 		ketdinh = cohesive;
-		channel = kenhd || kenhng;
+		channel = kenhd ^ kenhng;
 		debug = db;
 		plot = plt;
 	}
@@ -89,7 +89,7 @@ void update_boundary_at_t(int M, int N, float t, bool channel, int total_time, A
 
 void synch_and_check();
 
-void Hydraulic_Calculation(DOUBLE dT, Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, Constant_Coeffs* coeffs, Options ops);
+void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, Constant_Coeffs* coeffs, Options ops);
 
 
 #endif

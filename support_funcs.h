@@ -43,7 +43,7 @@ __global__ void Update_Boundary_Value(DOUBLE t, int total_time, Argument_Pointer
 __global__ void update_uvz(Argument_Pointers* arg, Constant_Coeffs* coeffs);
 
 __device__ void _normalize (DOUBLE coeff, int N, int M, int closenb_dist, int farnb_dist, DOUBLE* tmp_buffer, DOUBLE* val_buff, int* khouot);
-__global__ void Normalize(DOUBLE isU, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs);
+__global__ void Normalize(bool isU, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs);
 __global__ void update_buffer(bool updateU, Argument_Pointers* arg, Array_Pointers* arr);
 
 __device__ int locate_segment_v(int N, int M, bool* bienran1, bool* bienran2, int* first, int* last, int row, int col,  int* daui, int* cuoii, int* moci, DOUBLE* h, DOUBLE NANGDAY);

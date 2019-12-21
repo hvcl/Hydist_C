@@ -105,7 +105,7 @@ __device__ void bienlongdau(int i, int first, int last,  DOUBLE* AA, DOUBLE* BB,
 }
 
 
-__device__ void  _vzSolver_calculate_preindex(DOUBLE t, int i, int j, int width, int first, int last,  Argument_Pointers* arg, Array_Pointers *arr, Constant_Coeffs* coeffs){
+__device__ void  _vzSolver_calculate_preindex(int i, int j, int width, int first, int last,  Argument_Pointers* arg, Array_Pointers *arr, Constant_Coeffs* coeffs){
     if ((first > last) || (j < first) || ( j > last)) return;
     DOUBLE p = 0.0;
     DOUBLE q = 0.0;    
@@ -684,7 +684,7 @@ __device__ void uSolver(DOUBLE t, int offset, int N, int first, int last, int ro
 
 
 __global__ void 
-VZSolver_calculate_preindex(DOUBLE t, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
+VZSolver_calculate_preindex( int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
     // locate segment 
     int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
     int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
@@ -693,7 +693,7 @@ VZSolver_calculate_preindex(DOUBLE t, int startidx, int endidx, Argument_Pointer
     bool bienran2 = false;
     int first = 0; int last = 0;
     locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, coeffs->NANGDAY);
-    _vzSolver_calculate_preindex(t, i, j, arg->M + 3, first, last, arg, arr, coeffs);
+    _vzSolver_calculate_preindex(i, j, arg->M + 3, first, last, arg, arr, coeffs);
 }
 
 

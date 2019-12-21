@@ -78,8 +78,8 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 
 		UZSolver_calculate_preindex <<<grid_shape, block_shape>>> (start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
 		synch_and_check();
-		// UZSolver_calculate_abcd<<<grid_shape, block_shape>>>(start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
-		// synch_and_check();
+		UZSolver_calculate_abcd<<<grid_shape, block_shape>>>(start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
+		synch_and_check();
 		// UZSolver_calculate_matrix_coeff<<<grid_shape, block_shape>>>(start_idx, end_idx, NANGDAY, d_arg_ptr, d_arr_ptr);
 		// synch_and_check();
 

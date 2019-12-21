@@ -49,6 +49,7 @@ void Hydraulic_Calculation(Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_p
 	int Tmax = 0.5;
 	while (t < Tmax){
 		t += 0.5 * t;
+		cout << "Tmax = " << ops.Tmax;
 
 		// update boundary conditionmake
 		update_boundary_at_t(M, N, t, channel, ops.total_time, d_arg_ptr, coeffs);
@@ -65,8 +66,6 @@ void Hydraulic_Calculation(Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_p
 		// is U 
 		// jump_step
 		
-
-
 
 		// set block size
 

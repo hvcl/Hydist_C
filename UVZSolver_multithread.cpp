@@ -245,8 +245,6 @@ __device__ void  _uzSolver_calculate_preindex(int i, int j, int width, int first
 
 __device__ void _calculate_abcd(int i, int j, int first, int last, DOUBLE f4, int support_array_width,  bool bienran1, bool bienran2, Array_Pointers* arr){
     
-    // if ((first) && (last))
-    //     printf("i %d j %d first %d last %d\n", i, j , first, last );
 
     if ((first > last) || (j < first) || ( j > last)) return;
 
@@ -346,9 +344,6 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
 
     printf("a1 %x, a2 %x, b1 %x, c1 %x, c2 %x, d1 %x, d2 %x\n",a1, a2, b1, c1, c2, d1, d2);
     printf("AA %x, BB %x, CC %x, DD %x\n",AA, BB, CC, DD);
-
-    return;
-
 
     // if (j == first)
     //     printf("debug %d %x\n", i, BB);

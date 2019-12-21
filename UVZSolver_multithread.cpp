@@ -802,7 +802,7 @@ __global__ void
 UZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
-    if ((blockIdx.y == 0) &&  ()){
+    if ((blockIdx.x == 0) &&  (threadIdx.y ==0)){
         printf("Blocksize: %d %d %d Grid size : %d %d %d\n", blockDim.x, blockDim.y, blockDim.z, blockIdx.x, blockIdx.y, blockIdx.z );
         printf("endidx = %d\n", endidx );
     }

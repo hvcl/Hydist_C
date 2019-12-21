@@ -829,7 +829,7 @@ UZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argume
         printf("Blocksize: %d %d %d\n", blockDim.x, blockDim.y, blockDim.z);
         printf("endidx = %d\n", endidx );
     }
-    if ((j > endidx) || (i > N)) return;
+    if ((j > endidx) || (i > arg->N)) return;
     printf("i = %d j = %d\n", i, j );
 
     

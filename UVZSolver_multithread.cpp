@@ -317,7 +317,7 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
 
 
     if ((first > last) || (j < first) || ( j > last)) {
-    printf("i %d, j %d, first %d, last %d\n",i, j, first, last );
+    printf("device_func i %d, j %d, first %d, last %d\n",i, j, first, last );
         return;
     }
 
@@ -831,6 +831,7 @@ UZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argume
     int first = 0; int last = 0;
 
     int seg_no = locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
+    
     printf("i %d, j %d, first = %d last = %d\n",i, j, first, last );
 
     _calculate_matrix_coeff(true, j, i, arg->N + 2, 2 * (arg->N) + 1, first, last, seg_no, bienran1, bienran2,

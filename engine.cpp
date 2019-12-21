@@ -73,8 +73,10 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 
 		// set block size
 		block_shape = (1, 1024, 1);
-		grid_shape = (M1, (int) ceil( N / 1024.0), 1);
+		grid_shape = (M1, 1, 1);
+		// grid_shape = (M1, (int) ceil( N / 1024.0), 1);
 
+		cout << "block_shape: " << block_shape.x << " " << block_shape.y <<  " " << block_shape.z << endl;
 		cout << grid_shape.x << " " << grid_shape.y << " " << grid_shape.z << endl;
 		cout << "M : " << M1 << " N: " << N1 << endl;
 

@@ -293,7 +293,7 @@ __global__ void Find_Calculation_limits_Horizontal( Argument_Pointers *arg, Cons
 			}
 			
 		} 
-	printf("daui[%d, %d] = %d  cuoii[%d, %d] = %d\n",i, number_of_seg-1, daui[i* segment_limit + number_of_seg-1], i, i* segment_limit + number_of_seg-1, cuoii[i* segment_limit + number_of_seg-1]);
+	// printf("daui[%d, %d] = %d  cuoii[%d, %d] = %d\n",i, number_of_seg-1, daui[i* segment_limit + number_of_seg-1], i, number_of_seg-1, cuoii[i* segment_limit + number_of_seg-1]);
 
 	}
 	moci[i] = number_of_seg;

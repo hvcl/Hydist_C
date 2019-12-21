@@ -260,8 +260,7 @@ int main (int argc, char ** argv){
 	Onetime_init <<<grid_2d, block_2d >>>(d_argument_pointers,d_const_coeffs);
 
  	
-	cudaDeviceSynchronize();
-	check_error();
+	synch_and_check();
 
 
 	int* arr;

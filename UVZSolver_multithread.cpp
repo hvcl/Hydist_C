@@ -814,9 +814,9 @@ UZSolver_calculate_abcd(int startidx, int endidx, Argument_Pointers* arg, Array_
     g = coeffs->g;
     NANGDAY= coeffs->NANGDAY;
 
+    locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
     if ((first) && (last))
         printf("i = %d, j = %d, first = %d, last = %d\n",i, j, first, last );
-    locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
     _calculate_abcd(j, i, first, last, 2 * g * dTchia2dX, arg->N + 2, bienran1 , bienran2, arr);
 
 }

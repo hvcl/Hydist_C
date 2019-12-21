@@ -24,7 +24,9 @@ void update_boundary_at_t(int M, int N, float t, bool channel, int total_time, A
 		// boundary_right(t, d_arg_ptr, coeffs);
 
 	} else{
-		Update_Boundary_Value<<<(1, 1024, 1), (1, max(M, N) / 1024 + 1)>>>(t, total_time, d_arg_ptr);
+		dim3 grid(1, max(M, N) / 1024 + 1);
+		dim3 block(1, 1024, 1)
+		Update_Boundary_Value<<<grid, block>>>(t, total_time, d_arg_ptr);
 	}
 }
 
@@ -73,11 +75,8 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 		jump_step = 2;
 
 		// set block size
-		block_shape = dim3(1, 1024, 1);
+		block_shape = dim3(1, 512, 1);
 		grid_shape = dim3(M1, 1, 1);
-
-		// block_shape = (1, 1024, 1);
-		// grid_shape = (M, (int) ceil( N / 1024.0), 1);
 
 		cout << "block_shape: " << block_shape.x << " " << block_shape.y <<  " " << block_shape.z << endl;
 		cout << grid_shape.x << " " << grid_shape.y << " " << grid_shape.z << endl;

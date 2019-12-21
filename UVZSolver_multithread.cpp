@@ -312,11 +312,11 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
 
     if ((first > last) || (j < first) || ( j > last)) {
     printf("i %d, j %d, first %d, last %d\n",i, j, first, last );
-        
+
         return;
     }
 
-
+    return;
 
     // int array_width = arg->M + 2;
     // int tridiag_coeff_width = 2 * arg->M  + 1;

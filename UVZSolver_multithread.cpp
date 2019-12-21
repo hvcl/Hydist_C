@@ -319,9 +319,8 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
     if ((first > last) || (j < first) || ( j > last)) {
         return;
     }
-        printf("device_func i %d, j %d, first %d, last %d\n",i, j, first, last );
+        // printf("device_func i %d, j %d, first %d, last %d\n",i, j, first, last );
 
-    return;
     // int array_width = arg->M + 2;
     // int tridiag_coeff_width = 2 * arg->M  + 1;
     __shared__ DOUBLE *a1, *b1, *c1, *d1, *a2, *c2, *d2, *AA, *BB, *CC, *DD;
@@ -343,6 +342,9 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
 
     printf("a1 %x, a2 %x, b1 %x, c1 %x, c2 %x, d1 %x, d2 %x\n",a1, a2, b1, c1, c2, d1, d2);
     printf("AA %x, BB %x, CC %x, DD %x\n",AA, BB, CC, DD);
+
+    return;
+    
 
     // if (j == first)
     //     printf("debug %d %x\n", i, BB);

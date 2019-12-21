@@ -245,8 +245,8 @@ __device__ void  _uzSolver_calculate_preindex(int i, int j, int width, int first
 
 __device__ void _calculate_abcd(int i, int j, int first, int last, DOUBLE f4, int support_array_width,  bool bienran1, bool bienran2, Array_Pointers* arr){
     
-    if ((first) && (last))
-        printf("i %d j %d first %d last %d\n", i, j , first, last );
+    // if ((first) && (last))
+    //     printf("i %d j %d first %d last %d\n", i, j , first, last );
 
     if ((first > last) || (j < first) || ( j > last)) return;
 
@@ -814,6 +814,7 @@ UZSolver_calculate_abcd(int startidx, int endidx, Argument_Pointers* arg, Array_
     dTchia2dX = coeffs->dTchia2dX;
     g = coeffs->g;
     NANGDAY= coeffs->NANGDAY;
+
     locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
     _calculate_abcd(j, i, first, last, 2 * g * dTchia2dX, arg->N + 2, bienran1 , bienran2, arr);
 

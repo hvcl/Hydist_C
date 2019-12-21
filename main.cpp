@@ -298,7 +298,7 @@ int main (int argc, char ** argv){
 
 	// enter main loop here
 
-	Hydraulic_Calculation(d_argument_pointers, d_arr_pointers, ops);
+	Hydraulic_Calculation(d_argument_pointers, d_arr_pointers, d_const_coeffs, ops);
 
 
 

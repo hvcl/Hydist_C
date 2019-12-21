@@ -46,7 +46,7 @@ void Hydraulic_Calculation(Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_p
 	bool channel = ops.kenhhepng xor ops.kenhhepd;
 	int t = ops.t_start;
 	// int Tmax = ops.Tmax;
-	int Tmax = 0.5;
+	DOUBLE Tmax = 0.5;
 	cout << "t = " << t << endl;
 	while (t < Tmax){
 		t += 0.5 * t;

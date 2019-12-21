@@ -5,6 +5,12 @@
 using namespace std;
 
 
+void synch_and_check(){
+	cudaDeviceSynchronize();
+	cudaError_t err = cudaGetLastError();
+	if (err != cudaSuccess)
+		cout << "error: " <<  cudaGetErrorString(err) << endl;
+}
 
 
 void update_boundary_at_t(int M, int N, float t, bool channel, int total_time, Argument_Pointers* d_arg_ptr, Constant_Coeffs* coeffs)
@@ -22,7 +28,7 @@ void update_boundary_at_t(int M, int N, float t, bool channel, int total_time, A
 }
 
 
-void Hydraulic_Calculation(int Tmax, Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, Constant_Coeffs* coeffs, Options ops){
+void Hydraulic_Calculation(Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, Constant_Coeffs* coeffs, Options ops){
 	// note: blocksize in this case is fixed to be 1024 threads, can change later
 	int blocksize = 1024;
 	int M = ops.M; 
@@ -38,11 +44,14 @@ void Hydraulic_Calculation(int Tmax, Argument_Pointers* d_arg_ptr, Array_Pointer
 	int start_idx, end_idx, jump_step;
 	bool channel = ops.kenhhepng xor ops.kenhhepd;
 	int t = ops.t_start;
+	int Tmax = ops.Tmax;
+	int Tmax = 0.5;
 	while (t < Tmax){
 		t += 0.5 * t;
 
 		// update boundary conditionmake
 		update_boundary_at_t(M, N, t, channel, ops.total_time, d_arg_ptr, coeffs);
+		synch_and_check();
 
 		// set start/ end index for kernels
 		// start_idx = 2;

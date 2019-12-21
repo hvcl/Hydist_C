@@ -20,11 +20,7 @@ using namespace std;
 
 
 // launch kernel
-void check_error(){
-	cudaError_t err = cudaGetLastError();
-	if (err != cudaSuccess)
-		cout << "error: " <<  cudaGetErrorString(err) << endl;
-}
+
 
 int main (int argc, char ** argv){
 	int M, N, total_time;
@@ -58,7 +54,7 @@ int main (int argc, char ** argv){
 	int c;
 
 
-	while ((c = getopt(argc, argv, "f:h:m:s::p::d::v::b::B::e::E::i::c::k::n::")) != -1){
+	while ((c = getopt(argc, argv, "f:h:m:s::p::d::v::b::B::e::E::i::c::T::k::n::")) != -1){
 		switch (c)
 		{
 			case('f'):
@@ -99,6 +95,9 @@ int main (int argc, char ** argv){
 				continue;
 			case ('c'):
 				load_initial_condition = atoi(optarg);
+				continue;
+			case ('T'):
+				t_start = atoi(optarg);
 				continue;
 			case('k'):
 				kenhhepd = atoi(optarg);
@@ -265,9 +264,6 @@ int main (int argc, char ** argv){
 	check_error();
 
 
-
-
-
 	int* arr;
 	arr = (int*) malloc(sizeof(int) * host_ap.h.size());
 	status = cudaMemcpy((void*) arr, h_argument_pointers.khouot, sizeof(int) * host_ap.h.size(), cudaMemcpyDeviceToHost);
@@ -295,35 +291,16 @@ int main (int argc, char ** argv){
 
 	Htuongdoi<<<grid_2d, block_2d>>> (d_argument_pointers);
 
-	cudaDeviceSynchronize();
-	check_error();
+	synch_and_check();
 
 	preprocess_data <<<(1, 1, 1), (32, 1,1 )>>> (d_argument_pointers, d_const_coeffs);
-	cudaDeviceSynchronize();
-	check_error();
+	synch_and_check();
 
 
 	// enter main loop here
 
-	// either call everything here, or separate it into another module to keep track easilier
+	Hydraulic_Calculation(d_argument_pointers, d_arr_pointers, ops);
 
-	// Hydraulic Calculatation:
-	/*
-	while (true){
-	t += 0.5 * delta_t;
-	// call first set of kernels
-
-
-
-	t += 0.5 * delta_t;
-
-	// call second set of kernels
-
-
-	}
-
-
-	*/
 
 
 	return 0;

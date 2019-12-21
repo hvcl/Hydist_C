@@ -7,7 +7,6 @@
 #include "cuda_runtime.h"
 using namespace std;
 
-
 #define DOUBLE double
 #define	segment_limit 20
 #define PI 3.14159265358979323846
@@ -85,13 +84,11 @@ struct  Host_arrays
 };
 
 
-void update_boundary_at_t();
+void update_boundary_at_t(int M, int N, float t, bool channel, int total_time, Argument_Pointers* d_arg_ptr, Constant_Coeffs* coeffs);
 
-void Hydraulic_Calculation(int Tmax, Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, Options ops);
+void synch_and_check();
 
+void Hydraulic_Calculation(Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, Options ops);
 
-// solution for the constant thing:
-// keep constant on device known to device functions onky 
-// retrive constant value from device and pass to host when needed
 
 #endif

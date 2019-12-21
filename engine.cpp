@@ -2,6 +2,7 @@
 #include "engine.h"
 #include "UVZSolver_multithread.h"
 #include "support_funcs.h"
+#include <iostream>
 using namespace std;
 
 

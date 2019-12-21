@@ -76,6 +76,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 		grid_shape = (M1, (int) ceil( N / 1024.0), 1);
 
 		cout << grid_shape.x << " " << grid_shape.y << " " << grid_shape.z << endl;
+		cout << "M : " << M << " N: " << N << endl;
 
 
 		UZSolver_calculate_preindex <<<grid_shape, block_shape>>> (start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);

@@ -293,10 +293,11 @@ __global__ void Find_Calculation_limits_Horizontal( Argument_Pointers *arg, Cons
 			}
 			
 		} 
+	printf("daui[%d, %d] = %d  cuoii[%d, %d] = %d\n",i, number_of_seg-1, daui[i* segment_limit + number_of_seg-1], i, i* segment_limit + number_of_seg-1, cuoii[i* segment_limit + number_of_seg-1]);
+
 	}
 	moci[i] = number_of_seg;
 	// printf("moci[%d] = %d \n",i, moci[i]);
-	printf("daui[%d] = %d  cuoii[%d] = %d\n",i, moci[i], i, cuoii[i]);
 
 }
 
@@ -352,7 +353,7 @@ __global__ void Find_Calculation_limits_Vertical(Argument_Pointers *arg, Constan
 	// if (j == 3 && threadIdx.x == 0)
 	// 	printf(" khouot[%d %d], %d\n", end, j, khouot[end * offset + j]);
 	mocj[j] = number_of_seg;
-	printf("dauj[%d] = %d  cuoij[%d] = %d\n",j, mocj[j], j, cuoij[j]);
+	// printf("dauj[%d] = %d  cuoij[%d] = %d\n",j, mocj[j], j, cuoij[j]);
 
 }
 

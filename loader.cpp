@@ -342,7 +342,6 @@ Array_Pointers supporting_arrays_alloc(int M, int N, Array_Pointers** device_arr
 	d_ap.f3 = device_alloc<DOUBLE> (nBytes);
 	d_ap.f5 = device_alloc<DOUBLE> (nBytes);
 
-	printf("a1 %x, a2 %x, b1 %x, c1 %x, c2 %x, d1 %x, d2 %x\n",d_ap.a1, d_ap.a2, d_ap.b1, d_ap.c1, d_ap.c2, d_ap.d1, d_ap.d2);
 
 	nBytes = sizeof (DOUBLE) * (2 * M * N + 4 * max(M, N));
 	d_ap.AA = device_alloc<DOUBLE> (nBytes);
@@ -353,8 +352,6 @@ Array_Pointers supporting_arrays_alloc(int M, int N, Array_Pointers** device_arr
 	d_ap.Bp = device_alloc<DOUBLE> (nBytes);
 	d_ap.ep = device_alloc<DOUBLE> (nBytes);	
 	d_ap.x = device_alloc<DOUBLE> (nBytes);	
-
-    printf("AA %x, BB %x, CC %x, DD %x\n",d_ap.AA, d_ap.BB, d_ap.CC, d_ap.DD);
 
 
 	d_ap.SN = device_alloc<int> (sizeof(int) * segment_limit * max(M, N));

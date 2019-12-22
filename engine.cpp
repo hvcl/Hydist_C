@@ -51,17 +51,19 @@ template void save_file<int>(int*, int, int, const char*);
 
 
 
-void save_result(Argument_Pointers h_arg_pointer, t, save_FS=false){
+void save_result(Argument_Pointers h_arg_pointer, DOUBLE t, bool save_FS=false){
 	DOUBLE *u, *v, *z;
 
 	int size = sizeof(DOUBLE) * (h_arg_pointer.M + 3) * (h_arg_pointer.N + 3);
-	u = malloc(size);
-	cudaError_t status = cudamemcpy((void*) u, h_arg_pointer.u, size, cudaMemcpyDeviceToHost);
+	u = (DOUBLE*) malloc(size);
+	cudaError_t status = cudaMemcpy((void*) u, h_arg_pointer.u, size, cudaMemcpyDeviceToHost);
 	assert(status == cudaSuccess);
-	v = malloc(size);
-	status = cudamemcpy((void*) u, h_arg_pointer.v, size, cudaMemcpyDeviceToHost);
+	v = (DOUBLE*) malloc(size);
+	status = cudaMemcpy((void*) v, h_arg_pointer.v, size, cudaMemcpyDeviceToHost);
 	assert(status == cudaSuccess);
-	z = malloc(size);
+	z = (DOUBLE*) malloc(size);
+	status = cudaMemcpy((void*) z, h_arg_pointer.v, size, cudaMemcpyDeviceToHost);
+	assert(status == cudaSuccess);
 	save_file(u, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/u_" + str(t) + ".txt").c_str());
 	save_file(v, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/v_" + str(t) + ".txt").c_str());
 	save_file(z, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/z_" + str(t) + ".txt").c_str());

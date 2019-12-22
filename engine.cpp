@@ -192,7 +192,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 
         
 
-        block_shape = dim3(1024, 1, 1) ;
+        block_shape = dim3(512, 1, 1) ;
         grid_shape = dim3((int) (ceil(M / 1024.0)), N, 1);
         start_idx = 2;
         end_idx = N;

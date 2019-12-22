@@ -355,7 +355,7 @@ Array_Pointers supporting_arrays_alloc(int M, int N, Array_Pointers** device_arr
 	d_ap.x = device_alloc<DOUBLE> (nBytes);	
 
     printf("AA %x, BB %x, CC %x, DD %x\n",d_ap.AA, d_ap.BB, d_ap.CC, d_ap.DD);
-	
+
 
 	d_ap.SN = device_alloc<int> (sizeof(int) * segment_limit * max(M, N));
 	cudaError_t status = cudaMalloc((void**) device_arr_ptr, sizeof(Array_Pointers));

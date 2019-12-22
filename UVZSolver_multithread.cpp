@@ -263,8 +263,6 @@ __device__ void _calculate_abcd(int i, int j, int first, int last, DOUBLE f4, in
     f5 = &(arr->f5[i * support_array_width]);
 
 
-    // printf("a1 %x, a2 %x, b1 %x, c1 %x, c2 %x, d1 %x, d2 %x\n",a1, a2, b1, c1, c2, d1, d2);
-    // printf("AA %x, BB %x, CC %x, DD %x\n",AA, BB, CC, DD);
 
     if (last - 1 > first){
             {
@@ -340,11 +338,8 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
     int sn = 2 * (last - first);
     bool isBienran;
 
-    printf("a1 %x, a2 %x, b1 %x, c1 %x, c2 %x, d1 %x, d2 %x\n",a1, a2, b1, c1, c2, d1, d2);
-    printf("AA %x, BB %x, CC %x, DD %x\n",AA, BB, CC, DD);
-
-    return;
-    
+    // printf("a1 %x, a2 %x, b1 %x, c1 %x, c2 %x, d1 %x, d2 %x\n",a1, a2, b1, c1, c2, d1, d2);
+    // printf("AA %x, BB %x, CC %x, DD %x\n",AA, BB, CC, DD);
 
     // if (j == first)
     //     printf("debug %d %x\n", i, BB);
@@ -353,6 +348,7 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
     if (bienran1){
         
         bienrandau(j, first, last, AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
+
         DD[offset] = d2[first];
 
 
@@ -822,10 +818,10 @@ __global__ void
 UZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
-    if ((i == 2) &&  (j == startidx)){
-        printf("Blocksize: %d %d %d\n", blockDim.x, blockDim.y, blockDim.z);
-        printf("endidx = %d\n", endidx );
-    }
+    // if ((i == 2) &&  (j == startidx)){
+    //     printf("Blocksize: %d %d %d\n", blockDim.x, blockDim.y, blockDim.z);
+    //     printf("endidx = %d\n", endidx );
+    // }
     if ((j > endidx) || (i > arg->N)) return;
     
     bool bienran1 = false;

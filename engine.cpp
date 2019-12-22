@@ -11,6 +11,7 @@ void synch_and_check(){
 	cudaError_t err = cudaGetLastError();
 	if (err != cudaSuccess)
 		cout << "error: " <<  cudaGetErrorString(err) << endl;
+	else cout << "cudaSuccess " << endl;
 }
 
 

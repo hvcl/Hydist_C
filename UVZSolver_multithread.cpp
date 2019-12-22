@@ -337,11 +337,11 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
     int sn = 2 * (last - first);
     bool isBienran;
 
-    printf("offset = %d\n", offset);
-    DD[offset] = d2[first];
-    // AA[sn + offset] = a2[last];
-    // BB[sn + offset] = 1;
-    // DD[sn + offset] = d2[last] - c2[last] * ubp_or_vbt;
+    printf("sn + offset = %d\n", sn + offset);
+    // DD[offset] = d2[first];
+    AA[sn + offset] = a2[last];
+    BB[sn + offset] = 1;
+    DD[sn + offset] = d2[last] - c2[last] * ubp_or_vbt;
     return;
 
     // if (j == first)

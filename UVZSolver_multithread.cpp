@@ -336,11 +336,9 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
     DD = &(arr->DD[i * tridiag_coeff_width]);
     int sn = 2 * (last - first);
     bool isBienran;
-    bienlongdau(j, first, last, AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
-    return;
-
-    // printf("a1 %x, a2 %x, b1 %x, c1 %x, c2 %x, d1 %x, d2 %x\n",a1, a2, b1, c1, c2, d1, d2);
-    // printf("AA %x, BB %x, CC %x, DD %x\n",AA, BB, CC, DD);
+    // bienlongdau(j, first, last, AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
+    // DD[offset] = d2[first];
+    // return;
 
     // if (j == first)
     //     printf("debug %d %x\n", i, BB);
@@ -438,7 +436,7 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
         }
     }
     
-
+    return;
     if (j == last)
         arr->SN[i * segment_limit + seg_no] = sn;
 }

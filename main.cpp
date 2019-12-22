@@ -62,13 +62,13 @@ int main (int argc, char ** argv){
 				dir = optarg;
 				continue;
 			case ('h'):
-				hour = atoi(optarg);
+				hour = (DOUBLE) atoi(optarg);
 				continue;
 			case ('m'):
-				minute = atoi(optarg);
+				minute = (DOUBLE) atoi(optarg);
 				continue;
 			case ('s'): 
-				sec = atoi(optarg);
+				sec = (DOUBLE) atoi(optarg);
 				continue;
 			case ('p'):
 				plot = (bool) atoi(optarg);
@@ -80,34 +80,36 @@ int main (int argc, char ** argv){
 				visualize = (bool) atoi(optarg);
 				continue;
 			case ('b'):
-				sediment_start = atoi(optarg);
+				sediment_start = (DOUBLE) atoi(optarg);
 				continue;
 			case ('B'):
-				bed_change_start = atoi(optarg);
+				bed_change_start = (DOUBLE) atoi(optarg);
 				continue;
 			case ('e'):
-				sediment_end = atoi(optarg);
+				sediment_end = (DOUBLE) atoi(optarg);
 				continue;
 			case ('E'):
-				bed_change_end = atoi(optarg);
+				bed_change_end = (DOUBLE) atoi(optarg);
 				continue;
 			case ('i'):
 				save_interval = atoi(optarg);
 				continue;
 			case ('c'):
-				load_initial_condition = atoi(optarg);
+				load_initial_condition = (bool) atoi(optarg);
 				continue;
 			case ('T'):
-				t_start = atoi(optarg);
+				t_start = (DOUBLE) atoi(optarg);
 				continue;
 			case('k'):
-				kenhhepd = atoi(optarg);
+				kenhhepd = (bool) atoi(optarg);
 				continue;
 			case('n'):
-				kenhhepng = atoi(optarg);
+				kenhhepng = (bool) atoi(optarg);
 				continue;
 		}
 	}
+
+	return;
 
 	DOUBLE Tmax = hour * 3600 + minute * 60 + sec;
 	

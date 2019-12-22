@@ -785,6 +785,9 @@ __global__ void update_uvz(Argument_Pointers* arg, Constant_Coeffs* coeffs){
 	if ((i > N) || ( j > M)) return;
 	int offset = M + 3;
 
+	if(kenhhepd + kenhhepng != 0)
+		printf("kenhhepng = %d kenhhepd = %d\n", kenhhepd, kenhhepng);
+
 	z[i * offset + j] = t_z[i * offset + j];
 	u[i * offset + j] = t_u[i * offset + j] * (1 - kenhhepd);
 	v[i * offset + j] = t_v[i * offset + j] * (1 - kenhhepng);

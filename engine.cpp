@@ -98,35 +98,35 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 		UZSolver_extract_solution <<<grid_shape, block_shape>>>(start_idx, end_idx, NANGDAY, d_arg_ptr, d_arr_ptr);
 		synch_and_check();
 
-		// Normalize<<<grid_2d, block_2d>>> (isU,d_arg_ptr, d_arr_ptr, coeffs);
-		// synch_and_check();
-		// update_buffer <<<grid_2d, block_2d>>>(isU, d_arg_ptr, d_arr_ptr);
-		// synch_and_check();
+		Normalize<<<grid_2d, block_2d>>> (isU,d_arg_ptr, d_arr_ptr, coeffs);
+		synch_and_check();
+		update_buffer <<<grid_2d, block_2d>>>(isU, d_arg_ptr, d_arr_ptr);
+		synch_and_check();
 
-		// solveV <<<grid_shape, block_shape>>>(t, 2, N, d_arg_ptr, coeffs);
-		// synch_and_check();
-		// update_margin_elem_V<<<(1, N, 1), (32, 1, 1)>>> (2, N, NANGDAY, d_arg_ptr);
-		// synch_and_check();
+		solveV <<<grid_shape, block_shape>>>(t, 2, N, d_arg_ptr, coeffs);
+		synch_and_check();
+		update_margin_elem_V<<<(1, N, 1), (32, 1, 1)>>> (2, N, NANGDAY, d_arg_ptr);
+		synch_and_check();
 
-		// // note that isU here is false since it normalize value of v after solving for v
-		// Normalize<<<grid_2d, block_2d>>> (false,d_arg_ptr, d_arr_ptr, coeffs);
-		// synch_and_check();
-		// update_buffer <<<grid_2d, block_2d>>>(false, d_arg_ptr, d_arr_ptr);
-		// synch_and_check();
-
-
-		// update_h_moi <<<grid_2d, block_2d>>> (d_arg_ptr);
-  //       synch_and_check();;
+		// note that isU here is false since it normalize value of v after solving for v
+		Normalize<<<grid_2d, block_2d>>> (false,d_arg_ptr, d_arr_ptr, coeffs);
+		synch_and_check();
+		update_buffer <<<grid_2d, block_2d>>>(false, d_arg_ptr, d_arr_ptr);
+		synch_and_check();
 
 
-  //       update_uvz <<<grid_2d, block_2d>>> (d_arg_ptr, coeffs);
-  //       synch_and_check();
+		update_h_moi <<<grid_2d, block_2d>>> (d_arg_ptr);
+        synch_and_check();;
+
+
+        update_uvz <<<grid_2d, block_2d>>> (d_arg_ptr, coeffs);
+        synch_and_check();
    
 
-  //       Find_Calculation_limits_Horizontal <<<(1, N, 1), (32, 1, 1)>>> (d_arg_ptr, coeffs);
-  //       Find_Calculation_limits_Vertical <<<(1, M, 1), (32, 1, 1)>>>(d_arg_ptr, coeffs);
-  //       Htuongdoi <<<grid_2d, block_2d>>> (d_arg_ptr);
-  //       synch_and_check();
+        Find_Calculation_limits_Horizontal <<<(1, N, 1), (32, 1, 1)>>> (d_arg_ptr, coeffs);
+        Find_Calculation_limits_Vertical <<<(1, M, 1), (32, 1, 1)>>>(d_arg_ptr, coeffs);
+        Htuongdoi <<<grid_2d, block_2d>>> (d_arg_ptr);
+        synch_and_check();
 
         // get result from device here and check
 

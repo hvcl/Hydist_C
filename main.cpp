@@ -109,7 +109,6 @@ int main (int argc, char ** argv){
 		}
 	}
 
-	return;
 
 	DOUBLE Tmax = hour * 3600 + minute * 60 + sec;
 	
@@ -127,6 +126,7 @@ int main (int argc, char ** argv){
 		<< "sediment_end " << sediment_end << endl
 		<< "save_interval " << save_interval << endl 
 		<< "load initial condition " << load_initial_condition << endl; 
+	return;
 
 	// // 3. Call initialize functions
 	// // a. load inputs

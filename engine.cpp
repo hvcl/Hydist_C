@@ -45,6 +45,8 @@ void save_file(T* array, int width, int height, const char* filename){
 	}
 }
 
+
+
 template void save_file<double>(double*, int, int, const char*);
 template void save_file<float>(float*, int, int, const char*);
 template void save_file<int>(int*, int, int, const char*);
@@ -182,7 +184,6 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 
 
         // second half of the simulation
-
 
         t += dT * 0.5;
 

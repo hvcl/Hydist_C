@@ -29,7 +29,6 @@ __device__ void tridiag(int sn, DOUBLE* AA, DOUBLE* BB, DOUBLE* CC, DOUBLE*DD, D
         ep[i] = AA[i] * Ap[i - 1] + BB[i]; 
         Ap[i] = -CC[i] / ep[i];
         Bp[i] = (DD[i] - (AA[i] * Bp[i - 1]) ) / ep[i];
-        
     }
     
     x[sn] = (DD[sn] - (AA[sn] * Bp[sn - 1])) / (BB[sn] + (AA[sn] * Ap[sn - 1]));
@@ -37,7 +36,6 @@ __device__ void tridiag(int sn, DOUBLE* AA, DOUBLE* BB, DOUBLE* CC, DOUBLE*DD, D
 
     for (int i = sn - 1; i >= 0; i--){
         x[i] = Bp[i] + (Ap[i] * x[i + 1]);     
-        printf("x[%d] = %f\n", i, x[i]);
     }        
 }
 
@@ -344,11 +342,9 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
 
     if (bienran1){
         
-        // bienrandau(j, first, last, AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
+        bienrandau(j, first, last, AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
 
         DD[offset] = d2[first];
-
-
         // ran - long
         if (bienran2 == false){
             if ((dkBienQ_2) && (last == dkfr)){         //r == dkfr:   // Kiem tra lai phan nay

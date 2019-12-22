@@ -433,7 +433,6 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
         }
     }
     
-    return;
     if (j == last)
         arr->SN[i * segment_limit + seg_no] = sn;
 }

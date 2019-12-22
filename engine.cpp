@@ -3,6 +3,8 @@
 #include "UVZSolver_multithread.h"
 #include "support_funcs.h"
 #include <iostream>
+#include <fstream>
+#include <string>
 using namespace std;
 
 
@@ -30,8 +32,46 @@ void update_boundary_at_t(int M, int N, float t, bool channel, int total_time, A
 	}
 }
 
+template <typename T>
+void save_file(T* array, int width, int height, const char* filename){
+	ofstream ofs;
+	ofs.open(filename);
+	if (!ofs)
+		cout << "cannot open file " << filename << endl;
+	for (int i = 1; i <= height; i++){
+		for (int j = 1; i <= width; i++)
+			ofs << array[i * (width + 3) + j] << " ";
+		ofs << endl;
+	}
+}
 
-void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, Constant_Coeffs* coeffs, Options ops){
+template void save_file<double>(double*, int, int, const char*);
+template void save_file<float>(float*, int, int, const char*);
+template void save_file<int>(int*, int, int, const char*);
+
+
+
+void save_result(Argument_Pointers h_arg_pointer, t, save_FS=false){
+	DOUBLE *u, *v, *z;
+
+	int size = sizeof(DOUBLE) * (h_arg_pointer.M + 3) * (h_arg_pointer.N + 3);
+	u = malloc(size);
+	cudaError_t status = cudamemcpy((void*) u, h_arg_pointer.u, size, cudaMemcpyDeviceToHost);
+	assert(status == cudaSuccess);
+	v = malloc(size);
+	status = cudamemcpy((void*) u, h_arg_pointer.v, size, cudaMemcpyDeviceToHost);
+	assert(status == cudaSuccess);
+	z = malloc(size);
+	save_file(u, M, N, ("Outputs/u_" + str(t) + ".txt").c_str());
+	save_file(v, M, N, ("Outputs/v_" + str(t) + ".txt").c_str());
+	save_file(z, M, N, ("Outputs/z_" + str(t) + ".txt").c_str());
+
+
+}
+
+
+void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, 
+						Constant_Coeffs* coeffs, Argument_Pointers h_arg_pointer, Options ops){
 	// note: blocksize in this case is fixed to be 1024 threads, can change later
 	int blocksize = 1024;
 	int M = ops.M; 
@@ -131,6 +171,9 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         synch_and_check();
 
         // get result from device here and check
+
+        if (((int) t % ops.interval == 0) && (t - (int) t == 0)
+        	save_result(h_arg_pointer);
 
 
         // sediment transport simulation condition start here

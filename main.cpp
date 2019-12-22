@@ -47,8 +47,8 @@ int main (int argc, char ** argv){
 	*/
 	string dir;
 	int hour(1), minute(0), sec(0);
-	DOUBLE sediment_start(20), bed_change_start(500), bed_change_end(1000);
-	DOUBLE save_interval(60), sediment_end(40);
+	DOUBLE sediment_start(20), sediment_end(40), bed_change_start(500), bed_change_end(1000);
+	int save_interval(60);
 	DOUBLE t_start(0);
 	bool kenhhepd(0), kenhhepng(0), cohesive(1);
 	bool plot(true), visualize(true), debug(false), load_initial_condition(false);
@@ -300,7 +300,7 @@ int main (int argc, char ** argv){
 
 	// enter main loop here
 
-	Hydraulic_Calculation(h_const_coeffs.dT, h_const_coeffs.NANGDAY, d_argument_pointers, d_arr_pointers, d_const_coeffs, ops);
+	Hydraulic_Calculation(h_const_coeffs.dT, h_const_coeffs.NANGDAY, d_argument_pointers, d_arr_pointers, d_const_coeffs, h_argument_pointers, ops);
 
 
 

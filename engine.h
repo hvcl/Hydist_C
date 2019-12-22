@@ -12,12 +12,13 @@ using namespace std;
 #define PI 3.14159265358979323846
 
 struct Options{
-	DOUBLE Tmax, t_start, interval, sediment_start, bed_change_start;
+	DOUBLE Tmax, t_start, sediment_start, bed_change_start;
+	int interval;
 	bool kenhhepd, kenhhepng;
 	int M, N;
 	bool ketdinh, channel, debug, plot;
 	int total_time;
-	Options(DOUBLE Tmx, DOUBLE ts, DOUBLE itv, DOUBLE sds, DOUBLE bcs, bool cohesive, bool kenhng,
+	Options(DOUBLE Tmx, DOUBLE ts, int itv, DOUBLE sds, DOUBLE bcs, bool cohesive, bool kenhng,
 			bool kenhd, bool db, bool plt){
 		Tmax = Tmx;
 		t_start = ts;
@@ -89,7 +90,11 @@ void update_boundary_at_t(int M, int N, float t, bool channel, int total_time, A
 
 void synch_and_check();
 
-void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, Constant_Coeffs* coeffs, Options ops);
+template <typename T>
+void save_file(T* array, int width, int height, const char* filename);
+
+void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, Constant_Coeffs* coeffs,
+						 Array_Pointers h_arg_ptr,  Options ops);
 
 
 #endif

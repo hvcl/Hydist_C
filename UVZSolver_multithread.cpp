@@ -86,7 +86,6 @@ __device__ void bienrandau(int i, int first, int last,  DOUBLE* AA, DOUBLE* BB, 
     CC[i * 2 + 1] = c1[i];
     DD[i * 2] = d2[i];
     DD[i * 2 + 1] = d1[i];
-    printf("AA %llx, BB %llx, CC %llx, DD %llx\n",AA, BB, CC, DD);
 }
 
 
@@ -94,8 +93,6 @@ __device__ void bienlongdau(int i, int first, int last,  DOUBLE* AA, DOUBLE* BB,
     DOUBLE *a1, DOUBLE *b1, DOUBLE *c1, DOUBLE *d1, DOUBLE *a2, DOUBLE *c2, DOUBLE *d2){
 
     if (first > last) return;
-    printf("AA %llx, BB %llx, CC %llx, DD %llx\n",AA, BB, CC, DD);
-    return;
     AA[i * 2] = a1[i];
     AA[i * 2 + 1] = a2[i + 1];
     BB[i * 2] = b1[i]; 
@@ -104,6 +101,8 @@ __device__ void bienlongdau(int i, int first, int last,  DOUBLE* AA, DOUBLE* BB,
     CC[i * 2 + 1] = c2[i + 1];
     DD[i * 2] = d1[i];
     DD[i * 2 + 1] = d2[i + 1];
+    printf("AA %llx, BB %llx, CC %llx, DD %llx\n",AA, BB, CC, DD);
+
 }
 
 
@@ -337,7 +336,7 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
     DD = &(arr->DD[i * tridiag_coeff_width]);
     int sn = 2 * (last - first);
     bool isBienran;
-    bienrandau(j, first, last, AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
+    bienlongdau(j, first, last, AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
     return;
 
     // printf("a1 %x, a2 %x, b1 %x, c1 %x, c2 %x, d1 %x, d2 %x\n",a1, a2, b1, c1, c2, d1, d2);

@@ -51,7 +51,7 @@ template void save_file<int>(int*, int, int, const char*);
 
 
 
-void save_result(Argument_Pointers h_arg_pointer, DOUBLE t, bool save_FS=false){
+void save_result(Argument_Pointers h_arg_pointer, int t, bool save_FS=false){
 	DOUBLE *u, *v, *z;
 
 	int size = sizeof(DOUBLE) * (h_arg_pointer.M + 3) * (h_arg_pointer.N + 3);
@@ -175,7 +175,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         // get result from device here and check
 
         if ( ((int) t % ops.interval == 0) && (t - (int) t == 0))
-        	save_result(h_arg_pointer);
+        	save_result(h_arg_pointer, (int) t);
 
 
         // sediment transport simulation condition start here

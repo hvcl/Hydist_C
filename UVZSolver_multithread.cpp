@@ -337,13 +337,6 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
     int sn = 2 * (last - first);
     bool isBienran;
 
-    printf("sn + offset = %d\n", sn + offset);
-    // DD[offset] = d2[first];
-    AA[sn + offset] = a2[last];
-    BB[sn + offset] = 1;
-    DD[sn + offset] = d2[last] - c2[last] *  ubp_or_vbt;
-    return;
-
     // if (j == first)
     //     printf("debug %d %x\n", i, BB);
     // TODO: can re-organize this function so that only warp with right index range execute right snippet, avoid unnescessary memory access and execution cost.
@@ -833,9 +826,8 @@ UZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argume
 
     int seg_no = locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, NANGDAY);
     
-    
-    // if ((i > 10) && (j > 2)) 
-    //     printf("i %d, j %d, first = %d last = %d\n",i, j, first, last, endidx );
+    printf("ubt = %llf, ubp = %llf\n", arg->ubt[j], arg->ubp[j] );
+    return;
 
     _calculate_matrix_coeff(true, j, i, arg->N + 2, 2 * (arg->N) + 1, first, last, seg_no, bienran1, bienran2,
                           arg->ubt[j], arg->ubp[j], arg->t_z[last * (arg->M + 3) + j], arg->t_z[first * (arg->M + 3) + j], arg->bienQ[2], arg->bienQ[3], arg->N ,arg,arr);

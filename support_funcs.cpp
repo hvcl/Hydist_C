@@ -6,6 +6,8 @@ Created by Huong Nguyen
 
 
 #include "support_funcs.h"
+#define powf pow
+
 
 // __device__ void calculate_index(int *i, int *j, int M){
 //     int thrx = blockIdx.x * blockDim.x + threadIdx.x;

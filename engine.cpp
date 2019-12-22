@@ -91,7 +91,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 		synch_and_check();
 
 		dim3 grid(1, M -1, 1);
-		tridiagSolver<<<(grid, 32>>> (false,isU, start_idx, end_idx, jump_step, 2 * N + 1, d_arg_ptr, d_arr_ptr);
+		tridiagSolver<<<grid, 32>>> (false,isU, start_idx, end_idx, jump_step, 2 * N + 1, d_arg_ptr, d_arr_ptr);
 		synch_and_check();
 
 

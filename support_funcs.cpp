@@ -530,7 +530,7 @@ __global__ void preprocess_data(Argument_Pointers* arg, Constant_Coeffs* coeffs)
 			// printf("h[%d], %f\n", i, h[i] );
 			sum += powf(hi[i], 5.0/3.0);// / hsnham[i * width + M];
 			if (threadIdx.x == 0){
-				printf("up hi[%d] = %llf sum = %llf\n",i, hi[i], sum );
+				printf("up h[%d] = %llf, hi[%d] = %llf sum = %llf\n",i, h[i], i, hi[i], sum );
 			}
 		}
 

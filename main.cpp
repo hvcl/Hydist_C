@@ -113,18 +113,18 @@ int main (int argc, char ** argv){
 	
 	Options ops(Tmax, t_start, save_interval, sediment_start, bed_change_start, cohesive, kenhhepng, kenhhepd, debug, plot);
 
-	// cout << "dir " << dir << endl
-	// 	<< "hour " << hour << endl
-	// 	<< "min " << minute << endl
-	// 	<< "sec " << sec << endl
-	// 	<< "plot " << plot << endl
-	// 	<< "debug " << debug << endl
-	// 	<< "visualize " << visualize << endl
-	// 	<< "sediment start " << sediment_start << endl
-	// 	<< "bed_change_start " << bed_change_start << endl
-	// 	<< "sediment_end " << sediment_end << endl
-	// 	<< "save_interval " << save_interval << endl 
-	// 	<< "load initial condition " << load_initial_condition << endl; 
+	cout << "dir " << dir << endl
+		<< "hour " << hour << endl
+		<< "min " << minute << endl
+		<< "sec " << sec << endl
+		<< "plot " << plot << endl
+		<< "debug " << debug << endl
+		<< "visualize " << visualize << endl
+		<< "sediment start " << sediment_start << endl
+		<< "bed_change_start " << bed_change_start << endl
+		<< "sediment_end " << sediment_end << endl
+		<< "save_interval " << save_interval << endl 
+		<< "load initial condition " << load_initial_condition << endl; 
 
 	// // 3. Call initialize functions
 	// // a. load inputs

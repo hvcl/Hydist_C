@@ -56,6 +56,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 	cout << "t = " << t << endl;
 	while (t < Tmax){
 		t += 0.5 * dT;
+		cout << t << endl;
 
 		// update boundary conditionmake
 		update_boundary_at_t(M, N, t, channel, ops.total_time, d_arg_ptr, coeffs);

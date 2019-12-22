@@ -339,7 +339,7 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
 
     printf("sn + offset = %d\n", sn + offset);
     // DD[offset] = d2[first];
-    AA[sn + offset] = 1; //a2[last];
+    AA[sn + offset] = a2[last];
     BB[sn + offset] = 1;
     DD[sn + offset] = 1; // d2[last] - c2[last] * ubp_or_vbt;
     return;

@@ -11,7 +11,6 @@ void synch_and_check(){
 	cudaError_t err = cudaGetLastError();
 	if (err != cudaSuccess)
 		cout << "error: " <<  cudaGetErrorString(err) << endl;
-	else cout << "cudaSuccess " << endl;
 }
 
 
@@ -52,12 +51,11 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 	bool channel = ops.channel;
 
 	DOUBLE t = ops.t_start;
-	// int Tmax = ops.Tmax;
-	DOUBLE Tmax = 0.5;
+	int Tmax = ops.Tmax;
+	// DOUBLE Tmax = 0.5;
 	cout << "t = " << t << endl;
 	while (t < Tmax){
 		t += 0.5 * dT;
-		cout << "Tmax = " << ops.Tmax << endl;
 
 		// update boundary conditionmake
 		update_boundary_at_t(M, N, t, channel, ops.total_time, d_arg_ptr, coeffs);
@@ -79,9 +77,9 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 		block_shape = dim3(1, 512, 1);
 		grid_shape = dim3(M1, 1, 1);
 
-		cout << "block_shape: " << block_shape.x << " " << block_shape.y <<  " " << block_shape.z << endl;
-		cout << grid_shape.x << " " << grid_shape.y << " " << grid_shape.z << endl;
-		cout << "M : " << M1 << " N: " << N1 << endl;
+		// cout << "block_shape: " << block_shape.x << " " << block_shape.y <<  " " << block_shape.z << endl;
+		// cout << grid_shape.x << " " << grid_shape.y << " " << grid_shape.z << endl;
+		// cout << "M : " << M1 << " N: " << N1 << endl;
 
 		UZSolver_calculate_preindex <<<grid_shape, block_shape>>> (start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
 		synch_and_check();

@@ -17,6 +17,7 @@ __device__ void tridiag(int sn, DOUBLE* AA, DOUBLE* BB, DOUBLE* CC, DOUBLE*DD, D
     DOUBLE *Ap, DOUBLE *Bp, DOUBLE *ep){
     if (sn == 0){
         x[0] = DD[0] / BB[0];
+        printf("sn is not set\n");
         return;
     }
 

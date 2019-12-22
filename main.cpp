@@ -51,11 +51,11 @@ int main (int argc, char ** argv){
 	int save_interval(60);
 	DOUBLE t_start(0);
 	bool kenhhepd(0), kenhhepng(0), cohesive(1);
-	bool plot(true), visualize(true), debug(false), load_initial_condition(false);
+	bool plot(true), visualize(false), debug(false), load_initial_condition(false);
 	int c;
 
 
-	while ((c = getopt(argc, argv, "f:h:m:s:pdvb::B::e::E::i::cT::kn")) != -1){
+	while ((c = getopt(argc, argv, "f:h:m:s:pdvb:B:e:E:i:cT:kn")) != -1){
 		switch (c)
 		{
 			case('f'):

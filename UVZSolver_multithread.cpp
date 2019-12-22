@@ -341,7 +341,7 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
     // DD[offset] = d2[first];
     AA[sn + offset] = a2[last];
     BB[sn + offset] = 1;
-    DD[sn + offset] = 1; // d2[last] - c2[last] * ubp_or_vbt;
+    DD[sn + offset] = d2[last] - c2[last] * 1;// ubp_or_vbt;
     return;
 
     // if (j == first)

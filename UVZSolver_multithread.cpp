@@ -564,6 +564,10 @@ __device__ void _uzSolver_extract_solution( int i, int j, int sn, int width, int
             }
         }
     }
+    if (t_u[i * width + j] + t_z[i * width + j] != 0)
+    printf("t_u[%d, %d] = %.7f\n", i, j, t_u[i * width + j]);
+    printf("t_z[%d, %d] = %.7f\n", i, j, t_z[i * width + j]);
+
 }
 
 

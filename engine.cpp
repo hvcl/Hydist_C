@@ -122,9 +122,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 		block_shape = dim3(1, 512, 1);
 		grid_shape = dim3(M1, 1, 1);
 
-		// cout << "block_shape: " << block_shape.x << " " << block_shape.y <<  " " << block_shape.z << endl;
-		// cout << grid_shape.x << " " << grid_shape.y << " " << grid_shape.z << endl;
-		// cout << "M : " << M1 << " N: " << N1 << endl;
+
 
 		UZSolver_calculate_preindex <<<grid_shape, block_shape>>> (start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
 		synch_and_check();
@@ -141,8 +139,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 		UZSolver_extract_solution <<<grid_shape, block_shape>>>(start_idx, end_idx, NANGDAY, d_arg_ptr, d_arr_ptr);
 		synch_and_check();
 
-		if ( ((int) t % ops.interval == 0) && (t - (int) t == 0))
-        	save_result(h_arg_pointer, (int) t);
+		
 
 
 		Normalize<<<grid_2d, block_2d>>> (isU,d_arg_ptr, d_arr_ptr, coeffs);
@@ -179,6 +176,9 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         synch_and_check();
 
         // get result from device here and check
+
+        if ( ((int) t % ops.interval == 0) && (t - (int) t == 0))
+        	save_result(h_arg_pointer, (int) t);
 
         
 

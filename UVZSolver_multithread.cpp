@@ -78,6 +78,8 @@ __device__ void bienrandau(int i, int first, int last,  DOUBLE* AA, DOUBLE* BB, 
     DOUBLE *a1, DOUBLE *b1, DOUBLE *c1, DOUBLE *d1, DOUBLE *a2, DOUBLE *c2, DOUBLE *d2){
     // printf("bienrandau is calledsn");
     if (first > last) return;
+    printf("AA %llx, BB %llx, CC %llx, DD %llx\n",AA, BB, CC, DD);
+    return;
     AA[i * 2] = a2[i];
     AA[i * 2 + 1] = a1[i];
     BB[i * 2] = 1;

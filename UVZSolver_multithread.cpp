@@ -345,7 +345,7 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
 
     if (bienran1){
         
-        bienrandau(j, first, last, AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
+        // bienrandau(j, first, last, AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
 
         DD[offset] = d2[first];
 
@@ -387,14 +387,14 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
     else{
         if ((dkBienQ_1) && (first == 2)){
             // printf("debug\n");
-            bienrandau(j,first, last,  AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
+            // bienrandau(j,first, last,  AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
 
             DD[offset] = d2[first] - a2[first] * ubt_or_vbd;
             // thieu bb[1] va cc[1] cho truong hop vz, hoi lai co
             isBienran = true;
         }
         else{
-            bienlongdau(j,first, last, AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
+            // bienlongdau(j,first, last, AA, BB, CC, DD, a1, b1, c1, d1, a2, c2, d2);
             if (j == first){
                 BB[offset] = b1[first];
                 CC[offset] = c1[first];

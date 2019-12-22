@@ -20,6 +20,7 @@ __device__ void tridiag(int sn, DOUBLE* AA, DOUBLE* BB, DOUBLE* CC, DOUBLE*DD, D
         printf("sn is not set\n");
         return;
     }
+    printf("SN is set but coeffs are 0\n");
 
     Ap[0] = - CC[0] / BB[0];
     Bp[0] = DD[0] / BB[0];

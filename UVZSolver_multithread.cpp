@@ -36,7 +36,7 @@ __device__ void tridiag(int sn, DOUBLE* AA, DOUBLE* BB, DOUBLE* CC, DOUBLE*DD, D
 
     for (int i = sn - 1; i >= 0; i--){
         x[i] = Bp[i] + (Ap[i] * x[i + 1]);     
-        printf("x[%d] = %f\n", x[i]);
+        printf("x[%d] = %f\n", i,  x[i]);
 
     }        
 }

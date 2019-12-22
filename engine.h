@@ -5,6 +5,7 @@
 #include <cmath>
 #include "cuda.h"
 #include "cuda_runtime.h"
+#include <assert.h>
 using namespace std;
 
 #define DOUBLE double

@@ -300,9 +300,9 @@ Argument_Pointers attribute_arrays_memory_alloc(int device, Host_arrays &ap, Arg
 	d_ap.dH  = device_alloc<DOUBLE> (nBytes);
 
 	d_ap.ubt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (M + 2));
-	d_ap.ubt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (M + 2));
+	d_ap.ubp = device_alloc<DOUBLE> (sizeof(DOUBLE) * (M + 2));
 	d_ap.vbt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (N + 2));
-	d_ap.vbt = device_alloc<DOUBLE> (sizeof(DOUBLE) * (N + 2));
+	d_ap.vbd = device_alloc<DOUBLE> (sizeof(DOUBLE) * (N + 2));
 
 	
 	d_ap.moci = device_alloc<int> (sizeof(int) * (N + 2));

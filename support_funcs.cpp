@@ -527,13 +527,14 @@ __global__ void preprocess_data(Argument_Pointers* arg, Constant_Coeffs* coeffs)
 			hi[i] = (h[i * width + M] + h[(i - 1) * width + M]) / 2.0 - NANGDAY;
 			// printf("h[%d], %f\n", i, h[i] );
 			sum += powf(hi[i], 5.0/3.0);// / hsnham[i * width + M];
+			if (threadIdx.x == 0){
+				printf("up hi[%d] = %llf sum = %llf\n",i, hi[i], sum );
+			}
 		}
 
 		for (int i = dauj[M * segment_limit + k]; i <= cuoij[M * segment_limit + k]; i++){
 			hi[i] = powf(hi[i], 2.0 / 3.0) / (sum * dX ) ;//* hsnham[i * width + M]);
-			if (threadIdx.x == 0){
-				printf("up hi[%d] = %llf sum = %llf\n",i, hi[i], sum );
-			}
+			
 		}
 
 	}
@@ -547,14 +548,16 @@ __global__ void preprocess_data(Argument_Pointers* arg, Constant_Coeffs* coeffs)
 		// int sum = 0;
 		for (int i = dauj[2 * segment_limit + k]; i <= cuoij[2 * segment_limit + k]; i++){
 			hi[i] = (h[i * width + 1] + h[(i - 1) * width + 1]) / 2.0 - NANGDAY;
+
 			sum += powf(hi[i], 5.0/3.0);// / hsnham[i * width + 2];
+			if (threadIdx.x == 0){
+				printf("down hi[%d] = %llf, sum = %llf\n",i, hi[i], sum );
+			}
 		}
 
 		for (int i = dauj[2 * segment_limit + k]; i <= cuoij[2 * segment_limit + k]; i++){
 			hi[i] = powf(hi[i], 2.0 / 3.0) / (sum * dX) ; // * hsnham[i * width + 2]);
-			if (threadIdx.x == 0){
-				printf("down hi[%d] = %llf, sum = %llf\n",i, hi[i], sum );
-			}
+			
 		}
 
 	}
@@ -567,13 +570,14 @@ __global__ void preprocess_data(Argument_Pointers* arg, Constant_Coeffs* coeffs)
 		for (int i = daui[2 * segment_limit + k]; i <= cuoii[2 * segment_limit + k]; i++){
 			hi[i] = (h[1 * width + i] + h[1 * width + i - 1]) / 2.0 - NANGDAY;
 			sum += powf(hi[i], 5.0/3.0);// / hsnham[2 * width + i];
+			if (threadIdx.x == 0){
+				printf("left hi[%d] = %llf sum = %llf\n",i, hi[i], sum );
+			}
 		}
 
 		for (int i = daui[2 * segment_limit + k]; i <= cuoii[2 * segment_limit + k]; i++){
 			hi[i] = powf(hi[i], 2.0 / 3.0) / (sum * dX); // * hsnham[2 * width + i]);
-			if (threadIdx.x == 0){
-				printf("left hi[%d] = %llf sum = %llf\n",i, hi[i], sum );
-			}
+			
 		}
 
 	}
@@ -585,12 +589,13 @@ __global__ void preprocess_data(Argument_Pointers* arg, Constant_Coeffs* coeffs)
 		for (int i = daui[N * segment_limit + k]; i <= cuoii[N * segment_limit + k]; i++){
 			hi[i] = (h[N * width + i] + h[N * width + i - 1]) / 2.0 - NANGDAY;
 			sum += powf(hi[i], 5.0/3.0);// / hsnham[N * width + i];
-		}
-		for (int i = daui[N * segment_limit + k]; i <= cuoii[N * segment_limit + k]; i++){
-			hi[i] = powf(hi[i], 2.0 / 3.0) / (sum * dX);// * hsnham[N * width + i]);
 			if (threadIdx.x == 0){
 				printf("right hi[%d] = %llfsum = %llf\n",i, hi[i], sum);
 			}
+		}
+		for (int i = daui[N * segment_limit + k]; i <= cuoii[N * segment_limit + k]; i++){
+			hi[i] = powf(hi[i], 2.0 / 3.0) / (sum * dX);// * hsnham[N * width + i]);
+			
 		}
 
 	}

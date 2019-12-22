@@ -172,7 +172,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 
         // get result from device here and check
 
-        if (((int) t % ops.interval == 0) && (t - (int) t == 0)
+        if ( ((int) t % ops.interval == 0) && (t - (int) t == 0))
         	save_result(h_arg_pointer);
 
 

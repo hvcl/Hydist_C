@@ -86,7 +86,6 @@ __device__ void bienrandau(int i, int first, int last,  DOUBLE* AA, DOUBLE* BB, 
     CC[i * 2 + 1] = c1[i];
     DD[i * 2] = d2[i];
     DD[i * 2 + 1] = d1[i];
-    printf("AA %llx, BB %llx, CC %llx, DD %llx\n",AA, BB, CC, DD);
 }
 
 
@@ -94,6 +93,8 @@ __device__ void bienlongdau(int i, int first, int last,  DOUBLE* AA, DOUBLE* BB,
     DOUBLE *a1, DOUBLE *b1, DOUBLE *c1, DOUBLE *d1, DOUBLE *a2, DOUBLE *c2, DOUBLE *d2){
 
     if (first > last) return;
+    printf("AA %llx, BB %llx, CC %llx, DD %llx\n",AA, BB, CC, DD);
+    return;
     AA[i * 2] = a1[i];
     AA[i * 2 + 1] = a2[i + 1];
     BB[i * 2] = b1[i]; 

@@ -47,7 +47,7 @@ int main (int argc, char ** argv){
 	*/
 	string dir;
 	int hour(1), minute(0), sec(0);
-	DOUBLE sediment_start(20), sediment_end(40), bed_change_start(500), bed_change_end(1000);
+	DOUBLE sediment_start(20 * 3600), sediment_end(40 * 3600), bed_change_start(500 * 3600), bed_change_end(1000 * 3600);
 	int save_interval(60);
 	DOUBLE t_start(0);
 	bool kenhhepd(0), kenhhepng(0), cohesive(1);
@@ -126,7 +126,6 @@ int main (int argc, char ** argv){
 		<< "sediment_end " << sediment_end << endl
 		<< "save_interval " << save_interval << endl 
 		<< "load initial condition " << load_initial_condition << endl; 
-	return;
 
 	// // 3. Call initialize functions
 	// // a. load inputs

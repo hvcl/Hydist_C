@@ -814,10 +814,6 @@ __global__ void
 UZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argument_Pointers* arg, Array_Pointers* arr){
     int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
-    // if ((i == 2) &&  (j == startidx)){
-    //     printf("Blocksize: %d %d %d\n", blockDim.x, blockDim.y, blockDim.z);
-    //     printf("endidx = %d\n", endidx );
-    // }
     if ((j > endidx) || (i > arg->N)) return;
     
     bool bienran1 = false;

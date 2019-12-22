@@ -10,6 +10,6 @@
 
 #### Todo:
 - Put things to gether
- - [ ] Call kernels one by one to check if things are in their right positions
-- Test final result
-- Use new tridiag solver to test performance
+ - [x] Call kernels one by one to check if things are in their right positions
+- [ ] Test final result
+- [ ] Use new tridiag solver to test performance

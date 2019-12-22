@@ -56,13 +56,13 @@ void save_result(Argument_Pointers h_arg_pointer, int t, bool save_FS=false){
 
 	int size = sizeof(DOUBLE) * (h_arg_pointer.M + 3) * (h_arg_pointer.N + 3);
 	u = (DOUBLE*) malloc(size);
-	cudaError_t status = cudaMemcpy((void*) u, h_arg_pointer.u, size, cudaMemcpyDeviceToHost);
+	cudaError_t status = cudaMemcpy((void*) u, h_arg_pointer.h, size, cudaMemcpyDeviceToHost);
 	assert(status == cudaSuccess);
 	v = (DOUBLE*) malloc(size);
-	status = cudaMemcpy((void*) v, h_arg_pointer.v, size, cudaMemcpyDeviceToHost);
+	status = cudaMemcpy((void*) v, h_arg_pointer.h, size, cudaMemcpyDeviceToHost);
 	assert(status == cudaSuccess);
 	z = (DOUBLE*) malloc(size);
-	status = cudaMemcpy((void*) z, h_arg_pointer.v, size, cudaMemcpyDeviceToHost);
+	status = cudaMemcpy((void*) z, h_arg_pointer.h, size, cudaMemcpyDeviceToHost);
 	assert(status == cudaSuccess);
 	save_file <double> (u, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/u_" + to_string(t) + ".txt").c_str());
 	save_file <double> (v, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/v_" + to_string(t) + ".txt").c_str());

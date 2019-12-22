@@ -90,7 +90,8 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 		UZSolver_calculate_matrix_coeff<<<grid_shape, block_shape>>>(start_idx, end_idx, NANGDAY, d_arg_ptr, d_arr_ptr);
 		synch_and_check();
 
-		tridiagSolver<<<(1, M-1, 1), (32, 1, 1)>>> (false,isU, start_idx, end_idx, jump_step, 2 * N + 1, d_arg_ptr, d_arr_ptr);
+		dim3 grid(1, M -1, 1);
+		tridiagSolver<<<(grid, 32>>> (false,isU, start_idx, end_idx, jump_step, 2 * N + 1, d_arg_ptr, d_arr_ptr);
 		synch_and_check();
 
 

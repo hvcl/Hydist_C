@@ -338,7 +338,7 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
     DD = &(arr->DD[i * tridiag_coeff_width]);
     int sn = 2 * (last - first);
     bool isBienran;
-    bienrandau()
+    bienrandau();
     return;
 
     // printf("a1 %x, a2 %x, b1 %x, c1 %x, c2 %x, d1 %x, d2 %x\n",a1, a2, b1, c1, c2, d1, d2);

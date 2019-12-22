@@ -55,7 +55,7 @@ int main (int argc, char ** argv){
 	int c;
 
 
-	while ((c = getopt(argc, argv, "f:h:m:s::p::d::v::b::B::e::E::i::c::T::k::n::")) != -1){
+	while ((c = getopt(argc, argv, "f:h:m:s:pdvb::B::e::E::i::cT::kn")) != -1){
 		switch (c)
 		{
 			case('f'):
@@ -71,13 +71,13 @@ int main (int argc, char ** argv){
 				sec = (DOUBLE) atoi(optarg);
 				continue;
 			case ('p'):
-				plot = (bool) atoi(optarg);
+				plot = true;
 				continue;
 			case ('d'):
-				debug = (bool) atoi(optarg);
+				debug = true;
 				continue;
 			case ('v'):
-				visualize = (bool) atoi(optarg);
+				visualize = true;
 				continue;
 			case ('b'):
 				sediment_start = (DOUBLE) atoi(optarg);
@@ -95,16 +95,16 @@ int main (int argc, char ** argv){
 				save_interval = atoi(optarg);
 				continue;
 			case ('c'):
-				load_initial_condition = (bool) atoi(optarg);
+				load_initial_condition = true;
 				continue;
 			case ('T'):
 				t_start = (DOUBLE) atoi(optarg);
 				continue;
 			case('k'):
-				kenhhepd = (bool) atoi(optarg);
+				kenhhepd = true;
 				continue;
 			case('n'):
-				kenhhepng = (bool) atoi(optarg);
+				kenhhepng = true;
 				continue;
 		}
 	}

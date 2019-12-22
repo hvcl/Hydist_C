@@ -39,7 +39,7 @@ void save_file(T* array, int width, int height, const char* filename){
 	if (!ofs)
 		cout << "cannot open file " << filename << endl;
 	for (int i = 1; i <= height; i++){
-		for (int j = 1; i <= width; i++)
+		for (int j = 1; j <= width; j++)
 			ofs << array[i * (width + 3) + j] << " ";
 		ofs << endl;
 	}

@@ -62,9 +62,9 @@ void save_result(Argument_Pointers h_arg_pointer, t, save_FS=false){
 	status = cudamemcpy((void*) u, h_arg_pointer.v, size, cudaMemcpyDeviceToHost);
 	assert(status == cudaSuccess);
 	z = malloc(size);
-	save_file(u, M, N, ("Outputs/u_" + str(t) + ".txt").c_str());
-	save_file(v, M, N, ("Outputs/v_" + str(t) + ".txt").c_str());
-	save_file(z, M, N, ("Outputs/z_" + str(t) + ".txt").c_str());
+	save_file(u, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/u_" + str(t) + ".txt").c_str());
+	save_file(v, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/v_" + str(t) + ".txt").c_str());
+	save_file(z, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/z_" + str(t) + ".txt").c_str());
 
 
 }

@@ -126,7 +126,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
    
         grid = dim3(1, N, 1);
         Find_Calculation_limits_Horizontal <<<grid, 32>>> (d_arg_ptr, coeffs);
-        grid = dim3(1, M, 1)
+        grid = dim3(1, M, 1);
         Find_Calculation_limits_Vertical <<<grid, 32>>>(d_arg_ptr, coeffs);
         Htuongdoi <<<grid_2d, block_2d>>> (d_arg_ptr);
         synch_and_check();

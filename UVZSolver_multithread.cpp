@@ -37,7 +37,7 @@ __device__ void tridiag(int sn, DOUBLE* AA, DOUBLE* BB, DOUBLE* CC, DOUBLE*DD, D
     for (int i = sn - 1; i >= 0; i--){
         x[i] = Bp[i] + (Ap[i] * x[i + 1]);     
         if (x[i] > 0)
-            printf("x[%d] = %f\n", i, x[i]);
+            printf("x[%d] = %.9f\n", i, x[i]);
 
     }        
 }
@@ -565,7 +565,7 @@ __device__ void _uzSolver_extract_solution( int i, int j, int sn, int width, int
             }
         }
     }
-    if (t_u[i * width + j] + t_z[i * width + j] > 0){
+    if ((t_u[i * width + j] > 0) || (t_z[i * width + j] > 0)){
         printf("t_u[%d, %d] = %.7f\n", i, j, t_u[i * width + j]);
         printf("t_z[%d, %d] = %.7f\n", i, j, t_z[i * width + j]);
     }  

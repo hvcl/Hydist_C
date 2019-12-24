@@ -57,7 +57,6 @@ __global__ void  tridiagSolver(bool print, bool isU, int startidx, int endidx, i
         dau = arg->daui;
 
     }
-    
     for (int j = 0; j < number_of_segments; j++){
         int first = dau[i * segment_limit + j];
         int pos = i * tridiag_coeff_width + first * jumpstep + jumpstep % 2; 
@@ -70,7 +69,9 @@ __global__ void  tridiagSolver(bool print, bool isU, int startidx, int endidx, i
         DOUBLE* Ap = &(arr->Ap[pos]);
         DOUBLE* Bp = &(arr->Bp[pos]);
         DOUBLE* ep = &(arr->ep[pos]);
-        // if ()
+        if (threadIdx.x == 0 ){
+            printf("x[%d, %d] = %x",i, first, x);
+        }
         tridiag(arr->SN[i * segment_limit + j], Dl, D, Du, B, x, Ap, Bp, ep);
 
     }
@@ -569,6 +570,9 @@ __device__ void _uzSolver_extract_solution( int i, int j, int sn, int width, int
         printf("t_u[%d, %d] = %.7f x= %.9f\n", i, j, t_u[i * width + j], x[2 * i]);
         printf("t_z[%d, %d] = %.7f x= %.9f\n", i, j, t_z[i * width + j], x[2* i + 1]);
     }  
+    if (i == first){
+        printf("x[%d, %d] = %x\n", j, first, x + 2 * first);
+    }
 
 }
 

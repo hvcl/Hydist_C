@@ -259,6 +259,9 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         Htuongdoi <<<grid_2d, block_2d>>> (d_arg_ptr);
         synch_and_check();
 
+        if ( ((int) t % ops.interval == 0) && (t - (int) t == 0))
+        	save_result(h_arg_pointer, (int) t);
+
        // sediment transport simulation here
 
 

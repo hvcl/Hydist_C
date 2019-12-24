@@ -2,6 +2,7 @@
 #include "engine.h"
 #include "UVZSolver_multithread.h"
 #include "support_funcs.h"
+#include "sediment_transport.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -180,6 +181,28 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         if ( ((int) t % ops.interval == 0) && (t - (int) t == 0))
         	save_result(h_arg_pointer, (int) t);
 
+        if (t >= ops.sediment_start)
+            Find_VTH(arg_struct_ptr, block=block_2d, grid=grid_2d)
+            hesoK(arg_struct_ptr, block=block_2d, grid=grid_2d)
+            ctx.synchronize()
+
+         
+            start_idx = np.int32(3)
+            end_idx = np.int32(M - 1)
+            Scan_FSj(floattype(t), bed_change_start,ketdinh, start_idx, end_idx, arg_struct_ptr, arr_struct_ptr, block=block_size, grid=grid_size)
+            ctx.synchronize();
+
+            # Tridiag
+            jump_step = 1
+            tridiagSolver(np.int8(True), isU, start_idx, 
+                            end_idx, np.int32(jump_step), np.int32(N + 3), 
+                            arg_struct_ptr, arr_struct_ptr, block=(32, 1, 1), grid=(1, M - 1 , 1))
+            ctx.synchronize();
+
+            # Extract Solution
+            FSj_extract_solution(ketdinh, start_idx, end_idx, arg_struct_ptr, arr_struct_ptr, block=block_size, grid=grid_size)
+            ctx.synchronize();
+            Update_FS(arg_struct_ptr, block=block_2d, grid=grid_2d)
         
         // sediment transport simulation condition start here
 
@@ -245,8 +268,6 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 		synch_and_check();
 
 		
-
-
 		update_h_moi <<<grid_2d, block_2d>>> (d_arg_ptr);
         synch_and_check();
 
@@ -269,6 +290,36 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         Find_Calculation_limits_Vertical <<<grid, 32>>>(d_arg_ptr, coeffs);
         Htuongdoi <<<grid_2d, block_2d>>> (d_arg_ptr);
         synch_and_check();
+
+        // if t >= sediment_start:
+        //     Find_VTH(arg_struct_ptr, block=block_2d, grid=grid_2d)
+        //     hesoK(arg_struct_ptr, block=block_2d, grid=grid_2d)
+        //     ctx.synchronize()
+
+        //     # sediment kernels come here
+        //     # Scan FSj
+        //     start_idx = np.int32(3)
+        //     end_idx = np.int32(N - 1)
+        //     Scan_FSi(floattype(t), bed_change_start, ketdinh, start_idx, end_idx, arg_struct_ptr, arr_struct_ptr, block=block_size, grid=grid_size)
+        //     ctx.synchronize();
+
+        //     jump_step = 1
+        //     # Tridiag
+        //     tridiagSolver(np.int8(True), isU, start_idx,
+        //                     end_idx, np.int32(jump_step), np.int32(M + 3), 
+        //                     arg_struct_ptr, arr_struct_ptr, block=(32, 1, 1), grid=(1, N - 3 , 1))
+        //     ctx.synchronize();
+
+        //     # Extract Solution
+        //     FSi_extract_solution(ketdinh, start_idx, end_idx, arg_struct_ptr, arr_struct_ptr, block=block_size, grid=grid_size)
+        //     ctx.synchronize();
+        //     Update_FS(arg_struct_ptr, block=block_2d, grid=grid_2d)
+        //     ctx.synchronize();
+
+        // # only here is new. Verify if this work 
+        // if int(t) % bed_change_start == 0 and t - int(t) == 0:
+        //     Calculate_Qb(ketdinh, arg_struct_ptr, arr_struct_ptr, block=block_2d, grid=grid_2d)
+        //     BedLoad(floattype(t), ketdinh, start_idx, end_idx, arg_struct_ptr, arr_struct_ptr, block=block_2d, grid=grid_2d)
 
         
 

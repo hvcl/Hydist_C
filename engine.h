@@ -11,6 +11,7 @@ using namespace std;
 #define DOUBLE double
 #define	segment_limit 20
 #define PI 3.14159265358979323846
+#define powf pow
 
 struct Options{
 	DOUBLE Tmax, t_start, sediment_start, bed_change_start;

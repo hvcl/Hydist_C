@@ -303,7 +303,5 @@ int main (int argc, char ** argv){
 
 	Hydraulic_Calculation(h_const_coeffs.dT, h_const_coeffs.NANGDAY, d_argument_pointers, d_arr_pointers, d_const_coeffs, h_argument_pointers, ops);
 
-
-
 	return 0;
 }

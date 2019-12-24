@@ -11,5 +11,8 @@
 #### Todo:
 - Put things to gether
  - [x] Call kernels one by one to check if things are in their right positions
-- [ ] Test final result
+- [x] Test final result for hydraulic module
 - [ ] Use new tridiag solver to test performance
+- [ ] change sediment transport kernels to work with non_constant versions
+- [ ] test sediment transport functions
+- [ ] test the program with sediment transport

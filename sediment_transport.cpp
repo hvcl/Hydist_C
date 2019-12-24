@@ -97,8 +97,8 @@ __device__ void _FSi_calculate__mactrix_coeff(Constant_Coeffs* coeffs, DOUBLE t,
 		S = 0;
 	DOUBLE gamav = 0.98 - 0.198 * Zf + 0.032 * Zf * Zf;
 
-	AA[j] = -gamav * 0.5 * (t_v[pos - 1] + t_v[pos]) / dY2 - Htdv[pos - 1] * Ky[pos - 1] / (H_moi[pos] * (dY * dY));
-	CC[j] = gamav * 0.5 * (t_v[pos - 1] + t_v[pos]) / dY2 - Htdv[pos] * Ky[pos] / (H_moi[pos] * (dY * dY));
+	AA[j] = -gamav * 0.5 * (t_v[pos - 1] + t_v[pos]) / (dY * 2) - Htdv[pos - 1] * Ky[pos - 1] / (H_moi[pos] * (dY * dY));
+	CC[j] = gamav * 0.5 * (t_v[pos - 1] + t_v[pos]) / (dY * 2) - Htdv[pos] * Ky[pos] / (H_moi[pos] * (dY * dY));
 	BB[j] = 2.0 / dT + (Htdv[pos] * Ky[pos] + Htdv[pos - 1] * Ky[pos - 1]) / (H_moi[pos] * (dY * dY));
 
 	DOUBLE p, q;
@@ -258,7 +258,7 @@ __device__ void _FSj_calculate__mactrix_coeff(Constant_Coeffs* coeffs, DOUBLE t,
     p = (1 / (H_moi[pos] * (dY * dY))) * (Htdv[pos] * Ky[pos] * p - Htdv[pos - 1] * Ky[pos - 1] * q);
 
     if ((H_moi[pos - 2] > H_TINH) && (H_moi[pos + 2] > H_TINH)){
-        q = (FS[pos + 1] - FS[pos - 1]) / dY2;
+        q = (FS[pos + 1] - FS[pos - 1]) / (dY * 2);
         q = (t_v[pos] + t_v[pos - 1]) * 0.5 * q * gamav;
     }
     else q = 0;
@@ -445,13 +445,13 @@ __device__ void _bed_load(DOUBLE t, bool ketdinh, int i, int j, int first, int l
     
     if (khouot[pos - 1] == 1) {
         if (t_v[pos] < 0) 
-            q = (-3 * Qby[pos] + 4 * Qby[pos + 1] - Qby[pos + 2]) / dY2;
+            q = (-3 * Qby[pos] + 4 * Qby[pos + 1] - Qby[pos + 2]) / (dY * 2);
     } else {
         if (khouot[pos + 1] == 1) {
             if (t_v[pos] > 0) 
-                q = (3 * Qby[pos] - 4 * Qby[pos - 1] + Qby[pos - 2]) / dY2;
+                q = (3 * Qby[pos] - 4 * Qby[pos - 1] + Qby[pos - 2]) / (dY * 2);
         }  else
-            q = (Qby[pos + 1] - Qby[pos - 1]) / dY2;
+            q = (Qby[pos + 1] - Qby[pos - 1]) / (dY * 2);
     }
         
     DOUBLE tH = p + q;

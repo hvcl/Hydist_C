@@ -565,9 +565,9 @@ __device__ void _uzSolver_extract_solution( int i, int j, int sn, int width, int
             }
         }
     }
-    if ((t_u[i * width + j] > 0) || (t_z[i * width + j] > 0)){
-        printf("t_u[%d, %d] = %.7f\n", i, j, t_u[i * width + j]);
-        printf("t_z[%d, %d] = %.7f\n", i, j, t_z[i * width + j]);
+    if ((x[2 * i] > 0) || (x[2 * i + 1] > 0)){
+        printf("t_u[%d, %d] = %.7f x= %.9f\n", i, j, t_u[i * width + j], x[2 * i]);
+        printf("t_z[%d, %d] = %.7f x= %.9f\n", i, j, t_z[i * width + j], x[2* i + 1]);
     }  
 
 }

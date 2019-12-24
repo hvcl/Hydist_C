@@ -33,11 +33,13 @@ __device__ void tridiag(int sn, DOUBLE* AA, DOUBLE* BB, DOUBLE* CC, DOUBLE*DD, D
     
     x[sn] = (DD[sn] - (AA[sn] * Bp[sn - 1])) / (BB[sn] + (AA[sn] * Ap[sn - 1]));
     
+    if ((threadIdx.x == 0))
+        printf("address of x = %x, sn = %d\n", x, sn);
 
     for (int i = sn - 1; i >= 0; i--){
         x[i] = Bp[i] + (Ap[i] * x[i + 1]);     
-        if ((x[i] > 0 ) && (threadIdx.x == 0))
-            printf("address of x = %x, x[%d] = %.9f\n", x, i, x[i]);
+        // if ((x[i] > 0 ) && (threadIdx.x == 0))
+            // printf("address of x = %x, x[%d] = %.9f\n", x, i, x[i]);
 
     } 
 }

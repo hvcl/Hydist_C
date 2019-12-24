@@ -243,8 +243,8 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 		synch_and_check();
 		update_buffer <<<grid_2d, block_2d>>>(true, d_arg_ptr, d_arr_ptr );
 		synch_and_check();
-		if ( ((int) t % ops.interval == 0) && (t - (int) t == 0))
-        	save_result(h_arg_pointer, (int) t);
+
+		
 
 
 		update_h_moi <<<grid_2d, block_2d>>> (d_arg_ptr);
@@ -252,7 +252,10 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         grid = dim3(M, 1, 1);
         dim3 block(1, 32, 1);
         Reset_states_vertical <<<grid, block>>> (d_arg_ptr, coeffs);
-        synch_and_check();;
+        synch_and_check();
+
+        if ( ((int) t % ops.interval == 0) && (t - (int) t == 0))
+        	save_result(h_arg_pointer, (int) t);
 
 
         update_uvz <<<grid_2d, block_2d>>> (d_arg_ptr, coeffs);

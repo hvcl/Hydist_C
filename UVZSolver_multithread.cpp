@@ -68,8 +68,6 @@ __global__ void  tridiagSolver(bool print, bool isU, int startidx, int endidx, i
         DOUBLE* Ap = &(arr->Ap[pos]);
         DOUBLE* Bp = &(arr->Bp[pos]);
         DOUBLE* ep = &(arr->ep[pos]);
-        if ((threadIdx.x ==0))
-            printf("i= %d, j = %d, SN_offset = %d, sn = %d\n", i, j, i*segment_limit + j, arr->SN[i * segment_limit + j] );
         tridiag(arr->SN[i * segment_limit + j], Dl, D, Du, B, x, Ap, Bp, ep);
 
     }

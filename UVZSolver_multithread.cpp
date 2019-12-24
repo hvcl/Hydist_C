@@ -36,10 +36,10 @@ __device__ void tridiag(int sn, DOUBLE* AA, DOUBLE* BB, DOUBLE* CC, DOUBLE*DD, D
 
     for (int i = sn - 1; i >= 0; i--){
         x[i] = Bp[i] + (Ap[i] * x[i + 1]);     
-        // if (x[i] > 0)
-        //     printf("x[%d] = %.9f\n", i, x[i]);
+        if ((x[i] > 0 ) && (threadIdx.x == 0))
+            printf("address of x = %x, x[%d] = %.9f\n", x, i, x[i]);
 
-    }        
+    } 
 }
 
 
@@ -689,8 +689,6 @@ __device__ void uSolver(DOUBLE t, int offset, int N, int first, int last, int ro
                         2 * u[row * offset +  col] + u[(row - 1) * offset +  col]) / dXbp )) + (Windx - Tsxw[row * offset +  col]) / Htdu[row * offset +  col];
 
     t_u[row * offset +  col] = q / p;
-    
-    
 }
 
 

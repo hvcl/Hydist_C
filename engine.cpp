@@ -189,21 +189,21 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         t += dT * 0.5;
 
 
-		// update_boundary_at_t(M, N, t, channel, ops.total_time, d_arg_ptr, coeffs);        
-  //       synch_and_check();
+		update_boundary_at_t(M, N, t, channel, ops.total_time, d_arg_ptr, coeffs);        
+        synch_and_check();
 
         
 
-  //       block_shape = dim3(512, 1, 1) ;
-  //       grid_shape = dim3((int) (ceil(M / 1024.0)), N, 1);
-  //       start_idx = 2;
-  //       end_idx = N;
-  //       jump_step = 2;
-  //       isU = false;
-  //       if ((ops.channel) && (ops.kenhhepng)){
-  //           start_idx = 3;
-  //           end_idx = N;
-  //       }
+        block_shape = dim3(512, 1, 1) ;
+        grid_shape = dim3((int) (ceil(M / 1024.0)), N, 1);
+        start_idx = 2;
+        end_idx = N;
+        jump_step = 2;
+        isU = false;
+        if ((ops.channel) && (ops.kenhhepng)){
+            start_idx = 3;
+            end_idx = N;
+        }
 
 
         VZSolver_calculate_preindex <<<grid_shape,block_shape>>> (start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);

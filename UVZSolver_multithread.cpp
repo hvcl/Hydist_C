@@ -68,6 +68,8 @@ __global__ void  tridiagSolver(bool print, bool isU, int startidx, int endidx, i
         DOUBLE* Ap = &(arr->Ap[pos]);
         DOUBLE* Bp = &(arr->Bp[pos]);
         DOUBLE* ep = &(arr->ep[pos]);
+        if ((threadIdx.x ==0))
+            printf("i= %d, j = %d, SN_offset = %d, sn = %d\n", i, j, i*segment_limit + j, arr->SN[i * segment_limit + j] );
         tridiag(arr->SN[i * segment_limit + j], Dl, D, Du, B, x, Ap, Bp, ep);
 
     }
@@ -502,10 +504,6 @@ __device__ void _vzSolver_extract_solution( int i,int j, int sn, int width, int 
             }
         }
     }
-    if ((t_v[i * width + j] > 0) || (t_z[i * width + j] > 0)){
-        printf("t_v[%d, %d] = %.9f\n", i, j, t_v[i * width + j]);
-        printf("t_z[%d, %d] = %.9f\n", i, j, t_z[i * width + j]);
-    }
 
 
 }
@@ -566,6 +564,12 @@ __device__ void _uzSolver_extract_solution( int i, int j, int sn, int width, int
             }
         }
     }
+    // if ((j == 106) || (j == 21)){
+    //     printf("first = %d, last = %d, t_u[%d, %d] = %.7f x= %.9f\n", first, last, i, j, t_u[i * width + j], x[2 * i]);
+    //     printf("t_z[%d, %d] = %.7f x= %.9f\n", i, j, t_z[i * width + j], x[2* i + 1]);
+    // }  
+
+
 }
 
 

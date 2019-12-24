@@ -8,7 +8,7 @@ Created by Huong Nguyen
 #include "support_funcs.h"
 
 // Source function for cohesive case
-__device__ DOUBLE source_chs(Constant_Coeffs*coeffs, i, int j, DOUBLE wsm , DOUBLE Zf, DOUBLE fs, DOUBLE fw, DOUBLE vth, DOUBLE h_moi){
+__device__ DOUBLE source_chs(Constant_Coeffs* coeffs, int i, int j, DOUBLE wsm , DOUBLE Zf, DOUBLE fs, DOUBLE fw, DOUBLE vth, DOUBLE h_moi){
 	DOUBLE toee = coeffs->Toe;
 	DOUBLE todd = coeffs->Tod;
 	DOUBLE S = 0;
@@ -19,9 +19,9 @@ __device__ DOUBLE source_chs(Constant_Coeffs*coeffs, i, int j, DOUBLE wsm , DOUB
 	// 	printf("i= %d, j = %d, fw %.15lf vth %.15lf %.15lf\n", i, j, fw, vth, ro);
 
 	if (h_moi > coeffs->ghtoe)
-	    toee = toee * (1 + hstoe * ((h_moi - coeffs->ghtoe)));
+	    toee = toee * (1 + coeffs->hstoe * ((h_moi - coeffs->ghtoe)));
 	if (tob > toee)
-		S = coeffs->Mbochat / ros * (tob - toee) / toee;
+		S = coeffs->Mbochat / coeffs->ros * (tob - toee) / toee;
 	else{
 		if (tob < todd){
 			// this can be optimized
@@ -38,7 +38,7 @@ __device__ DOUBLE source_chs(Constant_Coeffs*coeffs, i, int j, DOUBLE wsm , DOUB
 }
 
 // Source function for non cohesive case
-__device__ DOUBLE source_nchs(DOUBLE wsm, DOUBLE Zf, DOUBLE Dxr, DOUBLE Ufr, DOUBLE Uf, DOUBLE h_moi, DOUBLE fs){
+__device__ DOUBLE source_nchs(Constant_Coeffs* coeffs, DOUBLE wsm, DOUBLE Zf, DOUBLE Dxr, DOUBLE Ufr, DOUBLE Uf, DOUBLE h_moi, DOUBLE fs){
 	DOUBLE S = 0;
 	DOUBLE gamac = 0.434 + 5.975 * Zf + 2.888 * Zf * Zf;
     DOUBLE Tx = max(0.0, (Uf * Uf - Ufr * Ufr) / (Ufr * Ufr));
@@ -48,10 +48,11 @@ __device__ DOUBLE source_nchs(DOUBLE wsm, DOUBLE Zf, DOUBLE Dxr, DOUBLE Ufr, DOU
 	return S;
 }
 
-__device__ void _FSi_calculate__mactrix_coeff(DOUBLE t, DOUBLE s_start, bool ketdinh, int i, int j, int first, int last, int seg_no, bool bienran1, bool bienran2, Argument_Pointers* arg, Array_Pointers* arr){
+__device__ void _FSi_calculate__mactrix_coeff(Constant_Coeffs* coeffs, DOUBLE t, DOUBLE s_start, bool ketdinh, int i, int j, int first, int last, int seg_no, bool bienran1, bool bienran2, Argument_Pointers* arg, Array_Pointers* arr){
 
 	__shared__ DOUBLE* FS, *H_moi, *t_u, *t_v, *VTH, *Htdu, *Htdv, *Fw, *Kx, *Ky;
 	__shared__ int width, tridiag_coeff_width;
+	__shared__ DOUBLE Ks, g, wss, Dxr, Ufr, dY2, dYbp, dX2, dT; 
 	DOUBLE *AA, *BB, *CC, *DD;
 	// int sn = last - first - 2;
 	width = arg-> M + 3;
@@ -79,7 +80,7 @@ __device__ void _FSi_calculate__mactrix_coeff(DOUBLE t, DOUBLE s_start, bool ket
 
 	DOUBLE c = 18 * log(12 * H_moi[pos] / Ks);
 	DOUBLE Uf = sqrt(g) * abs(VTH[pos]) / c;
-	DOUBLE wsm = wss() *  pow((1 - FS[pos]), 4);
+	DOUBLE wsm = wss *  powf((1 - FS[pos]), 4);
 	DOUBLE Zf = 0;
 	
 	if (FS[pos] > 0.00001)
@@ -87,9 +88,9 @@ __device__ void _FSi_calculate__mactrix_coeff(DOUBLE t, DOUBLE s_start, bool ket
 
 	DOUBLE S;
 	if (ketdinh)
-		S = source_chs(i, j, wsm, Zf, FS[pos], Fw[pos], VTH[pos], H_moi[pos]);
+		S = source_chs(coeffs, i, j, wsm, Zf, FS[pos], Fw[pos], VTH[pos], H_moi[pos]);
 	else
-		S = source_nchs(wsm, Zf, Dxr(), Ufr(), Uf, H_moi[pos], FS[pos]);
+		S = source_nchs(coeffs, wsm, Zf, Dxr, Ufr, Uf, H_moi[pos], FS[pos]);
 	// if (S != 0)
 	// 	printf("saiiiiii, %.15lf\n", S);
 	if ( t < s_start) 
@@ -100,7 +101,7 @@ __device__ void _FSi_calculate__mactrix_coeff(DOUBLE t, DOUBLE s_start, bool ket
 
 	AA[j] = -gamav * 0.5 * (t_v[pos - 1] + t_v[pos]) / dY2 - Htdv[pos - 1] * Ky[pos - 1] / (H_moi[pos] * dYbp);
 	CC[j] = gamav * 0.5 * (t_v[pos - 1] + t_v[pos]) / dY2 - Htdv[pos] * Ky[pos] / (H_moi[pos] * dYbp);
-	BB[j] = HaiChiadT + (Htdv[pos] * Ky[pos] + Htdv[pos - 1] * Ky[pos - 1]) / (H_moi[pos] * dYbp);
+	BB[j] = 2.0 / dT + (Htdv[pos] * Ky[pos] + Htdv[pos - 1] * Ky[pos - 1]) / (H_moi[pos] * dYbp);
 
 	DOUBLE p, q;
 	p = 0;
@@ -154,7 +155,7 @@ __device__ void _FSi_calculate__mactrix_coeff(DOUBLE t, DOUBLE s_start, bool ket
 }
 
 
-__device__ void _FSi_extract_solution(int i, int j, int first, int last, bool bienran1, bool bienran2, Argument_Pointers* arg, Array_Pointers* arr){
+__device__ void _FSi_extract_solution(int i, int j, int first, int last, bool bienran1, bool bienran2, DOUBLE NDnen, Argument_Pointers* arg, Array_Pointers* arr){
 
 	__shared__ DOUBLE* FS, *x, *t_v, *tFS;
 	__shared__ int width;
@@ -191,11 +192,14 @@ __device__ void _FSi_extract_solution(int i, int j, int first, int last, bool bi
 }
 
 
-__device__ void _FSj_calculate__mactrix_coeff(DOUBLE t, DOUBLE s_start, bool ketdinh, int i, int j, int first, int last, int seg_no, bool bienran1, bool bienran2, Argument_Pointers* arg, Array_Pointers* arr){
+__device__ void _FSj_calculate__mactrix_coeff(Constant_Coeffs* coeffs, DOUBLE t, DOUBLE s_start, bool ketdinh, int i, int j, int first, int last, int seg_no, bool bienran1, bool bienran2, Argument_Pointers* arg, Array_Pointers* arr){
 	if (i > last - 1 || i < first + 1 || last < first + 1)
 		return;
 	__shared__ DOUBLE* FS, *H_moi, *t_u, *t_v, *VTH, *Htdu, *Htdv, *Fw, *Kx, *Ky;
 	__shared__ int width, tridiag_coeff_width;
+	__shared__ DOUBLE Ks, g, wss, Dxr, Ufr, dX2, dXbp, dT, H_TINH, dYbp, dY;
+
+
 	DOUBLE *AA, *BB, *CC, *DD;
 
 	width = arg-> M + 3;
@@ -232,19 +236,19 @@ __device__ void _FSj_calculate__mactrix_coeff(DOUBLE t, DOUBLE s_start, bool ket
 	// if (FS[pos] != 0)
 	// 	printf("%d %d %.15lf\n", i, j, FS[pos]);
 	if (ketdinh){
-		S = source_chs(i, j, wsm, Zf, FS[pos], Fw[pos], VTH[pos], H_moi[pos] );
+		S = source_chs(coeffs, i, j, wsm, Zf, FS[pos], Fw[pos], VTH[pos], H_moi[pos] );
 		// if (i == 463 && (j == 173 || j == 172))
   //   	printf("S = %d %.15lf\n",j, S);
 	}
 	else
-		S = source_nchs(wsm, Zf, Dxr(), Ufr(), Uf, H_moi[pos], FS[pos]);        
+		S = source_nchs(coeffs, wsm, Zf, Dxr, Ufr, Uf, H_moi[pos], FS[pos]);        
     
     if ( t < s_start) 
     	S = 0;
     
     AA[i] = -gamav * 0.5 * (t_u[pos] + t_u[pos - width]) / dX2 - Htdu[pos - width] * Kx[pos - width] / (H_moi[pos] * (dXbp));
     CC[i] = gamav * 0.5 * (t_u[pos] + t_u[pos - width]) / dX2 - Htdu[pos] * Kx[pos] / (H_moi[pos] * (dXbp));
-    BB[i] = HaiChiadT + (Htdu[pos] * Kx[pos] + Htdu[pos - width] * Kx[pos - width]) / (H_moi[pos] * (dXbp));
+    BB[i] = 2.0 / dT + (Htdu[pos] * Kx[pos] + Htdu[pos - width] * Kx[pos - width]) / (H_moi[pos] * (dXbp));
 
     DOUBLE p, q;
     p = q = 0;
@@ -291,7 +295,7 @@ __device__ void _FSj_calculate__mactrix_coeff(DOUBLE t, DOUBLE s_start, bool ket
 }
 
 
-__device__ void _FSj_extract_solution(int i, int j, int first, int last, bool bienran1, bool bienran2, Argument_Pointers* arg, Array_Pointers* arr){
+__device__ void _FSj_extract_solution(int i, int j, int first, int last, bool bienran1, bool bienran2, DOUBLE NDnen, Argument_Pointers* arg, Array_Pointers* arr){
 
 	__shared__ DOUBLE* FS, *x, *t_u, *tFS;
 	__shared__ int width;
@@ -332,6 +336,7 @@ __global__ void Calculate_Qb(bool ketdinh, Argument_Pointers* arg, Array_Pointer
 	int j = blockIdx. x* blockDim.x + threadIdx.x + 2;
 	if (i > arg->N || j > arg->M || i < 2 || j < 2)
 		return;
+	__shared__  DOUBLEToe, ro, ghtoe, hstoe, Sx, g, dm, Dxr; 
 	DOUBLE Tob;
 	DOUBLE Toee = Toe;
 	DOUBLE Tx = 0;
@@ -405,8 +410,9 @@ __global__ void Calculate_Qb(bool ketdinh, Argument_Pointers* arg, Array_Pointer
 __device__ void _bed_load(DOUBLE t, bool ketdinh, int i, int j, int first, int last, bool bienran1, bool bienran2, Argument_Pointers* arg, Array_Pointers* arr){
 	if (last - first < 2 || j < first || j > last)
 		return;
-	__shared__ DOUBLE* FS, *H_moi, *t_u, *t_v, *VTH, *Htdu, *Htdv, *Fw, *Kx, *Ky, *Qbx, *Qby, *htaiz, *dH ;
+	__shared__ DOUBLE* FS, *H_moi, *t_u, *t_v, *VTH, *Htdu, *Htdv, *Fw, *Kx, *Ky, *Qbx, *Qby, *dH ;
 	__shared__ int width, *khouot, M, N;
+	__shared__ DOUBLE dX2, dY2, dXbp, dYbp, Ks, g, wss, Dxr, Ufr, dT, Dorong;
 	M = arg->M;
 	N = arg->N;
 	width = arg-> M + 3;
@@ -422,7 +428,6 @@ __device__ void _bed_load(DOUBLE t, bool ketdinh, int i, int j, int first, int l
 	Fw = arg->Fw;
 	Qbx = arg->Qbx;
 	Qby = arg->Qby;
-	htaiz = arg->htaiz;
 	khouot = arg->khouot;
 	dH = arg->dH;
 	int pos = i * width + j;
@@ -479,22 +484,22 @@ __device__ void _bed_load(DOUBLE t, bool ketdinh, int i, int j, int first, int l
     
     DOUBLE c = 18 * log(12 * H_moi[pos] / Ks);
 	DOUBLE Uf = sqrt(g) * abs(VTH[pos]) / c;
-	DOUBLE wsm = wss() * pow((1 - FS[pos]), 4);
+	DOUBLE wsm = wss * pow((1 - FS[pos]), 4);
 	DOUBLE Zf = 0;
 	DOUBLE S = 0;
 	if (FS[pos] > 0.0)
 		Zf = wsm / (0.4 * (Uf + 2 * wsm));
 	
 	if (ketdinh)
-		S = source_chs(i, j, wsm, Zf, FS[pos], Fw[pos], VTH[pos], H_moi[pos] );
+		S = source_chs(coeffs, i, j, wsm, Zf, FS[pos], Fw[pos], VTH[pos], H_moi[pos] );
 	else
-		S = source_nchs(wsm, Zf, Dxr(), Ufr(), Uf, H_moi[pos], FS[pos]); 
+		S = source_nchs(coeffs, wsm, Zf, Dxr, Ufr, Uf, H_moi[pos], FS[pos]); 
 
     dH[pos] += dT / (1 - Dorong) * (S + tH);   
     
 }
 
-__global__ void hesoK(Argument_Pointers* arg){
+__global__ void hesoK(Constant_Coeffs* coeffs, Argument_Pointers* arg){
 	
 	int i = blockIdx.y * blockDim.y + threadIdx.y;
 	int j = blockIdx.x * blockDim.x  + threadIdx.x;
@@ -505,6 +510,7 @@ __global__ void hesoK(Argument_Pointers* arg){
 		return;
 	DOUBLE Cz = 0;
 	__shared__ DOUBLE *Kx, *Ky, *Htdu, *Htdv, *t_u, *t_v, *h;
+	__shared__ DOUBLE Ks, g;
 	Kx = arg->Kx;
 	Ky = arg->Ky;
 	Htdu = arg->Htdu;
@@ -527,7 +533,7 @@ __global__ void hesoK(Argument_Pointers* arg){
 	}
 }
 
-__global__ void Find_VTH(Argument_Pointers* arg){
+__global__ void Find_VTH(Constant_Coeffs* coeffs, Argument_Pointers* arg){
 	// printf("%d %d\n", blockDim.x, blockDim.y );
 	int i = blockIdx.y * blockDim.y + threadIdx.y;
 	int j = blockIdx.x * blockDim.x  + threadIdx.x;
@@ -547,7 +553,7 @@ __global__ void Find_VTH(Argument_Pointers* arg){
 	int pos = i * width + j;
 	// if (i == 463 && j == 5)
 	// 	printf("htaiz = %.15lf, h_moi %.15lf\n", htaiz[pos], H_moi[pos] );
-	if ((htaiz[pos] > NANGDAY) && (H_moi[pos] > H_TINH)){
+	if ((htaiz[pos] > coeffs->NANGDAY) && (H_moi[pos] > coeffs->H_TINH)){
 		DOUBLE ut = (t_u[pos] + t_u[pos - width]) * 0.5;
 		DOUBLE vt = (t_v[pos] + t_v[pos - 1]) * 0.5;
 		VTH[pos] = sqrt(ut * ut + vt * vt);
@@ -556,7 +562,7 @@ __global__ void Find_VTH(Argument_Pointers* arg){
 	} else VTH[pos] = 0;
 }
 
-__global__ void Scan_FSi(DOUBLE t, DOUBLE s_start, bool ketdinh, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr){
+__global__ void Scan_FSi(DOUBLE t, DOUBLE s_start, bool ketdinh, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
 // find first, last, bienran1, bienran2, i, j, pass argument
 	int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
     int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
@@ -565,9 +571,9 @@ __global__ void Scan_FSi(DOUBLE t, DOUBLE s_start, bool ketdinh, int startidx, i
     bool bienran2 = false;
     int first = 0; int last = 0;
     int seg_no = locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h);
-    _FSi_calculate__mactrix_coeff(t, s_start, ketdinh, i, j, first, last, seg_no, bienran1, bienran2, arg, arr);
+    _FSi_calculate__mactrix_coeff(coeffs, t, s_start, ketdinh, i, j, first, last, seg_no, bienran1, bienran2, arg, arr);
 }
-__global__ void FSi_extract_solution( bool ketdinh, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr){
+__global__ void FSi_extract_solution( bool ketdinh, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs*coeffs){
 	int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
     int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
     if (i > endidx ) return;
@@ -575,12 +581,12 @@ __global__ void FSi_extract_solution( bool ketdinh, int startidx, int endidx, Ar
     bool bienran2 = false;
     int first = 0; int last = 0;
     locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h);
-    _FSi_extract_solution(i, j, first, last, bienran1, bienran2, arg, arr);
+    _FSi_extract_solution(i, j, first, last, bienran1, bienran2, coeffs->NDnen, arg, arr);
 
 }
 
 
-__global__ void Scan_FSj(DOUBLE t, DOUBLE s_start, bool ketdinh, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr){
+__global__ void Scan_FSj(DOUBLE t, DOUBLE s_start, bool ketdinh, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
 // find first, last, bienran1, bienran2, i, j, pass argument
 	int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
@@ -591,10 +597,10 @@ __global__ void Scan_FSj(DOUBLE t, DOUBLE s_start, bool ketdinh, int startidx, i
     bool bienran2 = false;
     int first = 0; int last = 0;
     int seg_no = locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h);
-    _FSj_calculate__mactrix_coeff(t, s_start, ketdinh, i, j, first, last, seg_no, bienran1, bienran2, arg, arr);
+    _FSj_calculate__mactrix_coeff(coeffs, t, s_start, ketdinh, i, j, first, last, seg_no, bienran1, bienran2, arg, arr);
 }
 
-__global__ void FSj_extract_solution(bool ketdinh, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr){
+__global__ void FSj_extract_solution(bool ketdinh, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
 	int i = blockIdx.y * blockDim.y + threadIdx.y + 2;
     int j = blockIdx.x * blockDim.x + threadIdx.x + startidx;
     if (j > endidx ) return;
@@ -602,7 +608,7 @@ __global__ void FSj_extract_solution(bool ketdinh, int startidx, int endidx, Arg
     bool bienran2 = false;
     int first = 0; int last = 0;
     locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h);
-    _FSj_extract_solution(i, j, first, last, bienran1, bienran2, arg, arr);
+    _FSj_extract_solution(i, j, first, last, bienran1, bienran2,coeffs->NDnen, arg, arr);
 }
 
 
@@ -616,7 +622,7 @@ __global__ void Update_FS(Argument_Pointers* arg){
 	int width = arg->M + 3;
 	FS[i * width + j] = tFS[i * width + j];
 }
-__global__ void BedLoad(DOUBLE t, bool ketdinh, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr){
+__global__ void BedLoad(DOUBLE t, bool ketdinh, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
 	int i = blockIdx.y * blockDim.y + threadIdx.y + startidx;
     int j = blockIdx.x * blockDim.x + threadIdx.x + 2;
     if (i >= endidx ) return;
@@ -624,5 +630,5 @@ __global__ void BedLoad(DOUBLE t, bool ketdinh, int startidx, int endidx, Argume
     bool bienran2 = false;
     int first = 0; int last = 0;
     locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h);
-    _bed_load(t, ketdinh, i, j, first, last, bienran1, bienran2, arg, arr);
+    _bed_load(t, ketdinh, i, j, first, last, bienran1, bienran2, arg, arr, coeffs);
 }

@@ -83,8 +83,8 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 	int M1 = M + 3;
 	int N1 = N + 3;
 
-	dim3 block_2d = (min(blocksize, M1), 1, 1);
-	dim3 grid_2d = ((int) ceil((DOUBLE)(M1) / min(blocksize, M1)), N1, 1) ;
+	dim3 block_2d(min(blocksize, M1), 1, 1);
+	dim3 grid_2d((int) ceil((DOUBLE)(M1) / min(blocksize, M1)), N1, 1) ;
 
 	dim3 block_shape;
 	dim3 grid_shape;
@@ -249,7 +249,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 
 		update_h_moi <<<grid_2d, block_2d>>> (d_arg_ptr);
         synch_and_check();
-        
+
         grid = dim3(M, 1, 1);
         dim3 block(1, 32, 1);
         Reset_states_vertical <<<grid, block>>> (d_arg_ptr, coeffs);

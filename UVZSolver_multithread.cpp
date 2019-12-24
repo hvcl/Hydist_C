@@ -433,8 +433,10 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
         }
     }
     
-    if (j == last)
+    if (j == last){
+        printf("first = %d, last = %d, sn = %d, i  = %d, segment_limit = %d seg_no = %d\n",first, last, sn, i, segment_limit, seg_no );
         arr->SN[i * segment_limit + seg_no] = sn;
+    }
 }
 
 __device__ void _vzSolver_extract_solution( int i,int j, int sn, int width, int first, int last, bool bienran1, bool bienran2, Argument_Pointers *arg, Array_Pointers * arr)

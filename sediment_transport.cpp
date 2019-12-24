@@ -52,7 +52,7 @@ __device__ void _FSi_calculate__mactrix_coeff(Constant_Coeffs* coeffs, DOUBLE t,
 
 	__shared__ DOUBLE* FS, *H_moi, *t_u, *t_v, *VTH, *Htdu, *Htdv, *Fw, *Kx, *Ky;
 	__shared__ int width, tridiag_coeff_width;
-	__shared__ DOUBLE Ks, g, wss, Dxr, Ufr, dY2, dYbp, dX2, dT, H_TINH, dXbp; 
+	__shared__ DOUBLE Ks, g, wss, Dxr, Ufr, dY, dX, dT, H_TINH; 
 	DOUBLE *AA, *BB, *CC, *DD;
 	// int sn = last - first - 2;
 	width = arg-> M + 3;
@@ -97,9 +97,9 @@ __device__ void _FSi_calculate__mactrix_coeff(Constant_Coeffs* coeffs, DOUBLE t,
 		S = 0;
 	DOUBLE gamav = 0.98 - 0.198 * Zf + 0.032 * Zf * Zf;
 
-	AA[j] = -gamav * 0.5 * (t_v[pos - 1] + t_v[pos]) / dY2 - Htdv[pos - 1] * Ky[pos - 1] / (H_moi[pos] * dYbp);
-	CC[j] = gamav * 0.5 * (t_v[pos - 1] + t_v[pos]) / dY2 - Htdv[pos] * Ky[pos] / (H_moi[pos] * dYbp);
-	BB[j] = 2.0 / dT + (Htdv[pos] * Ky[pos] + Htdv[pos - 1] * Ky[pos - 1]) / (H_moi[pos] * dYbp);
+	AA[j] = -gamav * 0.5 * (t_v[pos - 1] + t_v[pos]) / dY2 - Htdv[pos - 1] * Ky[pos - 1] / (H_moi[pos] * (dY * dY));
+	CC[j] = gamav * 0.5 * (t_v[pos - 1] + t_v[pos]) / dY2 - Htdv[pos] * Ky[pos] / (H_moi[pos] * (dY * dY));
+	BB[j] = 2.0 / dT + (Htdv[pos] * Ky[pos] + Htdv[pos - 1] * Ky[pos - 1]) / (H_moi[pos] * (dY * dY));
 
 	DOUBLE p, q;
 	p = 0;
@@ -113,12 +113,12 @@ __device__ void _FSi_calculate__mactrix_coeff(Constant_Coeffs* coeffs, DOUBLE t,
 	// if (i == 463 && j == last - 1)
 	// 		printf("trc %.15lf %.15lf %d %d\n", p,q, H_moi[pos - 2 * width] > H_TINH, H_moi[pos + width] > H_TINH);
 
-	p = (1 / (H_moi[pos] * dXbp)) * (Htdu[pos] * Kx[pos] * p - Htdu[pos - width] * Kx[pos - width] * q);
+	p = (1 / (H_moi[pos] * (dX * dX))) * (Htdu[pos] * Kx[pos] * p - Htdu[pos - width] * Kx[pos - width] * q);
 	
 
 
 	if (H_moi[pos + 2 * width] > H_TINH && H_moi[pos - 2 * width] > H_TINH){
-	    q = (FS[pos + width] - FS[pos - width]) / dX2;
+	    q = (FS[pos + width] - FS[pos - width]) / (dX * 2);
 		q = (t_u[pos] + t_u[pos - width]) * 0.5  * q * gamav;
 	}
 	else q = 0;
@@ -195,7 +195,7 @@ __device__ void _FSj_calculate__mactrix_coeff(Constant_Coeffs* coeffs, DOUBLE t,
 		return;
 	__shared__ DOUBLE* FS, *H_moi, *t_u, *t_v, *VTH, *Htdu, *Htdv, *Fw, *Kx, *Ky;
 	__shared__ int width, tridiag_coeff_width;
-	__shared__ DOUBLE Ks, g, wss, Dxr, Ufr, dX2, dXbp, dT, H_TINH, dYbp, dY;
+	__shared__ DOUBLE Ks, g, wss, Dxr, Ufr, dX, dT, H_TINH, dY;
 
 
 	DOUBLE *AA, *BB, *CC, *DD;
@@ -244,9 +244,9 @@ __device__ void _FSj_calculate__mactrix_coeff(Constant_Coeffs* coeffs, DOUBLE t,
     if ( t < s_start) 
     	S = 0;
     
-    AA[i] = -gamav * 0.5 * (t_u[pos] + t_u[pos - width]) / dX2 - Htdu[pos - width] * Kx[pos - width] / (H_moi[pos] * (dXbp));
-    CC[i] = gamav * 0.5 * (t_u[pos] + t_u[pos - width]) / dX2 - Htdu[pos] * Kx[pos] / (H_moi[pos] * (dXbp));
-    BB[i] = 2.0 / dT + (Htdu[pos] * Kx[pos] + Htdu[pos - width] * Kx[pos - width]) / (H_moi[pos] * (dXbp));
+    AA[i] = -gamav * 0.5 * (t_u[pos] + t_u[pos - width]) / (dX * 2) - Htdu[pos - width] * Kx[pos - width] / (H_moi[pos] * (dX * dX));
+    CC[i] = gamav * 0.5 * (t_u[pos] + t_u[pos - width]) / (dX * 2) - Htdu[pos] * Kx[pos] / (H_moi[pos] * (dX * dX));
+    BB[i] = 2.0 / dT + (Htdu[pos] * Kx[pos] + Htdu[pos - width] * Kx[pos - width]) / (H_moi[pos] * (dX * dX));
 
     DOUBLE p, q;
     p = q = 0;
@@ -255,7 +255,7 @@ __device__ void _FSj_calculate__mactrix_coeff(Constant_Coeffs* coeffs, DOUBLE t,
     if ((H_moi[pos - 2] > H_TINH) && (H_moi[pos + 1] > H_TINH))
         q = (FS[pos] - FS[pos - 1]);
 
-    p = (1 / (H_moi[pos] * dYbp)) * (Htdv[pos] * Ky[pos] * p - Htdv[pos - 1] * Ky[pos - 1] * q);
+    p = (1 / (H_moi[pos] * (dY * dY))) * (Htdv[pos] * Ky[pos] * p - Htdv[pos - 1] * Ky[pos - 1] * q);
 
     if ((H_moi[pos - 2] > H_TINH) && (H_moi[pos + 2] > H_TINH)){
         q = (FS[pos + 1] - FS[pos - 1]) / dY2;
@@ -410,7 +410,7 @@ __device__ void _bed_load(DOUBLE t, bool ketdinh, int i, int j, int first, int l
 		return;
 	__shared__ DOUBLE* FS, *H_moi, *t_u, *t_v, *VTH, *Htdu, *Htdv, *Fw, *Kx, *Ky, *Qbx, *Qby, *dH ;
 	__shared__ int width, *khouot, M, N;
-	__shared__ DOUBLE dX2, dY2, dXbp, dYbp, Ks, g, wss, Dxr, Ufr, dT, Dorong;
+	__shared__ DOUBLE dX, dY, Ks, g, wss, Dxr, Ufr, dT, Dorong;
 	M = arg->M;
 	N = arg->N;
 	width = arg-> M + 3;
@@ -433,14 +433,14 @@ __device__ void _bed_load(DOUBLE t, bool ketdinh, int i, int j, int first, int l
 	p = q = 0;
 	if (khouot[pos - width] == 1){
 		if (t_u[pos] < 0)
-            p = (-3 * Qbx[pos] + 4 * Qbx[pos + width] - Qbx[pos + 2 * width]) / dX2 ;
+            p = (-3 * Qbx[pos] + 4 * Qbx[pos + width] - Qbx[pos + 2 * width]) / (dX * 2) ;
 
 	} else {
 		if (khouot[pos + width] == 1){
 			if (t_u[pos > 0])
-                p = (3 * Qbx[pos] - 4 * Qbx[pos - width] + Qbx[pos - 2 * width]) / dX2;
+                p = (3 * Qbx[pos] - 4 * Qbx[pos - width] + Qbx[pos - 2 * width]) / (dX * 2);
 		} else 
-            p = (Qbx[pos + width] - Qbx[pos - width]) / dX2;
+            p = (Qbx[pos + width] - Qbx[pos - width]) / (dX * 2);
 	}
     
     if (khouot[pos - 1] == 1) {
@@ -463,7 +463,7 @@ __device__ void _bed_load(DOUBLE t, bool ketdinh, int i, int j, int first, int l
     if ((i > 2) && (khouot[pos - 2 * width] == 1 || khouot[pos + width] == 1)) 
         q = 0;
         
-    p = 1 / dXbp * (Htdu[pos] * Kx[pos] * p - Htdu[pos - width] * Kx[pos - width] * q);
+    p = 1 / (dX * dX) * (Htdu[pos] * Kx[pos] * p - Htdu[pos - width] * Kx[pos - width] * q);
         
     tH = tH + p;
 	p = FS[pos + 1] - FS[pos];
@@ -475,7 +475,7 @@ __device__ void _bed_load(DOUBLE t, bool ketdinh, int i, int j, int first, int l
     if (((first > 2) && (khouot[pos - 2] == 1 || khouot[pos + 1] == 1)) || (first == 2 && khouot[pos + 1] == 1))
     	q = 0;
                  
-    p = 1 / (dYbp) * (Htdv[pos] * Ky[pos] * p - Htdv[pos - 1] * Ky[pos - 1] * q);
+    p = 1 / ((dY * dY)) * (Htdv[pos] * Ky[pos] * p - Htdv[pos - 1] * Ky[pos - 1] * q);
     
     tH = tH + p;
 

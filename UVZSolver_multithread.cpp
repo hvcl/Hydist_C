@@ -571,7 +571,7 @@ __device__ void _uzSolver_extract_solution( int i, int j, int sn, int width, int
         printf("t_z[%d, %d] = %.7f x= %.9f\n", i, j, t_z[i * width + j], x[2* i + 1]);
     }  
     if (i == first){
-        printf("x[%d, %d] = %x\n", j, first, x + 2 * first);
+        printf("in x[%d, %d] = %x\n", j, first, x + 2 * first);
     }
 
 }

@@ -189,75 +189,75 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         t += dT * 0.5;
 
 
-		update_boundary_at_t(M, N, t, channel, ops.total_time, d_arg_ptr, coeffs);        
-        synch_and_check();
+		// update_boundary_at_t(M, N, t, channel, ops.total_time, d_arg_ptr, coeffs);        
+  //       synch_and_check();
 
         
 
-        block_shape = dim3(512, 1, 1) ;
-        grid_shape = dim3((int) (ceil(M / 1024.0)), N, 1);
-        start_idx = 2;
-        end_idx = N;
-        jump_step = 2;
-        isU = false;
-        if ((ops.channel) && (ops.kenhhepng)){
-            start_idx = 3;
-            end_idx = N;
-        }
+  //       block_shape = dim3(512, 1, 1) ;
+  //       grid_shape = dim3((int) (ceil(M / 1024.0)), N, 1);
+  //       start_idx = 2;
+  //       end_idx = N;
+  //       jump_step = 2;
+  //       isU = false;
+  //       if ((ops.channel) && (ops.kenhhepng)){
+  //           start_idx = 3;
+  //           end_idx = N;
+  //       }
 
 
-        VZSolver_calculate_preindex <<<grid_shape,block_shape>>> (start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
-        synch_and_check();
+  //       VZSolver_calculate_preindex <<<grid_shape,block_shape>>> (start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
+  //       synch_and_check();
             
-        VZSolver_calculate_abcd<<<grid_shape,block_shape>>> (start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
-        synch_and_check();
-        VZSolver_calculate_matrix_coeff<<<grid_shape,block_shape>>> (start_idx, end_idx, NANGDAY, d_arg_ptr, d_arr_ptr);
-        synch_and_check();
+  //       VZSolver_calculate_abcd<<<grid_shape,block_shape>>> (start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
+  //       synch_and_check();
+  //       VZSolver_calculate_matrix_coeff<<<grid_shape,block_shape>>> (start_idx, end_idx, NANGDAY, d_arg_ptr, d_arr_ptr);
+  //       synch_and_check();
 
-        grid = dim3(1, N-1, 1);
-        tridiagSolver<<<grid, 32>>> (false, isU, start_idx, end_idx, jump_step, 2 * M + 1, d_arg_ptr, d_arr_ptr);
-        synch_and_check();
+  //       grid = dim3(1, N-1, 1);
+  //       tridiagSolver<<<grid, 32>>> (false, isU, start_idx, end_idx, jump_step, 2 * M + 1, d_arg_ptr, d_arr_ptr);
+  //       synch_and_check();
 
-        VZSolver_extract_solution<<<grid_shape,block_shape>>> (start_idx, end_idx, NANGDAY, d_arg_ptr, d_arr_ptr);
-        synch_and_check();      
-
-
-        Normalize<<<grid_2d, block_2d>>> (isU, d_arg_ptr, d_arr_ptr, coeffs);
-        synch_and_check();
-        update_buffer<<<grid_2d, block_2d>>> (isU, d_arg_ptr, d_arr_ptr);
-        synch_and_check();
-
-        solveU<<<grid_2d, block_2d>>> (t, 2, M, d_arg_ptr, coeffs);
-        synch_and_check();
-        grid = dim3(1, M, 1);
-        update_margin_elem_U<<<grid,32>>> (2, M, NANGDAY, d_arg_ptr);
-        synch_and_check();
-
-        // similar to first haft, isU here is true, since it normalize u value after solving for u
-        Normalize<<<grid_2d, block_2d>>> (true, d_arg_ptr, d_arr_ptr, coeffs);
-		synch_and_check();
-		update_buffer <<<grid_2d, block_2d>>>(true, d_arg_ptr, d_arr_ptr );
-		synch_and_check();
+  //       VZSolver_extract_solution<<<grid_shape,block_shape>>> (start_idx, end_idx, NANGDAY, d_arg_ptr, d_arr_ptr);
+  //       synch_and_check();      
 
 
-		update_h_moi <<<grid_2d, block_2d>>> (d_arg_ptr);
-        synch_and_check();
-        grid = dim3(M, 1, 1);
-        dim3 block(1, 32, 1);
-        Reset_states_vertical <<<grid, block>>> (d_arg_ptr, coeffs);
-        synch_and_check();;
+  //       Normalize<<<grid_2d, block_2d>>> (isU, d_arg_ptr, d_arr_ptr, coeffs);
+  //       synch_and_check();
+  //       update_buffer<<<grid_2d, block_2d>>> (isU, d_arg_ptr, d_arr_ptr);
+  //       synch_and_check();
+
+  //       solveU<<<grid_2d, block_2d>>> (t, 2, M, d_arg_ptr, coeffs);
+  //       synch_and_check();
+  //       grid = dim3(1, M, 1);
+  //       update_margin_elem_U<<<grid,32>>> (2, M, NANGDAY, d_arg_ptr);
+  //       synch_and_check();
+
+  //       // similar to first haft, isU here is true, since it normalize u value after solving for u
+  //       Normalize<<<grid_2d, block_2d>>> (true, d_arg_ptr, d_arr_ptr, coeffs);
+		// synch_and_check();
+		// update_buffer <<<grid_2d, block_2d>>>(true, d_arg_ptr, d_arr_ptr );
+		// synch_and_check();
 
 
-        update_uvz <<<grid_2d, block_2d>>> (d_arg_ptr, coeffs);
-        synch_and_check();
+		// update_h_moi <<<grid_2d, block_2d>>> (d_arg_ptr);
+  //       synch_and_check();
+  //       grid = dim3(M, 1, 1);
+  //       dim3 block(1, 32, 1);
+  //       Reset_states_vertical <<<grid, block>>> (d_arg_ptr, coeffs);
+  //       synch_and_check();;
+
+
+  //       update_uvz <<<grid_2d, block_2d>>> (d_arg_ptr, coeffs);
+  //       synch_and_check();
    
 
-        grid = dim3(1, N, 1);
-        Find_Calculation_limits_Horizontal <<<grid, 32>>> (d_arg_ptr, coeffs);
-        grid = dim3(1, M, 1);
-        Find_Calculation_limits_Vertical <<<grid, 32>>>(d_arg_ptr, coeffs);
-        Htuongdoi <<<grid_2d, block_2d>>> (d_arg_ptr);
-        synch_and_check();
+  //       grid = dim3(1, N, 1);
+  //       Find_Calculation_limits_Horizontal <<<grid, 32>>> (d_arg_ptr, coeffs);
+  //       grid = dim3(1, M, 1);
+  //       Find_Calculation_limits_Vertical <<<grid, 32>>>(d_arg_ptr, coeffs);
+  //       Htuongdoi <<<grid_2d, block_2d>>> (d_arg_ptr);
+  //       synch_and_check();
 
        // sediment transport simulation here
 

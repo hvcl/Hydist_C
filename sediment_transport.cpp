@@ -52,7 +52,7 @@ __device__ void _FSi_calculate__mactrix_coeff(Constant_Coeffs* coeffs, DOUBLE t,
 
 	__shared__ DOUBLE* FS, *H_moi, *t_u, *t_v, *VTH, *Htdu, *Htdv, *Fw, *Kx, *Ky;
 	__shared__ int width, tridiag_coeff_width;
-	__shared__ DOUBLE Ks, g, wss, Dxr, Ufr, dY2, dYbp, dX2, dT; 
+	__shared__ DOUBLE Ks, g, wss, Dxr, Ufr, dY2, dYbp, dX2, dT, H_TINH, dXbp; 
 	DOUBLE *AA, *BB, *CC, *DD;
 	// int sn = last - first - 2;
 	width = arg-> M + 3;
@@ -96,8 +96,6 @@ __device__ void _FSi_calculate__mactrix_coeff(Constant_Coeffs* coeffs, DOUBLE t,
 	if ( t < s_start) 
 		S = 0;
 	DOUBLE gamav = 0.98 - 0.198 * Zf + 0.032 * Zf * Zf;
-
-    
 
 	AA[j] = -gamav * 0.5 * (t_v[pos - 1] + t_v[pos]) / dY2 - Htdv[pos - 1] * Ky[pos - 1] / (H_moi[pos] * dYbp);
 	CC[j] = gamav * 0.5 * (t_v[pos - 1] + t_v[pos]) / dY2 - Htdv[pos] * Ky[pos] / (H_moi[pos] * dYbp);
@@ -222,7 +220,7 @@ __device__ void _FSj_calculate__mactrix_coeff(Constant_Coeffs* coeffs, DOUBLE t,
 
 	DOUBLE c = 18 * log(12 * H_moi[pos] / Ks);
 	DOUBLE Uf = sqrt(g) * abs(VTH[pos]) / c;
-	DOUBLE wsm = wss() *  pow((1 - FS[pos]), 4);
+	DOUBLE wsm = wss *  pow((1 - FS[pos]), 4);
 	DOUBLE Zf = 0;
 	DOUBLE S = 0;
 
@@ -336,7 +334,7 @@ __global__ void Calculate_Qb(bool ketdinh, Argument_Pointers* arg, Array_Pointer
 	int j = blockIdx. x* blockDim.x + threadIdx.x + 2;
 	if (i > arg->N || j > arg->M || i < 2 || j < 2)
 		return;
-	__shared__  DOUBLEToe, ro, ghtoe, hstoe, Sx, g, dm, Dxr; 
+	__shared__  DOUBLE Toe, ro, ghtoe, hstoe, Sx, g, dm, Dxr; 
 	DOUBLE Tob;
 	DOUBLE Toee = Toe;
 	DOUBLE Tx = 0;

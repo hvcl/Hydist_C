@@ -38,8 +38,8 @@ __device__ void tridiag(int sn, DOUBLE* AA, DOUBLE* BB, DOUBLE* CC, DOUBLE*DD, D
 
     for (int i = sn - 1; i >= 0; i--){
         x[i] = Bp[i] + (Ap[i] * x[i + 1]);     
-        // if ((x[i] > 0 ) && (threadIdx.x == 0))
-            // printf("address of x = %x, x[%d] = %.9f\n", x, i, x[i]);
+        if ((x[i] > 0 ) && (threadIdx.x == 0))
+            printf("sn = %d, x[%d] = %.9f\n",sn, i, x[i]);
 
     } 
 }

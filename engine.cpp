@@ -198,7 +198,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         //                     end_idx, np.int32(jump_step), np.int32(N + 3), 
         //                     arg_struct_ptr, arr_struct_ptr, block=(32, 1, 1), grid=(1, M - 1 , 1))
         //     ctx.synchronize();
-
+ 
         //     # Extract Solution
         //     FSj_extract_solution(ketdinh, start_idx, end_idx, arg_struct_ptr, arr_struct_ptr, block=block_size, grid=grid_size)
         //     ctx.synchronize();

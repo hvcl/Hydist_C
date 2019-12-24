@@ -46,7 +46,7 @@ struct Constant_Coeffs{
 	DOUBLE Tod, Toe, hstoe, ghtoe , Mbochat;
 	DOUBLE ro, ros, dm, muy, d90, Dorong, Sx, sohn, soha, sohn1;
 	DOUBLE CORIOLIS_FORCE, g, Ks;
-	DOUBLE Windx, Windy; 
+	DOUBLE Windx, Windy, Ufr, Dxr, wss;
 
 
 };

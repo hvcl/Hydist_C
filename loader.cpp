@@ -80,6 +80,10 @@ void Load_coeffs(Constant_Coeffs& ce){
 	// hoac bang Ks = 3 * d 90% 
 	ce.Windx = 0.0013 * (0.00075 + 0.000067 * abs(ce.Wind)) * abs(ce.Wind) * ce.Wind * cos(ce.huonggio * (PI / 180));
 	ce.Windy = 0.0013 * (0.00075 + 0.000067 * abs(ce.Wind)) * abs(ce.Wind) * ce.Wind * sin(ce.huonggio * (PI / 180));
+
+	ce.Ufr = 0.25 * powf ((ce.Sx - 1) * ce.g, 8.0 / 15.0) * powf(ce.dm , 9.0 / 15.0) * powf(ce.muy , -1.0 / 15.0);
+	ce.Dxr =   ce.dm * powf(ce.g * (ce.Sx - 1) / ce.muy * ce.muy, (1.0 / 3.0));
+	ce.wss = 10 * ce.muy / ce.dm * ( sqrt(1 + 0.01 * (ce.Sx - 1) * 9.81 * powf(ce.dm , 3) / powf(ce.muy, 2) ) - 1);
 }
 
 

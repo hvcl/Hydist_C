@@ -8,22 +8,20 @@ Created by Huong Nguyen
 #include "support_funcs.h"
 
 // Source function for cohesive case
-__device__ DOUBLE source_chs(int i, int j, DOUBLE wsm , DOUBLE Zf, DOUBLE fs, DOUBLE fw, DOUBLE vth, DOUBLE h_moi){
-	DOUBLE toee = Toe;
-	DOUBLE todd = Tod;
+__device__ DOUBLE source_chs(Constant_Coeffs*coeffs, i, int j, DOUBLE wsm , DOUBLE Zf, DOUBLE fs, DOUBLE fw, DOUBLE vth, DOUBLE h_moi){
+	DOUBLE toee = coeffs->Toe;
+	DOUBLE todd = coeffs->Tod;
 	DOUBLE S = 0;
 	DOUBLE Pd, beta, Cb;
-	// int i = blockDim.y * blockIdx.y + threadIdx.y + 2;
-	// int j = blockIdx.x * blockDim.x * threadIdx.x + 2;
 	// for Tan Chau
-	DOUBLE tob = ro * fw * (vth * vth);
+	DOUBLE tob = coeffs->ro * fw * (vth * vth);
 	// if (vth != 0)
 	// 	printf("i= %d, j = %d, fw %.15lf vth %.15lf %.15lf\n", i, j, fw, vth, ro);
 
-	if (h_moi > ghtoe)
-	    toee = Toe * (1 + hstoe * ((h_moi - ghtoe)));
+	if (h_moi > coeffs->ghtoe)
+	    toee = toee * (1 + hstoe * ((h_moi - coeffs->ghtoe)));
 	if (tob > toee)
-		S = Mbochat / ros * (tob - toee) / toee;
+		S = coeffs->Mbochat / ros * (tob - toee) / toee;
 	else{
 		if (tob < todd){
 			// this can be optimized
@@ -36,14 +34,6 @@ __device__ DOUBLE source_chs(int i, int j, DOUBLE wsm , DOUBLE Zf, DOUBLE fs, DO
 	         
 		}
 	}
-	     // if (abs(S) != 0)
-	    //  	if (i == 463 && (j == 173 || j == 172))
-    	// printf("S = %d %.15lf\n",j, S);
-			// {printf("saiiiiii, %d %d %.15lf %.15lf %.15lf %.15lf %.15lf %.15lf\n",i, j, S, fs, Pd, beta, Cb, Zf); 
-			// printf("i= %d, j = %d, fw %.15lf vth %.15lf %.15lf %.15lf %.15lf %.15lf\n", i, j, fw, vth, ro, tob, Toe, toee);
-			// }
-
-	
 	return S;
 }
 
@@ -53,7 +43,7 @@ __device__ DOUBLE source_nchs(DOUBLE wsm, DOUBLE Zf, DOUBLE Dxr, DOUBLE Ufr, DOU
 	DOUBLE gamac = 0.434 + 5.975 * Zf + 2.888 * Zf * Zf;
     DOUBLE Tx = max(0.0, (Uf * Uf - Ufr * Ufr) / (Ufr * Ufr));
 
-	DOUBLE Cac = 0.015 * dm * pow(Tx , 1.5) * pow(Dxr , (-0.3)) / (0.05 * h_moi);
+	DOUBLE Cac = 0.015 * coeffs->dm * powf(Tx , 1.5) * powf(Dxr , (-0.3)) / (0.05 * h_moi);
     S = wsm * (Cac - gamac * fs);
 	return S;
 }

@@ -191,7 +191,7 @@ __global__ void Reset_states_vertical(Argument_Pointers* arg, Constant_Coeffs* c
 	for (int i = 2; i <= N; i++) {
 		if ((khouot[i * offset + j] == 0) && (H_moi[i * offset + j] <= coeffs->H_TINH)){
 				if (threadIdx.y == 0)
-					printf("close 0 %d %d\n", i, j);
+					printf("close 0 %d %d, HTINH = %f, H_moi = %f\n", i, j, coeffs->H_TINH, H_moi[i * offset + j]);
 			t_u[(i - 1) * offset + j] = 0;
 			t_u[i * offset + j] = 0;
 

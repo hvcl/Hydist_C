@@ -32,9 +32,6 @@ __device__ void tridiag(int sn, DOUBLE* AA, DOUBLE* BB, DOUBLE* CC, DOUBLE*DD, D
     }
     
     x[sn] = (DD[sn] - (AA[sn] * Bp[sn - 1])) / (BB[sn] + (AA[sn] * Ap[sn - 1]));
-    
-    if ((threadIdx.x == 0))
-        printf("sn = %d\n", sn);
 
     for (int i = sn - 1; i >= 0; i--){
         x[i] = Bp[i] + (Ap[i] * x[i + 1]);     

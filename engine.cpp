@@ -249,6 +249,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 
 		update_h_moi <<<grid_2d, block_2d>>> (d_arg_ptr);
         synch_and_check();
+        
         grid = dim3(M, 1, 1);
         dim3 block(1, 32, 1);
         Reset_states_vertical <<<grid, block>>> (d_arg_ptr, coeffs);

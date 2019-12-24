@@ -162,7 +162,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 
 
 		update_h_moi <<<grid_2d, block_2d>>> (d_arg_ptr);
-        synch_and_check();;
+        synch_and_check();
 
 
         update_uvz <<<grid_2d, block_2d>>> (d_arg_ptr, coeffs);
@@ -181,8 +181,6 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         	save_result(h_arg_pointer, (int) t);
 
         
-
-
         // sediment transport simulation condition start here
 
 

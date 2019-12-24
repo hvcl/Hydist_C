@@ -70,7 +70,7 @@ __global__ void  tridiagSolver(bool print, bool isU, int startidx, int endidx, i
         DOUBLE* Bp = &(arr->Bp[pos]);
         DOUBLE* ep = &(arr->ep[pos]);
         if (threadIdx.x == 0 ){
-            printf("x[%d, %d] = %x",i, first, x);
+            printf("x[%d, %d] = %x\n",i, first, x);
         }
         tridiag(arr->SN[i * segment_limit + j], Dl, D, Du, B, x, Ap, Bp, ep);
 

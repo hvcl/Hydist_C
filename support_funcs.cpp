@@ -39,8 +39,6 @@ __global__ void Onetime_init( Argument_Pointers *arg, Constant_Coeffs* coeffs){
 	int width = M + 3;
 	int i = blockIdx.y * blockDim.y + threadIdx.y;
 	int j = blockIdx.x * blockDim.x + threadIdx.x;
-	// if ((blockIdx.y < 129) && (blockIdx.x == 2) && (threadIdx.x == 0))	
-	// 	printf("blockIdx.x = %d bIdx.y = %d thIdx.x = %d, thIdx.y = %d\n", blockIdx.x, blockIdx.y, threadIdx.x, threadIdx.y);
 
 	if (( i >= N + 3) || (j >= M + 3)) return;
 	// ATTENTION
@@ -85,9 +83,6 @@ __global__ void update_h_moi(Argument_Pointers* arg){
 		H_moi[grid_pos] = htaiz[grid_pos] + t_z[grid_pos];
 		
 	}
-	// if (H_moi[grid_pos] < 0.02){
-	// 		printf("htaiz[%d] = %.9f, t_z[%d] = %.9f\n",grid_pos, htaiz[grid_pos], grid_pos, t_z[grid_pos]);
-	// 	}
 }
 
 __global__ void Reset_states_horizontal(Argument_Pointers* arg, Constant_Coeffs* coeffs){
@@ -111,16 +106,12 @@ __global__ void Reset_states_horizontal(Argument_Pointers* arg, Constant_Coeffs*
 	{
 		if (t_z[i * offset + j] > z[i * offset + j]){
 			if (khouot[i * offset + j - 1] == 1){
-				// if (threadIdx.x == 0)
-				// 	printf ("open 5 %d %d\n", i, j - 1);
 				t_z[i * offset + j - 1] = t_z[i * offset + j];
 				H_moi[i * offset + j - 1] = htaiz[i * offset + j - 1] + t_z[i * offset + j];
 	            khouot[i * offset + j - 1] = 0;
 	            FS[i * offset + j - 1] = FS[i * offset + j];
 			}
 			if (khouot[i * offset + j + 1] == 1){
-				// if (threadIdx.x == 0)
-				// 	printf ("open 4 %d %d\n", i, j + 1);
 				t_z[i * offset + j + 1] = t_z[i * offset + j];
 	            H_moi[i * offset + j + 1] = htaiz[i * offset + j + 1] + t_z[i * offset + j];
 	            khouot[i * offset + j + 1] = 0;
@@ -169,16 +160,12 @@ __global__ void Reset_states_vertical(Argument_Pointers* arg, Constant_Coeffs* c
 	for (int i = 2; i <= N; i++) {
 		if (t_z[i * offset + j] > z[i * offset + j]){
 			if (khouot[(i - 1) * offset + j] == 1){
-				// if (threadIdx.y == 0)
-				// 	printf("open 1 %d %d\n", i - 1, j);
 				t_z[(i - 1) * offset + j] = t_z[i * offset + j];
 				H_moi[(i - 1) * offset + j] = htaiz[(i - 1) * offset + j] + t_z[i * offset + j];
 	            khouot[(i - 1) * offset + j] = 0;
 	            FS[(i - 1) * offset + j] = FS[i * offset + j];
 			}
 			if (khouot[(i + 1) * offset + j] == 1){
-				// if (threadIdx.y == 0)
-				// 	printf("open 2 %d %d \n", i + 1, j);
 				t_z[(i + 1) * offset + j] = t_z[i * offset + j];
 	            H_moi[(i + 1) * offset + j] = htaiz[(i + 1) * offset + j] + t_z[i * offset + j];
 	            khouot[(i + 1) * offset + j] = 0;
@@ -189,8 +176,6 @@ __global__ void Reset_states_vertical(Argument_Pointers* arg, Constant_Coeffs* c
 
 	for (int i = 2; i <= N; i++) {
 		if ((khouot[i * offset + j] == 0) && (H_moi[i * offset + j] <= coeffs->H_TINH)){
-				// if (threadIdx.y == 0)
-				// 	printf("close 0 %d %d, HTINH = %f, H_moi = %f\n", i, j, coeffs->H_TINH, H_moi[i * offset + j]);
 			t_u[(i - 1) * offset + j] = 0;
 			t_u[i * offset + j] = 0;
 
@@ -298,11 +283,9 @@ __global__ void Find_Calculation_limits_Horizontal( Argument_Pointers *arg, Cons
 			}
 			
 		} 
-	// printf("daui[%d, %d] = %d  cuoii[%d, %d] = %d\n",i, number_of_seg-1, daui[i* segment_limit + number_of_seg-1], i, number_of_seg-1, cuoii[i* segment_limit + number_of_seg-1]);
 
 	}
 	moci[i] = number_of_seg;
-	// printf("moci[%d] = %d \n",i, moci[i]);
 
 }
 
@@ -355,10 +338,7 @@ __global__ void Find_Calculation_limits_Vertical(Argument_Pointers *arg, Constan
 			}
 		}
 	}
-	// if (j == 3 && threadIdx.x == 0)
-	// 	printf(" khouot[%d %d], %d\n", end, j, khouot[end * offset + j]);
 	mocj[j] = number_of_seg;
-	// printf("dauj[%d] = %d  cuoij[%d] = %d\n",j, mocj[j], j, cuoij[j]);
 
 }
 
@@ -464,14 +444,11 @@ __global__ void boundary_left(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs*
 	else{
 		t_z[2 * offset + i] = 0.01 * cos(2 * PI / 27.75 * t ) * cos(2 * (PI / 100) * dX / 2);
         t_z[1 * offset + i] = 0.01 * cos(2 * PI / 27.75 * t ) * cos(2 * (PI / 100) * (- dX) / 2);
-        //if (t >= 6.75) printf("tz[%d, %d] = %.15f\n",2, i, t_z[2 * offset + i]);
 
 	}
 
 }
 
-// __global__ void boundary_right(DOUBLE t, int M, int N, bool* bienQ, DOUBLE* t_z, int* daui, int* cuoii, 
-// 	int* dauj, int* cuoij, DOUBLE* vbt, DOUBLE* vbd, DOUBLE* ubt, DOUBLE* ubp){
 
 __global__ void boundary_right(DOUBLE t, Argument_Pointers* arg, Constant_Coeffs* coeffs){
 	DOUBLE *t_z, *ubp;
@@ -530,11 +507,7 @@ __global__ void preprocess_data(Argument_Pointers* arg, Constant_Coeffs* coeffs)
 		DOUBLE sum  = 0;
 		for (int i = dauj[M * segment_limit + k]; i <= cuoij[M * segment_limit + k]; i++){
 			hi[i] = (h[i * width + M] + h[(i - 1) * width + M]) / 2.0 - NANGDAY;
-			// printf("h[%d], %f\n", i, h[i] );
 			sum += powf(hi[i], 5.0/3.0);// / hsnham[i * width + M];
-			// if (threadIdx.x == 0){
-			// 	printf("up h[%d] = %f, hi[%d] = %f sum = %f\n",i, h[i], i, hi[i], sum );
-			// }
 		}
 
 		for (int i = dauj[M * segment_limit + k]; i <= cuoij[M * segment_limit + k]; i++){
@@ -555,9 +528,6 @@ __global__ void preprocess_data(Argument_Pointers* arg, Constant_Coeffs* coeffs)
 			hi[i] = (h[i * width + 1] + h[(i - 1) * width + 1]) / 2.0 - NANGDAY;
 
 			sum += powf(hi[i], 5.0/3.0);// / hsnham[i * width + 2];
-			// if (threadIdx.x == 0){
-			// 	printf("down hi[%d] = %f, sum = %f\n",i, hi[i], sum );
-			// }
 		}
 
 		for (int i = dauj[2 * segment_limit + k]; i <= cuoij[2 * segment_limit + k]; i++){
@@ -575,9 +545,6 @@ __global__ void preprocess_data(Argument_Pointers* arg, Constant_Coeffs* coeffs)
 		for (int i = daui[2 * segment_limit + k]; i <= cuoii[2 * segment_limit + k]; i++){
 			hi[i] = (h[1 * width + i] + h[1 * width + i - 1]) / 2.0 - NANGDAY;
 			sum += powf(hi[i], 5.0/3.0);// / hsnham[2 * width + i];
-			// if (threadIdx.x == 0){
-			// 	printf("left hi[%d] = %llf sum = %llf\n",i, hi[i], sum );
-			// }
 		}
 
 		for (int i = daui[2 * segment_limit + k]; i <= cuoii[2 * segment_limit + k]; i++){
@@ -594,9 +561,6 @@ __global__ void preprocess_data(Argument_Pointers* arg, Constant_Coeffs* coeffs)
 		for (int i = daui[N * segment_limit + k]; i <= cuoii[N * segment_limit + k]; i++){
 			hi[i] = (h[N * width + i] + h[N * width + i - 1]) / 2.0 - NANGDAY;
 			sum += powf(hi[i], 5.0/3.0);// / hsnham[N * width + i];
-			// if (threadIdx.x == 0){
-			// 	printf("right hi[%d] = %llfsum = %llf\n",i, hi[i], sum);
-			// }
 		}
 		for (int i = daui[N * segment_limit + k]; i <= cuoii[N * segment_limit + k]; i++){
 			hi[i] = powf(hi[i], 2.0 / 3.0) / (sum * dX);// * hsnham[N * width + i]);
@@ -668,8 +632,6 @@ __device__ void Boundary_value(bool isU, DOUBLE t, int location, int location_ex
 		t_z[location * width + i] = boundary_value;
 		t_z[location_extension * width  + i] = boundary_value;
 		} else{
-		// if (i == 158)
-		// 	printf("222 tz[%d, %d], %llx\n", location, i, boundary_value );
 		 t_z[i * width + location] = boundary_value;
 		 t_z[i * width + location_extension] = boundary_value;
 		}

@@ -85,10 +85,11 @@ __global__ void update_h_moi(Argument_Pointers* arg){
 	int grid_pos = i * (M + 3) + j;
 	if (khouot[grid_pos] == 0){
 		H_moi[grid_pos] = htaiz[grid_pos] + t_z[grid_pos];
-		if (H_moi[grid_pos] < 0.02){
+		
+	}
+	if (H_moi[grid_pos] < 0.02){
 			printf("htaiz[%d] = %.9f, t_z[%d] = %.9f\n",grid_pos, htaiz[grid_pos], grid_pos, t_z[grid_pos]);
 		}
-	}
 }
 
 __global__ void Reset_states_horizontal(Argument_Pointers* arg, Constant_Coeffs* coeffs){

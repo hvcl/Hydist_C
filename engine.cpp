@@ -220,14 +220,16 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 
         VZSolver_extract_solution<<<grid_shape,block_shape>>> (start_idx, end_idx, NANGDAY, d_arg_ptr, d_arr_ptr);
         synch_and_check();    
-        if ( ((int) t % ops.interval == 0) && (t - (int) t == 0))
-        	save_result(h_arg_pointer, (int) t);  
+
 
 
         Normalize<<<grid_2d, block_2d>>> (isU, d_arg_ptr, d_arr_ptr, coeffs);
         synch_and_check();
         update_buffer<<<grid_2d, block_2d>>> (isU, d_arg_ptr, d_arr_ptr);
         synch_and_check();
+
+        if ( ((int) t % ops.interval == 0) && (t - (int) t == 0))
+        	save_result(h_arg_pointer, (int) t);
 
         solveU<<<grid_2d, block_2d>>> (t, 2, M, d_arg_ptr, coeffs);
         synch_and_check();

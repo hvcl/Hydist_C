@@ -228,14 +228,16 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         update_buffer<<<grid_2d, block_2d>>> (isU, d_arg_ptr, d_arr_ptr);
         synch_and_check();
 
-        if ( ((int) t % ops.interval == 0) && (t - (int) t == 0))
-        	save_result(h_arg_pointer, (int) t);
+
 
         solveU<<<grid_2d, block_2d>>> (t, 2, M, d_arg_ptr, coeffs);
         synch_and_check();
         grid = dim3(1, M, 1);
         update_margin_elem_U<<<grid,32>>> (2, M, NANGDAY, d_arg_ptr);
         synch_and_check();
+
+        if ( ((int) t % ops.interval == 0) && (t - (int) t == 0))
+        	save_result(h_arg_pointer, (int) t);
 
         // similar to first haft, isU here is true, since it normalize u value after solving for u
         Normalize<<<grid_2d, block_2d>>> (true, d_arg_ptr, d_arr_ptr, coeffs);

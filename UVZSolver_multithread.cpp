@@ -102,7 +102,7 @@ __device__ void bienlongdau(int i, int first, int last,  DOUBLE* AA, DOUBLE* BB,
     CC[i * 2 + 1] = c2[i + 1];
     DD[i * 2] = d1[i];
     DD[i * 2 + 1] = d2[i + 1];
-    printf("AA %llx, BB %llx, CC %llx, DD %llx\n",AA, BB, CC, DD);
+    // printf("AA %llx, BB %llx, CC %llx, DD %llx\n",AA, BB, CC, DD);
 
 }
 
@@ -433,7 +433,7 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
     }
     
     if (j == last){
-        printf("first = %d, last = %d, sn = %d, i  = %d, segment_limit = %d seg_no = %d\n",first, last, sn, i, segment_limit, seg_no );
+        // printf("first = %d, last = %d, sn = %d, i  = %d, segment_limit = %d seg_no = %d\n",first, last, sn, i, segment_limit, seg_no );
         arr->SN[i * segment_limit + seg_no] = sn;
     }
 }
@@ -504,9 +504,7 @@ __device__ void _vzSolver_extract_solution( int i,int j, int sn, int width, int 
             }
         }
     }
-    // if (i == 155 && j > 173 && j < 177){
-    //     printf("%llx %llx %d %d\n", t_z[i * width + j], t_v[i * width + j], i, j );
-    // }
+
 
 }
 
@@ -566,8 +564,8 @@ __device__ void _uzSolver_extract_solution( int i, int j, int sn, int width, int
             }
         }
     }
-    if ((x[2 * i] > 0) || (x[2 * i + 1] > 0)){
-        printf("t_u[%d, %d] = %.7f x= %.9f\n", i, j, t_u[i * width + j], x[2 * i]);
+    if ((i == 106) || (i == 21)){
+        printf("first = %d, last = %d, t_u[%d, %d] = %.7f x= %.9f\n", first, last, i, j, t_u[i * width + j], x[2 * i]);
         printf("t_z[%d, %d] = %.7f x= %.9f\n", i, j, t_z[i * width + j], x[2* i + 1]);
     }  
 

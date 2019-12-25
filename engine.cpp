@@ -184,26 +184,26 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         // sediment transport simulation condition start here
 
         if (t >= ops.sediment_start){
-            Find_VTH<<<grid_2d, block_2d>>>(coeffs, arg_struct_ptr);
-            hesoK<<<grid_2d, block_2d>>> (coeffs, arg_struct_ptr);
+            Find_VTH<<<grid_2d, block_2d>>>(coeffs, d_arg_ptr);
+            hesoK<<<grid_2d, block_2d>>> (coeffs, d_arg_ptr);
             synch_and_check();
          
             start_idx = 3;
             end_idx = M - 1;
-            Scan_FSj<<<grid_shape, block_shape>>>(t, ops.bed_change_start, ops.cohesive, start_idx, end_idx, arg_struct_ptr, arr_struct_ptr, coeffs);
+            Scan_FSj<<<grid_shape, block_shape>>>(t, ops.bed_change_start, ops.cohesive, start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
             synch_and_check();
         //      Tridiag
-            jump_step = ;
+            jump_step = 1;
             grid= dim3(1, M - 1 , 1);
             tridiagSolver<<<grid, 32>>>(false, isU, start_idx, 
                             end_idx, jump_step, N + 3, 
-                            arg_struct_ptr, arr_struct_ptr);
+                           d_arg_ptr, d_arr_ptr);
             synch_and_check();
  
         //     # Extract Solution
-            FSj_extract_solution<<<grid_shape, block_shape>>>(ketdinh, start_idx, end_idx, arg_struct_ptr, arr_struct_ptr, coeffs);
+            FSj_extract_solution<<<grid_shape, block_shape>>>(ketdinh, start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
             synch_and_check();
-            Update_FS<<grid_2d, block_2d>>>(arg_struct_ptr);
+            Update_FS<<grid_2d, block_2d>>>(d_arg_ptr);
         }
         
 
@@ -293,15 +293,15 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         synch_and_check();
 
         if (t >= ops.sediment_start){
-            Find_VTH<<<grid_shape, block_shape>>>(coeffs, arg_struct_ptr);
-            hesoK<<<grid_shape, block_shape>>>(arg_struct_ptr);
+            Find_VTH<<<grid_shape, block_shape>>>(coeffs, d_arg_ptr);
+            hesoK<<<grid_shape, block_shape>>>(d_arg_ptr);
             synch_and_check();
 
         //     # sediment kernels come here
         //     # Scan FSj
             start_idx = 3;
             end_idx = N - 1;
-            Scan_FSi<<<grid_shape, block_shape>>>(t, ops.bed_change_start, ketdinh, start_idx, end_idx, arg_struct_ptr, arr_struct_ptr, coeffs);
+            Scan_FSi<<<grid_shape, block_shape>>>(t, ops.bed_change_start, ketdinh, start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
             synch_and_check();
 
             jump_step = 1;
@@ -309,13 +309,13 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
             grid = dim3(1, N-3, 1);
             tridiagSolver<<<grid, 32>>>(false, isU, start_idx,
                             end_idx, jump_step, M + 3, 
-                            arg_struct_ptr, arr_struct_ptr);
+                            d_arg_ptr, d_arr_ptr);
             synch_and_check();
 
         //     # Extract Solution
-            FSi_extract_solution<<<grid_shape, block_shape>>>(ketdinh, start_idx, end_idx, arg_struct_ptr, arr_struct_ptr, coeffs);
+            FSi_extract_solution<<<grid_shape, block_shape>>>(ketdinh, start_idx, end_idx, d_arg_ptr, d_ar_ptr, coeffs);
             synch_and_check();
-            Update_FS<<<grid_2d, block_2d>>>(arg_struct_ptr);
+            Update_FS<<<grid_2d, block_2d>>>(d_arg_ptr);
             synch_and_check()
            }
 

@@ -77,7 +77,7 @@ __device__ void _FSi_calculate__mactrix_coeff(Constant_Coeffs* coeffs, DOUBLE t,
     g = coeffs->g;
     wss = coeffs->wss;
     Dxr = coeffs->Dxr;
-    Ufr = coeffs->ufr;
+    Ufr = coeffs->Ufr;
     dY = coeffs->dY;
     dX = coeffs->dX;
     dT = coeffs->dT;
@@ -232,7 +232,7 @@ __device__ void _FSj_calculate__mactrix_coeff(Constant_Coeffs* coeffs, DOUBLE t,
     g = coeffs->g;
     wss = coeffs->wss;
     Dxr = coeffs->Dxr;
-    Ufr = coeffs->ufr;
+    Ufr = coeffs->Ufr;
     dY = coeffs->dY;
     dX = coeffs->dX;
     dT = coeffs->dT;
@@ -461,7 +461,7 @@ __device__ void _bed_load(DOUBLE t, bool ketdinh, int i, int j, int first, int l
     g = coeffs->g;
     wss = coeffs->wss;
     Dxr = coeffs->Dxr;
-    Ufr = coeffs->ufr;
+    Ufr = coeffs->Ufr;
     dY = coeffs->dY;
     dX = coeffs->dX;
     dT = coeffs->dT;

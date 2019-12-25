@@ -190,7 +190,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
          
             start_idx = 3;
             end_idx = M - 1;
-            Scan_FSj<<<grid_shape, block_shape>>>(t, ops.bed_change_start, ops.cohesive, start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
+            Scan_FSj<<<grid_shape, block_shape>>>(t, ops.bed_change_start, ops.ketdinh, start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
             synch_and_check();
         //      Tridiag
             jump_step = 1;
@@ -201,9 +201,9 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
             synch_and_check();
  
         //     # Extract Solution
-            FSj_extract_solution<<<grid_shape, block_shape>>>(ketdinh, start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
+            FSj_extract_solution<<<grid_shape, block_shape>>>(ops.ketdinh, start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
             synch_and_check();
-            Update_FS<<grid_2d, block_2d>>>(d_arg_ptr);
+            Update_FS<<<grid_2d, block_2d>>>(d_arg_ptr);
         }
         
 
@@ -294,14 +294,14 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 
         if (t >= ops.sediment_start){
             Find_VTH<<<grid_shape, block_shape>>>(coeffs, d_arg_ptr);
-            hesoK<<<grid_shape, block_shape>>>(d_arg_ptr);
+            hesoK<<<grid_shape, block_shape>>>(coeffs, d_arg_ptr);
             synch_and_check();
 
         //     # sediment kernels come here
         //     # Scan FSj
             start_idx = 3;
             end_idx = N - 1;
-            Scan_FSi<<<grid_shape, block_shape>>>(t, ops.bed_change_start, ketdinh, start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
+            Scan_FSi<<<grid_shape, block_shape>>>(t, ops.bed_change_start, ops.ketdinh, start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
             synch_and_check();
 
             jump_step = 1;
@@ -313,10 +313,10 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
             synch_and_check();
 
         //     # Extract Solution
-            FSi_extract_solution<<<grid_shape, block_shape>>>(ketdinh, start_idx, end_idx, d_arg_ptr, d_ar_ptr, coeffs);
+            FSi_extract_solution<<<grid_shape, block_shape>>>(ops.ketdinh, start_idx, end_idx, d_arg_ptr, d_arr_ptr, coeffs);
             synch_and_check();
             Update_FS<<<grid_2d, block_2d>>>(d_arg_ptr);
-            synch_and_check()
+            synch_and_check();
            }
 
         //  only here is new. Verify if this work 

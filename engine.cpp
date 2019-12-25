@@ -67,9 +67,9 @@ void save_result(Argument_Pointers h_arg_pointer, int t, bool save_FS=false){
 	z = (DOUBLE*) malloc(size);
 	status = cudaMemcpy((void*) z, h_arg_pointer.z, size, cudaMemcpyDeviceToHost);
 	assert(status == cudaSuccess);
-	save_file <double> (u, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/u_" + to_string(t) + ".txt").c_str());
-	save_file <double> (v, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/v_" + to_string(t) + ".txt").c_str());
-	save_file <double> (z, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/z_" + to_string(t) + ".txt").c_str());
+	save_file <double> (u, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/U/u_" + to_string(t) + ".txt").c_str());
+	save_file <double> (v, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/V/v_" + to_string(t) + ".txt").c_str());
+	save_file <double> (z, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/Z/z_" + to_string(t) + ".txt").c_str());
 
 
 }
@@ -140,7 +140,6 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 		UZSolver_extract_solution <<<grid_shape, block_shape>>>(start_idx, end_idx, NANGDAY, d_arg_ptr, d_arr_ptr);
 		synch_and_check();
 
-		
 
 
 		Normalize<<<grid_2d, block_2d>>> (isU,d_arg_ptr, d_arr_ptr, coeffs);
@@ -165,7 +164,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 		update_h_moi <<<grid_2d, block_2d>>> (d_arg_ptr);
         synch_and_check();
 
-
+        
         update_uvz <<<grid_2d, block_2d>>> (d_arg_ptr, coeffs);
         synch_and_check();
    
@@ -323,10 +322,6 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         // if int(t) % bed_change_start == 0 and t - int(t) == 0:
         //     Calculate_Qb(ketdinh, arg_struct_ptr, arr_struct_ptr, block=block_2d, grid=grid_2d)
         //     BedLoad(floattype(t), ketdinh, start_idx, end_idx, arg_struct_ptr, arr_struct_ptr, block=block_2d, grid=grid_2d)
-
-        
-
-
 
 	}
 }

@@ -354,7 +354,7 @@ Array_Pointers supporting_arrays_alloc(int M, int N, Array_Pointers** device_arr
 	d_ap.DD = device_alloc<DOUBLE> (nBytes);
 	d_ap.Ap = device_alloc<DOUBLE> (nBytes);
 	d_ap.Bp = device_alloc<DOUBLE> (nBytes);
-	d_ap.ep = device_alloc<DOUBLE> (nBytes);	
+	d_ap.ep = device_alloc<DOUBLE> (nBytes);
 	d_ap.x = device_alloc<DOUBLE> (nBytes);	
 
 

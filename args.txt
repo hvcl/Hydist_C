@@ -1,1 +1,1 @@
--f Inputs/ -h 0 -m 0 -s 1 -i 1
+-f Inputs/ -h 10 -m 0 -s 1 -i 60

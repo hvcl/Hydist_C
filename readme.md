@@ -7,12 +7,14 @@
  - [x] Rewrite makefile 
  - [x] Check kernels without constants in support_funcs.cpp
  - [x] Test kernels without constants in UVZsolver_multithreads.cpp
-
-#### Todo:
+ - [x] change sediment transport kernels to work with non_constant versions
 - Put things to gether
  - [x] Call kernels one by one to check if things are in their right positions
+
+#### Todo:
+
 - [x] Test final result for hydraulic module
-- [ ] Use new tridiag solver to test performance
-- [ ] change sediment transport kernels to work with non_constant versions
 - [ ] test sediment transport functions
 - [ ] test the program with sediment transport
+- [ ] Use new tridiag solver to test performance
+

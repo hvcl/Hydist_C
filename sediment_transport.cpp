@@ -329,7 +329,7 @@ __device__ void _FSj_extract_solution(int i, int j, int first, int last, bool bi
 }
 
 
-__global__ void Calculate_Qb(bool ketdinh, Argument_Pointers* arg, Array_Pointers* arr){
+__global__ void Calculate_Qb(bool ketdinh, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
 	int i = blockIdx.y* blockDim.y + threadIdx.y + 2;
 	int j = blockIdx. x* blockDim.x + threadIdx.x + 2;
 	if (i > arg->N || j > arg->M || i < 2 || j < 2)
@@ -362,7 +362,7 @@ __global__ void Calculate_Qb(bool ketdinh, Argument_Pointers* arg, Array_Pointer
 	    
 	    if (Tob > Toee)
 	        Tx = Tob / Toee - 1;
-    	Qbx[pos] = 0.053 * powf( (Sx - 1) * g , 0.5) * powf(fdm , 1.5) * powf(Tx , 2.1) * powf(Dxr , -0.3) * (t_u[pos] + t_u[pos - width]) * 0.5 / VTH[pos];
+    	Qbx[pos] = 0.053 * powf( (Sx - 1) * g , 0.5) * powf(dm , 1.5) * powf(Tx , 2.1) * powf(Dxr , -0.3) * (t_u[pos] + t_u[pos - width]) * 0.5 / VTH[pos];
     	Qby[pos] = 0.053 * powf( (Sx - 1) * g , 0.5) * powf(dm , 1.5) * powf(Tx , 2.1) * powf(Dxr , -0.3) * (t_v[pos] + t_v[pos - 1]) * 0.5 / VTH[pos];
     }
     else {
@@ -405,7 +405,7 @@ __global__ void Calculate_Qb(bool ketdinh, Argument_Pointers* arg, Array_Pointer
 
 }
 
-__device__ void _bed_load(DOUBLE t, bool ketdinh, int i, int j, int first, int last, bool bienran1, bool bienran2, Argument_Pointers* arg, Array_Pointers* arr){
+__device__ void _bed_load(DOUBLE t, bool ketdinh, int i, int j, int first, int last, bool bienran1, bool bienran2, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs* coeffs){
 	if (last - first < 2 || j < first || j > last)
 		return;
 	__shared__ DOUBLE* FS, *H_moi, *t_u, *t_v, *VTH, *Htdu, *Htdv, *Fw, *Kx, *Ky, *Qbx, *Qby, *dH ;
@@ -568,7 +568,7 @@ __global__ void Scan_FSi(DOUBLE t, DOUBLE s_start, bool ketdinh, int startidx, i
     bool bienran1 = false;
     bool bienran2 = false;
     int first = 0; int last = 0;
-    int seg_no = locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h);
+    int seg_no = locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, coeffs->NANGDAY);
     _FSi_calculate__mactrix_coeff(coeffs, t, s_start, ketdinh, i, j, first, last, seg_no, bienran1, bienran2, arg, arr);
 }
 __global__ void FSi_extract_solution( bool ketdinh, int startidx, int endidx, Argument_Pointers* arg, Array_Pointers* arr, Constant_Coeffs*coeffs){
@@ -578,7 +578,7 @@ __global__ void FSi_extract_solution( bool ketdinh, int startidx, int endidx, Ar
     bool bienran1 = false;
     bool bienran2 = false;
     int first = 0; int last = 0;
-    locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h);
+    locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, coeffs->NANGDAY);
     _FSi_extract_solution(i, j, first, last, bienran1, bienran2, coeffs->NDnen, arg, arr);
 
 }
@@ -594,7 +594,7 @@ __global__ void Scan_FSj(DOUBLE t, DOUBLE s_start, bool ketdinh, int startidx, i
     bool bienran1 = false;
     bool bienran2 = false;
     int first = 0; int last = 0;
-    int seg_no = locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h);
+    int seg_no = locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, coeffs->NANGDAY);
     _FSj_calculate__mactrix_coeff(coeffs, t, s_start, ketdinh, i, j, first, last, seg_no, bienran1, bienran2, arg, arr);
 }
 
@@ -605,7 +605,7 @@ __global__ void FSj_extract_solution(bool ketdinh, int startidx, int endidx, Arg
     bool bienran1 = false;
     bool bienran2 = false;
     int first = 0; int last = 0;
-    locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h);
+    locate_segment_u(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->dauj, arg->cuoij, arg->mocj, arg->h, coeffs->NANGDAY);
     _FSj_extract_solution(i, j, first, last, bienran1, bienran2,coeffs->NDnen, arg, arr);
 }
 
@@ -627,6 +627,6 @@ __global__ void BedLoad(DOUBLE t, bool ketdinh, int startidx, int endidx, Argume
     bool bienran1 = false;
     bool bienran2 = false;
     int first = 0; int last = 0;
-    locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h);
+    locate_segment_v(arg->N, arg->M, &bienran1, &bienran2, &first, &last, i, j, arg->daui, arg->cuoii, arg->moci, arg->h, coeffs->NANGDAY);
     _bed_load(t, ketdinh, i, j, first, last, bienran1, bienran2, arg, arr, coeffs);
 }

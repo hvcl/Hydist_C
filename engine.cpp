@@ -326,7 +326,6 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 
         
 
-       // sediment transport simulation here
 
 
 	}

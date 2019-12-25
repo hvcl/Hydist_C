@@ -72,6 +72,17 @@ __device__ void _FSi_calculate__mactrix_coeff(Constant_Coeffs* coeffs, DOUBLE t,
     CC = &(arr->CC[i * tridiag_coeff_width]);
     DD = &(arr->DD[i * tridiag_coeff_width]);
 
+    // coeffs:
+    Ks = coeffs->Ks;
+    g = coeffs->g;
+    wss = coeffs->wss;
+    Dxr = coeffs->Dxr;
+    Ufr = coeffs->ufr;
+    dY = coeffs->dY;
+    dX = coeffs->dX;
+    dT = coeffs->dT;
+    H_TINH = coeffs->H_TINH;
+
 	if (last < first + 1 || j > last - 1 || j < first + 1) return;
 	int pos = i * width + j;
 	// int offset = first + 1;
@@ -195,8 +206,7 @@ __device__ void _FSj_calculate__mactrix_coeff(Constant_Coeffs* coeffs, DOUBLE t,
 		return;
 	__shared__ DOUBLE* FS, *H_moi, *t_u, *t_v, *VTH, *Htdu, *Htdv, *Fw, *Kx, *Ky;
 	__shared__ int width, tridiag_coeff_width;
-	__shared__ DOUBLE Ks, g, wss, Dxr, Ufr, dX, dT, H_TINH, dY;
-
+	__shared__ DOUBLE Ks, g, wss, Dxr, Ufr, dY, dX, dT, H_TINH; 
 
 	DOUBLE *AA, *BB, *CC, *DD;
 
@@ -217,6 +227,16 @@ __device__ void _FSj_calculate__mactrix_coeff(Constant_Coeffs* coeffs, DOUBLE t,
     CC = &(arr->CC[j * tridiag_coeff_width]);
     DD = &(arr->DD[j * tridiag_coeff_width]);
 	int pos = i * width + j;
+
+	Ks = coeffs->Ks;
+    g = coeffs->g;
+    wss = coeffs->wss;
+    Dxr = coeffs->Dxr;
+    Ufr = coeffs->ufr;
+    dY = coeffs->dY;
+    dX = coeffs->dX;
+    dT = coeffs->dT;
+    H_TINH = coeffs->H_TINH;
 
 	DOUBLE c = 18 * log(12 * H_moi[pos] / Ks);
 	DOUBLE Uf = sqrt(g) * abs(VTH[pos]) / c;
@@ -352,6 +372,14 @@ __global__ void Calculate_Qb(bool ketdinh, Argument_Pointers* arg, Array_Pointer
 	t_u = arg->t_u;
 	VTH = arg->VTH;	
 	khouot = arg->khouot;
+	Toe = coeffs->Toe;
+	ro = coeffs->ro;
+	ghtoe = coeffs->ghtoe;
+	hstoe = coeffs->hstoe;
+	Sx = coeffs->Sx;
+	g = coeffs->g;
+	dm = coeffs->dm;
+	Dxr = coeffs->Dxr;
 
 	int pos = i * width + j;
 	if ((!VTH[pos]) && (khouot[pos] == 0)){
@@ -410,7 +438,7 @@ __device__ void _bed_load(DOUBLE t, bool ketdinh, int i, int j, int first, int l
 		return;
 	__shared__ DOUBLE* FS, *H_moi, *t_u, *t_v, *VTH, *Htdu, *Htdv, *Fw, *Kx, *Ky, *Qbx, *Qby, *dH ;
 	__shared__ int width, *khouot, M, N;
-	__shared__ DOUBLE dX, dY, Ks, g, wss, Dxr, Ufr, dT, Dorong;
+	__shared__ DOUBLE Ks, g, wss, Dxr, Ufr, dX, dY, dT, Dorong;
 	M = arg->M;
 	N = arg->N;
 	width = arg-> M + 3;
@@ -428,6 +456,17 @@ __device__ void _bed_load(DOUBLE t, bool ketdinh, int i, int j, int first, int l
 	Qby = arg->Qby;
 	khouot = arg->khouot;
 	dH = arg->dH;
+
+	Ks = coeffs->Ks;
+    g = coeffs->g;
+    wss = coeffs->wss;
+    Dxr = coeffs->Dxr;
+    Ufr = coeffs->ufr;
+    dY = coeffs->dY;
+    dX = coeffs->dX;
+    dT = coeffs->dT;
+    Dorong = coeffs->Dorong;
+
 	int pos = i * width + j;
 	DOUBLE p, q;
 	p = q = 0;
@@ -516,6 +555,8 @@ __global__ void hesoK(Constant_Coeffs* coeffs, Argument_Pointers* arg){
 	t_u = arg->t_u;
 	t_v = arg->t_v;
 	h = arg->h;
+	Ks = coeffs->Ks;
+	g = coeffs->g;
 	__shared__ int width;
 	width = M + 3;
 	int pos = i * width + j;

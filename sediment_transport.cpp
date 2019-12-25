@@ -362,8 +362,8 @@ __global__ void Calculate_Qb(bool ketdinh, Argument_Pointers* arg, Array_Pointer
 	    
 	    if (Tob > Toee)
 	        Tx = Tob / Toee - 1;
-    	Qbx[pos] = 0.053 * pow( (Sx - 1) * g , 0.5) * pow(dm , 1.5) * pow(Tx , 2.1) * pow(Dxr() , -0.3) * (t_u[pos] + t_u[pos - width]) * 0.5 / VTH[pos];
-    	Qby[pos] = 0.053 * pow( (Sx - 1) * g , 0.5) * pow(dm , 1.5) * pow(Tx , 2.1) * pow(Dxr() , -0.3) * (t_v[pos] + t_v[pos - 1]) * 0.5 / VTH[pos];
+    	Qbx[pos] = 0.053 * powf( (Sx - 1) * g , 0.5) * powf(fdm , 1.5) * powf(Tx , 2.1) * powf(Dxr , -0.3) * (t_u[pos] + t_u[pos - width]) * 0.5 / VTH[pos];
+    	Qby[pos] = 0.053 * powf( (Sx - 1) * g , 0.5) * powf(dm , 1.5) * powf(Tx , 2.1) * powf(Dxr , -0.3) * (t_v[pos] + t_v[pos - 1]) * 0.5 / VTH[pos];
     }
     else {
     	Qbx[pos] = 0;

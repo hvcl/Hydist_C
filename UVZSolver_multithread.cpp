@@ -100,7 +100,7 @@ __device__ void bienlongdau(int i, int first, int last,  DOUBLE* AA, DOUBLE* BB,
     CC[i * 2 + 1] = c2[i + 1];
     DD[i * 2] = d1[i];
     DD[i * 2 + 1] = d2[i + 1];
-    // printf("AA %llx, BB %llx, CC %llx, DD %llx\n",AA, BB, CC, DD);
+    printf("AA %llx, BB %llx, CC %llx, DD %llx\n",AA, BB, CC, DD);
 
 }
 

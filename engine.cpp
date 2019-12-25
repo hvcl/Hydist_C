@@ -28,7 +28,7 @@ void update_boundary_at_t(int M, int N, float t, bool channel, int total_time, A
 
 	} else{
 		dim3 grid(1, max(M, N) / 1024 + 1);
-		dim3 block(1, 1024, 1);
+		dim3 block(1, 1024);
 		Update_Boundary_Value<<<grid, block>>>(t, total_time, d_arg_ptr);
 	}
 }
@@ -101,7 +101,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 	cout << "t = " << t << endl;
 	while (t < Tmax){
 		t += 0.5 * dT;
-		cout << t << endl;
+// 		cout << t << endl;
 
 		// update boundary conditionmake
 		update_boundary_at_t(M, N, t, channel, ops.total_time, d_arg_ptr, coeffs);

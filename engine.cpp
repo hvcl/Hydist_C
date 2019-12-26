@@ -60,7 +60,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 	DOUBLE t = ops.t_start;
 	int Tmax = ops.Tmax;
 	// DOUBLE Tmax = 0.5;
-	cout << "t = " << t << endl;
+	cout << "t = " << t << " sediment start = " << ops.sediment_start << endl;
 	while (t < Tmax){
 		t += 0.5 * dT;
 // 		cout << t << endl;
@@ -145,6 +145,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         // sediment transport simulation condition start here
 
         if (t >= ops.sediment_start){
+            cout << "t in sediment = " << t << endl;
             Find_VTH<<<grid_2d, block_2d>>>(coeffs, d_arg_ptr);
             hesoK<<<grid_2d, block_2d>>> (coeffs, d_arg_ptr);
             synch_and_check();
@@ -254,6 +255,8 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         synch_and_check();
 
         if (t >= ops.sediment_start){
+            
+            cout << "2nd half t = " << t << endl;
             Find_VTH<<<grid_shape, block_shape>>>(coeffs, d_arg_ptr);
             hesoK<<<grid_shape, block_shape>>>(coeffs, d_arg_ptr);
             synch_and_check();
@@ -278,9 +281,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
             synch_and_check();
             Update_FS<<<grid_2d, block_2d>>>(d_arg_ptr);
             synch_and_check();
-
-            if ( ((int) t % 600 == 0) && (t - (int) t == 0)){
-                printf("t = %d", (int) t);
+            if ( ((int) t % 360 == 0) && (t - (int) t == 0)){
                 save_FS(h_arg_pointer, (int) t);
             }
            }

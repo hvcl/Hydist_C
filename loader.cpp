@@ -417,7 +417,7 @@ void save_FS(Argument_Pointers h_arg_pointer, int t){
     DOUBLE* FS;
 	int size = sizeof(DOUBLE) * (h_arg_pointer.M + 3) * (h_arg_pointer.N + 3);
     FS = (DOUBLE*) malloc(size);
-	cudaError_t status = cudaMemcpy((void*) FS, h_arg_pointer.u, size, cudaMemcpyDeviceToHost);
+	cudaError_t status = cudaMemcpy((void*) FS, h_arg_pointer.FS, size, cudaMemcpyDeviceToHost);
 	assert(status == cudaSuccess);
 	save_file <double> (FS, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/FS/fs_" + to_string(t) + ".txt").c_str());
 }

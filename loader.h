@@ -14,6 +14,10 @@ void Load_coeffs(Constant_Coeffs& ce);
 template <typename T>
 pair<int, int> load_file(const char* filename, vector<T> &arr);
 
+template <typename T>
+void save_file(T* array, int width, int height, const char* filename);
+
+void save_result(Argument_Pointers h_arg_pointer, int t); 
 
 pair<int, int> load_inputs(string dir, vector<DOUBLE> &h,
 				vector<DOUBLE> &hsnham,

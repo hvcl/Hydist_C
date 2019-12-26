@@ -3,6 +3,7 @@
 #include "UVZSolver_multithread.h"
 #include "support_funcs.h"
 #include "sediment_transport.h"
+#include "loader.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -33,46 +34,7 @@ void update_boundary_at_t(int M, int N, float t, bool channel, int total_time, A
 	}
 }
 
-template <typename T>
-void save_file(T* array, int width, int height, const char* filename){
-	ofstream ofs;
-	ofs.open(filename);
-	if (!ofs)
-		cout << "cannot open file " << filename << endl;
-	for (int i = 1; i <= height; i++){
-		for (int j = 1; j <= width; j++)
-			ofs << array[i * (width + 3) + j] << " ";
-		ofs << endl;
-	}
-}
 
-
-
-template void save_file<double>(double*, int, int, const char*);
-template void save_file<float>(float*, int, int, const char*);
-template void save_file<int>(int*, int, int, const char*);
-
-
-
-void save_result(Argument_Pointers h_arg_pointer, int t, bool save_FS=false){
-	DOUBLE *u, *v, *z;
-
-	int size = sizeof(DOUBLE) * (h_arg_pointer.M + 3) * (h_arg_pointer.N + 3);
-	u = (DOUBLE*) malloc(size);
-	cudaError_t status = cudaMemcpy((void*) u, h_arg_pointer.u, size, cudaMemcpyDeviceToHost);
-	assert(status == cudaSuccess);
-	v = (DOUBLE*) malloc(size);
-	status = cudaMemcpy((void*) v, h_arg_pointer.v, size, cudaMemcpyDeviceToHost);
-	assert(status == cudaSuccess);
-	z = (DOUBLE*) malloc(size);
-	status = cudaMemcpy((void*) z, h_arg_pointer.z, size, cudaMemcpyDeviceToHost);
-	assert(status == cudaSuccess);
-	save_file <double> (u, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/U/u_" + to_string(t) + ".txt").c_str());
-	save_file <double> (v, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/V/v_" + to_string(t) + ".txt").c_str());
-	save_file <double> (z, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/Z/z_" + to_string(t) + ".txt").c_str());
-
-
-}
 
 
 void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, 
@@ -316,6 +278,10 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
             synch_and_check();
             Update_FS<<<grid_2d, block_2d>>>(d_arg_ptr);
             synch_and_check();
+
+            if ( ((int) t % 600 == 0) && (t - (int) t == 0)){
+                save_FS(h_arg_pointer, (int) t);
+            }
            }
 
         //  only here is new. Verify if this work 

@@ -373,3 +373,84 @@ Array_Pointers supporting_arrays_alloc(int M, int N, Array_Pointers** device_arr
 	return d_ap;
 
 }
+
+
+template <typename T>
+void save_file(T* array, int width, int height, const char* filename){
+	ofstream ofs;
+	ofs.open(filename);
+	if (!ofs)
+		cout << "cannot open file " << filename << endl;
+	for (int i = 1; i <= height; i++){
+		for (int j = 1; j <= width; j++)
+			ofs << array[i * (width + 3) + j] << " ";
+		ofs << endl;
+	}
+}
+
+template void save_file<double>(double*, int, int, const char*);
+template void save_file<float>(float*, int, int, const char*);
+template void save_file<int>(int*, int, int, const char*);
+
+
+
+void save_result(Argument_Pointers h_arg_pointer, int t){
+	DOUBLE *u, *v, *z;
+
+	int size = sizeof(DOUBLE) * (h_arg_pointer.M + 3) * (h_arg_pointer.N + 3);
+	u = (DOUBLE*) malloc(size);
+	cudaError_t status = cudaMemcpy((void*) u, h_arg_pointer.u, size, cudaMemcpyDeviceToHost);
+	assert(status == cudaSuccess);
+	v = (DOUBLE*) malloc(size);
+	status = cudaMemcpy((void*) v, h_arg_pointer.v, size, cudaMemcpyDeviceToHost);
+	assert(status == cudaSuccess);
+	z = (DOUBLE*) malloc(size);
+	status = cudaMemcpy((void*) z, h_arg_pointer.z, size, cudaMemcpyDeviceToHost);
+	assert(status == cudaSuccess);
+	save_file <double> (u, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/U/u_" + to_string(t) + ".txt").c_str());
+	save_file <double> (v, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/V/v_" + to_string(t) + ".txt").c_str());
+	save_file <double> (z, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/Z/z_" + to_string(t) + ".txt").c_str());
+
+}
+
+void save_FS(Argument_Pointers h_arg_pointer, int t){
+    DOUBLE* FS;
+    FS = (DOUBLE*) malloc(size);
+	cudaError_t status = cudaMemcpy((void*) u, h_arg_pointer.u, size, cudaMemcpyDeviceToHost);
+	assert(status == cudaSuccess);
+	save_file <double> (FS, h_arg_pointer.M, h_arg_pointer.N, ("Outputs/FS/fs_" + to_string(t) + ".txt").c_str());
+}
+
+// def saveFS(value, filename, mode='DSAA', val_range=(0, 10)):
+
+
+//     file = open(filename, 'w')
+
+//     file.write(mode + '\n')
+//     file.write(str(N - 1) + ' ' + str(M - 1) + '\n')
+//     file.write(str(2) + ' ' + str(N) + '\n')
+//     file.write(str(2) + ' ' + str(M) + '\n')
+//     file.write(str(val_range[0]) + ' ' + str(val_range[1]) + '\n')
+//     for i in range(2, N):
+//         for j in range(2, M):
+//             # print value[i, j]
+//             file.write(str(value[i, j] * ros) + ' ')
+//         file.write('\n')
+//     file.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

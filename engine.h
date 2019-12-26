@@ -92,8 +92,6 @@ void update_boundary_at_t(int M, int N, float t, bool channel, int total_time, A
 
 void synch_and_check();
 
-template <typename T>
-void save_file(T* array, int width, int height, const char* filename);
 
 void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_ptr, Array_Pointers* d_arr_ptr, Constant_Coeffs* coeffs,
 						 Argument_Pointers h_arg_ptr,  Options ops);

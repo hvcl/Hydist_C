@@ -280,6 +280,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
             synch_and_check();
 
             if ( ((int) t % 600 == 0) && (t - (int) t == 0)){
+                printf("t = %d", (int) t);
                 save_FS(h_arg_pointer, (int) t);
             }
            }

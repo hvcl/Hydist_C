@@ -1,1 +1,1 @@
--f Inputs/ -h 50 -m 20 -s 0 -i 3600
+-f Inputs/ -h 50 -m 20 -s 0 -i 3600 -b 36000

@@ -282,7 +282,9 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
             Update_FS<<<grid_2d, block_2d>>>(d_arg_ptr);
             synch_and_check();
             if ( ((int) t % 360 == 0) && (t - (int) t == 0)){
-                save_FS(h_arg_pointer, (int) t);
+                // note: ask prof Bay about ros coefficient, ros here should be the same with the one in constant coeffs
+                DOUBLE ros = 2000;
+                save_FS(h_arg_pointer, (int) t, ros);
             }
            }
 

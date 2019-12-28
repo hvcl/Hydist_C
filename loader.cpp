@@ -427,8 +427,9 @@ void save_FS(Argument_Pointers h_arg_pointer, int t, DOUBLE ros){
 		cout << "cannot open file " << filename << endl;
 	for (int i = 1; i <= h_arg_pointer.N; i++){
 		for (int j = 1; j <= h_arg_pointer.M; j++)
-			ofs << array[i * (h_arg_pointer.M + 3) + j] * ros << " ";
+			ofs << FS[i * (h_arg_pointer.M + 3) + j] * ros << " ";
 		ofs << endl;
+    }
 }
 
 

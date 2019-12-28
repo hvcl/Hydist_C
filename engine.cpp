@@ -145,7 +145,6 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         // sediment transport simulation condition start here
 
         if (t >= ops.sediment_start){
-            cout << "t in sediment = " << t << endl;
             Find_VTH<<<grid_2d, block_2d>>>(coeffs, d_arg_ptr);
             hesoK<<<grid_2d, block_2d>>> (coeffs, d_arg_ptr);
             synch_and_check();
@@ -254,9 +253,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
         Htuongdoi <<<grid_2d, block_2d>>> (d_arg_ptr);
         synch_and_check();
 
-        if (t >= ops.sediment_start){
-            
-            cout << "2nd half t = " << t << endl;
+        if (t >= ops.sediment_start){            
             Find_VTH<<<grid_shape, block_shape>>>(coeffs, d_arg_ptr);
             hesoK<<<grid_shape, block_shape>>>(coeffs, d_arg_ptr);
             synch_and_check();

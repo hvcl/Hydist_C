@@ -18,7 +18,7 @@ template <typename T>
 void save_file(T* array, int width, int height, const char* filename);
 
 void save_result(Argument_Pointers h_arg_pointer, int t); 
-void save_FS(Argument_Pointers h_arg_pointer, int t);
+void save_FS(Argument_Pointers h_arg_pointer, int t, DOUBLE ros);
 
 pair<int, int> load_inputs(string dir, vector<DOUBLE> &h,
 				vector<DOUBLE> &hsnham,

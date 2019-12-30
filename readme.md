@@ -10,11 +10,11 @@
  - [x] change sediment transport kernels to work with non_constant versions
 - Put things to gether
  - [x] Call kernels one by one to check if things are in their right positions
+ - [x] Test final result for hydraulic module
+ - [x] test sediment transport functions
+ - [x] test the program with sediment transport
 
 #### Todo:
 
-- [x] Test final result for hydraulic module
-- [ ] test sediment transport functions
-- [ ] test the program with sediment transport
 - [ ] Use new tridiag solver to test performance
 

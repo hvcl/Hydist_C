@@ -4,7 +4,7 @@ DEPS = engine.h support_funcs.h UVZSolver_multithread.h loader.h sediment_transp
 OBJ = main.o engine.o support_funcs.o UVZSolver_multithread.o loader.o sediment_transport.o
 
 all: $(OBJ)
-	$(CC) -arch=sm_61 $(OBJ) -o rep
+	$(CC) -arch=sm_61 -lcusparse $(OBJ) -o rep
 
 %.o : %.cpp $(DEPS)
 	$(CC) $(CFLAGS) -dc $< -o $@

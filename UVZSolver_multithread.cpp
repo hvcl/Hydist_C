@@ -722,7 +722,7 @@ __device__ void vSolver(DOUBLE t, int offset, int first, int last, int row, int 
 //     t_u[row * offset +  col] = q / p;
 // }
 
-__global__ void uSolver(DOUBLE t, int offset, int N, int first, int last, int row, int col, bool bienran1, bool bienran2, Argument_Pointers* arg, Constant_Coeffs* coeffs)
+__device__ void uSolver(DOUBLE t, int offset, int N, int first, int last, int row, int col, bool bienran1, bool bienran2, Argument_Pointers* arg, Constant_Coeffs* coeffs)
 {
 
     __shared__ DOUBLE H_TINH, dY, dX, CORIOLIS_FORCE, Windx, g, HaiChiadT;
@@ -936,7 +936,7 @@ UZSolver_calculate_matrix_coeff(int startidx, int endidx, DOUBLE NANGDAY, Argume
 
 
 
-__device__ void solveU(DOUBLE t, int startidx, int endidx, Argument_Pointers* arg, Constant_Coeffs* coeffs){
+__global__ void solveU(DOUBLE t, int startidx, int endidx, Argument_Pointers* arg, Constant_Coeffs* coeffs){
 
     // calculate i, j from thread index. Should use function here for general thread assigning patttern.
     // each thread has its own bienran1, bienran2, dau, cuoi that are passed to uSolver, and executes its own version of uSolver

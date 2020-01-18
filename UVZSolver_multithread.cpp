@@ -956,8 +956,7 @@ __global__ void solveU(DOUBLE t, int startidx, int endidx, Argument_Pointers* ar
     if ( first > last || i < first - 1 || i >= last) return;
     
 
-    uSolver(t, M + 3, N, first, last, i, j, bienran1, bienran2, arg->VISCOIDX, arg->Tsxw, arg->v, arg->t_v, 
-            arg->u, arg->t_u, arg->z, arg->t_z, arg->Kx1, arg->Htdu, arg->H_moi, coeffs);    
+    uSolver(t, M + 3, N, first, last, i, j, bienran1, bienran2, arg, coeffs);    
 }
 
 __global__ void solveV(DOUBLE t, int startidx, int endidx, Argument_Pointers* arg, Constant_Coeffs* coeffs){

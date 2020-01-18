@@ -464,7 +464,6 @@ __device__ void _calculate_matrix_coeff(bool isU, int i, int j, int support_arra
             }
         }
     }
-    
     if (j == last){
         // printf("first = %d, last = %d, sn = %d, i  = %d, segment_limit = %d seg_no = %d\n",first, last, sn, i, segment_limit, seg_no );
         arr->SN[i * segment_limit + seg_no] = sn;
@@ -665,64 +664,135 @@ __device__ void vSolver(DOUBLE t, int offset, int first, int last, int row, int 
 }
 
 
+// __device__ void uSolver(DOUBLE t, int offset, int N, int first, int last, int row, int col, bool bienran1, bool bienran2, DOUBLE* VISCOIDX, DOUBLE* Tsxw,
+//     DOUBLE *v, DOUBLE *t_v, DOUBLE *u, DOUBLE *t_u, DOUBLE *z, DOUBLE *t_z, DOUBLE *Kx1, DOUBLE *Htdu, DOUBLE *H_moi, Constant_Coeffs* coeffs)
+// {
+
+//     __shared__ DOUBLE H_TINH, dY2, dX2, dX, CORIOLIS_FORCE, Windx, dXbp, dYbp, g, HaiChiadT;
+
+//     H_TINH = coeffs->H_TINH; 
+//     dX = coeffs->dY;
+//     dY2 = coeffs->dY2;
+//     dX2 = coeffs->dX2;
+//     Windx = coeffs->Windy;
+//     dXbp = coeffs->dXbp;
+//     dYbp = coeffs->dYbp;
+//     CORIOLIS_FORCE = coeffs->CORIOLIS_FORCE;
+//     g = coeffs->g;
+//     HaiChiadT = coeffs->HaiChiadT;
 
 
-__device__ void uSolver(DOUBLE t, int offset, int N, int first, int last, int row, int col, bool bienran1, bool bienran2, DOUBLE* VISCOIDX, DOUBLE* Tsxw,
-    DOUBLE *v, DOUBLE *t_v, DOUBLE *u, DOUBLE *t_u, DOUBLE *z, DOUBLE *t_z, DOUBLE *Kx1, DOUBLE *Htdu, DOUBLE *H_moi, Constant_Coeffs* coeffs)
+
+//     DOUBLE p, q, tmp;
+//     p = 0; q = 0; tmp = 0;
+//     // this can be optimised
+
+//     DOUBLE vtb = (v[row * offset + col - 1] + v[row * offset + col] + v[(row + 1) * offset +  col - 1] + v[(row + 1) * offset +  col]) * 0.25;
+//     DOUBLE t_vtb = (t_v[row * offset + col - 1] + t_v[row * offset + col] + t_v[(row + 1) * offset +  col - 1] + t_v[(row + 1) * offset +  col]) * 0.25;
+
+//     p = (u[(row + 1) * offset +  col] - u[(row - 1) * offset +  col]) / dX2;
+
+//     p = (HaiChiadT + p + Kx1[row * offset + col] * sqrt(vtb * vtb + u[row * offset + col] * u[row * offset + col]) / Htdu[row * offset + col]);
+    
+//     if (H_moi[row * offset + col - 1] <= H_TINH){
+//         if (vtb < 0){
+//             q = t_vtb * (-3 * u[row * offset + col] + 4 * u[row * offset + col + 1] - u[row * offset +  col + 2]) / dY2;
+//             tmp = (u[row * offset +  col] - 2 * u[row * offset +  col + 1] + u[row * offset +  col + 2] ) / dYbp;
+//         }
+//     }
+//     else {
+//         if (H_moi[row * offset +  col + 1] <= H_TINH) {
+//             if ((H_moi[row * offset +  col - 2] > H_TINH) && (vtb > 0)){ 
+//                 q = t_vtb * (3 * u[row * offset +  col] - 4 * u[row * offset +  col - 1] + u[row * offset +  col - 2]) /dY2;
+//                 tmp = (u[row * offset +  col] - 2 * u[row * offset +  col - 1] + u[row * offset +  col - 2] ) / dYbp;
+//             }
+//         }
+//         else{
+            
+//             q = t_vtb * (u[row * offset +  col + 1] - u[row * offset +  col - 1]) / dY2;
+//             tmp = (u[row * offset +  col + 1] - 2 * u[row * offset +  col] + u[row * offset +  col - 1]) / dYbp;
+//         }
+//     }
+
+
+//     q = HaiChiadT * u[row * offset +  col] - q + CORIOLIS_FORCE * t_vtb;
+//     q = (q - g * (z[(row + 1) * offset +  col] - z[row * offset +  col]) / dX + VISCOIDX[row * offset +  col] * (tmp + (u[(row + 1) * offset +  col] - 
+//                         2 * u[row * offset +  col] + u[(row - 1) * offset +  col]) / dXbp )) + (Windx - Tsxw[row * offset +  col]) / Htdu[row * offset +  col];
+
+//     t_u[row * offset +  col] = q / p;
+// }
+
+__global__ void uSolver(DOUBLE t, int offset, int N, int first, int last, int row, int col, bool bienran1, bool bienran2, Argument_Pointers* arg, Constant_Coeffs* coeffs)
 {
 
-    __shared__ DOUBLE H_TINH, dY2, dX2, dX, CORIOLIS_FORCE, Windx, dXbp, dYbp, g, HaiChiadT;
+    __shared__ DOUBLE H_TINH, dY, dX, CORIOLIS_FORCE, Windx, g, HaiChiadT;
+    __shared__ DOUBLE *VISCOIDX, *Tsxw, *v, *t_v, *u, *t_u, *z, *Kx1, *Htdu, *H_moi;
 
     H_TINH = coeffs->H_TINH; 
     dX = coeffs->dY;
-    dY2 = coeffs->dY2;
-    dX2 = coeffs->dX2;
+    dY = coeffs->dY;
+    //dX2 = coeffs->dX2;
     Windx = coeffs->Windy;
-    dXbp = coeffs->dXbp;
-    dYbp = coeffs->dYbp;
+    //dXbp = coeffs->dXbp;
+    //dYbp = coeffs->dYbp;
     CORIOLIS_FORCE = coeffs->CORIOLIS_FORCE;
     g = coeffs->g;
     HaiChiadT = coeffs->HaiChiadT;
+
+    VISCOIDX = arg->VISCOIDX;
+    Tsxw = arg->Tsxw;
+    v = arg->v;
+    u = arg->u;
+    z = arg->z;
+    t_u = arg->t_u;
+    t_v = arg->t_v;
+    //t_z = arg->t_z;
+    Kx1 = arg->Kx1;
+    Htdu = arg->Htdu;
+    H_moi = arg->H_moi;
 
 
 
     DOUBLE p, q, tmp;
     p = 0; q = 0; tmp = 0;
     // this can be optimised
+    int i_j = row * offset + col;
+    // [i+1, j]
+    int i_1_j = i_j + offset;
+    DOUBLE vtb = (v[i_j - 1] + v[i_j] + v[i_1_j - 1] + v[i_1_j]) * 0.25;
 
-    DOUBLE vtb = (v[row * offset + col - 1] + v[row * offset + col] + v[(row + 1) * offset +  col - 1] + v[(row + 1) * offset +  col]) * 0.25;
-    DOUBLE t_vtb = (t_v[row * offset + col - 1] + t_v[row * offset + col] + t_v[(row + 1) * offset +  col - 1] + t_v[(row + 1) * offset +  col]) * 0.25;
+    DOUBLE t_vtb = (t_v[i_j - 1] + t_v[i_j] + t_v[i_1_j - 1] + t_v[i_1_j]) * 0.25;
 
-    p = (u[(row + 1) * offset +  col] - u[(row - 1) * offset +  col]) / dX2;
+    p = (u[i_1_j] - u[(row - 1) * offset +  col]) / (dX * 2);
 
-    p = (HaiChiadT + p + Kx1[row * offset + col] * sqrt(vtb * vtb + u[row * offset + col] * u[row * offset + col]) / Htdu[row * offset + col]);
+    p = (HaiChiadT + p + Kx1[i_j] * sqrt(vtb * vtb + u[i_j] * u[i_j]) / Htdu[i_j]);
     
-    if (H_moi[row * offset + col - 1] <= H_TINH){
+    if (H_moi[i_j - 1] <= H_TINH){
         if (vtb < 0){
-            q = t_vtb * (-3 * u[row * offset + col] + 4 * u[row * offset + col + 1] - u[row * offset +  col + 2]) / dY2;
-            tmp = (u[row * offset +  col] - 2 * u[row * offset +  col + 1] + u[row * offset +  col + 2] ) / dYbp;
+            q = t_vtb * (-3 * u[i_j] + 4 * u[i_j + 1] - u[i_j + 2]) / (dY * 2);
+            tmp = (u[i_j] - 2 * u[i_j + 1] + u[i_j + 2] ) / (dY * dY);
         }
     }
     else {
-        if (H_moi[row * offset +  col + 1] <= H_TINH) {
-            if ((H_moi[row * offset +  col - 2] > H_TINH) && (vtb > 0)){ 
-                q = t_vtb * (3 * u[row * offset +  col] - 4 * u[row * offset +  col - 1] + u[row * offset +  col - 2]) /dY2;
-                tmp = (u[row * offset +  col] - 2 * u[row * offset +  col - 1] + u[row * offset +  col - 2] ) / dYbp;
+        if (H_moi[i_j + 1] <= H_TINH) {
+            if ((H_moi[i_j - 2] > H_TINH) && (vtb > 0)){ 
+                q = t_vtb * (3 * u[i_j] - 4 * u[i_j - 1] + u[i_j - 2]) / (dY * 2);
+                tmp = (u[i_j] - 2 * u[i_j - 1] + u[i_j - 2] ) / (dY * dY);
             }
         }
         else{
             
-            q = t_vtb * (u[row * offset +  col + 1] - u[row * offset +  col - 1]) / dY2;
-            tmp = (u[row * offset +  col + 1] - 2 * u[row * offset +  col] + u[row * offset +  col - 1]) / dYbp;
+            q = t_vtb * (u[i_j + 1] - u[i_j - 1]) / (dY * 2);
+            tmp = (u[i_j + 1] - 2 * u[i_j] + u[i_j - 1]) / (dY * dY);
         }
     }
 
 
-    q = HaiChiadT * u[row * offset +  col] - q + CORIOLIS_FORCE * t_vtb;
-    q = (q - g * (z[(row + 1) * offset +  col] - z[row * offset +  col]) / dX + VISCOIDX[row * offset +  col] * (tmp + (u[(row + 1) * offset +  col] - 
-                        2 * u[row * offset +  col] + u[(row - 1) * offset +  col]) / dXbp )) + (Windx - Tsxw[row * offset +  col]) / Htdu[row * offset +  col];
+    q = HaiChiadT * u[i_j] - q + CORIOLIS_FORCE * t_vtb;
+    q = (q - g * (z[i_1_j] - z[i_j]) / dX + VISCOIDX[i_j] * (tmp + (u[i_1_j] - 
+                        2 * u[i_j] + u[(row - 1) * offset +  col]) / (dX * dX) )) + (Windx - Tsxw[i_j]) / Htdu[i_j];
 
-    t_u[row * offset +  col] = q / p;
+    t_u[i_j] = q / p;
 }
 
 

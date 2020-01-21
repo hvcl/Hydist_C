@@ -85,7 +85,7 @@ void findBestGrid( int m, int tile_marshal, int *p_m_pad, int *p_b_dim, int *p_s
 
 
 __device__
-void gtsv_spike_partial_diag_pivot_v1(const DOUBLE* dl, const DOUBLE* d, const DOUBLE* du, DOUBLE* b,const int m)
+void gtsv_spike_partial_diag_pivot_v1(const DOUBLE* dl, const DOUBLE* d, const DOUBLE* du, DOUBLE* b, DOUBLE* x, const int m)
 {
 
 
@@ -172,7 +172,8 @@ void gtsv_spike_partial_diag_pivot_v1(const DOUBLE* dl, const DOUBLE* d, const D
     spike_GPU_local_solving_x1<DOUBLE><<<s,b_dim,local_solving_share_size>>>(b_buffer,w_buffer,v_buffer,x_level_2,stride);
     spike_GPU_back_sub_x1<DOUBLE><<<s,b_dim>>>(b_buffer,w_buffer,v_buffer, x_level_2,stride);
 
-    back_marshaling_bxb<DOUBLE><<<g_data ,b_data, marshaling_share_size >>>(b,b_buffer,stride,b_dim,m);
+    back_marshaling_bxb<DOUBLE><<<g_data ,b_data, marshaling_share_size >>>(x,b_buffer,stride,b_dim,m);
+    // back_marshaling_bxb<DOUBLE><<<g_data ,b_data, marshaling_share_size >>>(b,b_buffer,stride,b_dim,m);
     
     //free
     

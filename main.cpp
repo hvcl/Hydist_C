@@ -299,6 +299,10 @@ int main (int argc, char ** argv){
 	synch_and_check();
 
 
+	// set memory heap limit for new tridiag
+	size_t size = sizeof (DOUBLE) * (2 * M * N + 4 * max(M, N)) * 7;
+	cudaDeviceSetLimit(cudaLimitMallocHeapSize, size);
+
 	// enter main loop here
 
 	Hydraulic_Calculation(h_const_coeffs.dT, h_const_coeffs.NANGDAY, d_argument_pointers, d_arr_pointers, d_const_coeffs, h_argument_pointers, ops);

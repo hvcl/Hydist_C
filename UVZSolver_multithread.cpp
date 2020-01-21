@@ -43,38 +43,36 @@ __device__ void tridiag(int sn, DOUBLE* AA, DOUBLE* BB, DOUBLE* CC, DOUBLE*DD, D
 }
 
 
-// __global__ void  tridiagSolver_v2(bool print, bool isU, int startidx, int endidx, int jumpstep, int tridiag_coeff_width, Argument_Pointers* arg, Array_Pointers * arr){
 
-//     int i = blockIdx.y +  startidx;
-//     if (i > endidx) return;
-//     int number_of_segments;
-//     int *dau, *cuoi;
-//     if (isU){
-//         number_of_segments = arg->mocj[i];
-//         dau = arg->dauj;
-//     }
-//     else{ 
-//         number_of_segments = arg->moci[i];
-//         dau = arg->daui;
+__global__ void  tridiagSolver_v2(bool print, bool isU, int startidx, int endidx, int jumpstep, int tridiag_coeff_width, Argument_Pointers* arg, Array_Pointers * arr){
 
-//     }
-//     for (int j = 0; j < number_of_segments; j++){
-//         int first = dau[i * segment_limit + j];
-//         int pos = i * tridiag_coeff_width + first * jumpstep + jumpstep % 2; 
+    int i = blockIdx.x +  startidx;
+    if (i > endidx) return;
+    int number_of_segments;
+    int *dau, *cuoi;
+    if (isU){
+        number_of_segments = arg->mocj[i];
+        dau = arg->dauj;
+    }
+    else{ 
+        number_of_segments = arg->moci[i];
+        dau = arg->daui;
 
-//         DOUBLE* Dl = &(arr->AA[pos]);
-//         DOUBLE* D = &(arr->BB[pos]);
-//         DOUBLE* Du = &(arr->CC[pos]);
-//         DOUBLE* B = &(arr->DD[pos]);
-//         DOUBLE* x = &(arr->x[pos]);
-//         DOUBLE* Ap = &(arr->Ap[pos]);
-//         DOUBLE* Bp = &(arr->Bp[pos]);
-//         DOUBLE* ep = &(arr->ep[pos]);
+    }
+    for (int j = 0; j < number_of_segments; j++){
+        int first = dau[i * segment_limit + j];
+        int pos = i * tridiag_coeff_width + first * jumpstep + jumpstep % 2; 
 
-//         gtsv_spike_partial_diag_pivot_v1(Dl, D, Du, B, arr->SN[i * segment_limit + j]);
-//     }
+        DOUBLE* Dl = &(arr->AA[pos]);
+        DOUBLE* D = &(arr->BB[pos]);
+        DOUBLE* Du = &(arr->CC[pos]);
+        DOUBLE* B = &(arr->DD[pos]);
+        DOUBLE* x = &(arr->x[pos]);
+        gtsv_spike_partial_diag_pivot_v1(Dl, D, Du, B, x, arr->SN[i * segment_limit + j]);
+        
+    }
 
-// }
+}
 
 
 __global__ void  tridiagSolver(bool print, bool isU, int startidx, int endidx, int jumpstep, int tridiag_coeff_width, Argument_Pointers* arg, Array_Pointers * arr){

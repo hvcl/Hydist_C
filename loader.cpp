@@ -421,7 +421,8 @@ void save_FS(Argument_Pointers h_arg_pointer, int t, DOUBLE ros){
 	assert(status == cudaSuccess);
     
     ofstream ofs;
-    const char* filename = ("Outputs/FS/fs_" + to_string(t) + ".txt").c_str();
+    string str_name = "Outputs/FS/fs_" + to_string(t) + ".txt";
+    const char* filename = str_name.c_str();
 	ofs.open(filename);
 	if (!ofs)
 		cout << "cannot open file " << filename << endl;

@@ -15,6 +15,7 @@ void synch_and_check(){
 	cudaError_t err = cudaGetLastError();
 	if (err != cudaSuccess)
 		cout << "error: " <<  cudaGetErrorString(err) << endl;
+    assert(err == cudaSuccess);
 }
 
 
@@ -63,7 +64,7 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 	cout << "t = " << t << " sediment start = " << ops.sediment_start << endl;
 	while (t < Tmax){
 		t += 0.5 * dT;
-// 		cout << t << endl;
+		cout << t << endl;
 
 		// update boundary conditionmake
 		update_boundary_at_t(M, N, t, channel, ops.total_time, d_arg_ptr, coeffs);
@@ -95,8 +96,8 @@ void Hydraulic_Calculation(DOUBLE dT, DOUBLE NANGDAY, Argument_Pointers* d_arg_p
 		synch_and_check();
 
 		dim3 grid(1, M - 1, 1);
-        	tridiagSolver_v2<<<1, M - 1>>> (false,isU, start_idx, end_idx, jump_step, 2 * N + 1, d_arg_ptr, d_arr_ptr);
-		// tridiagSolver<<<grid, 32>>> (false,isU, start_idx, end_idx, jump_step, 2 * N + 1, d_arg_ptr, d_arr_ptr);
+        	//tridiagSolver_v2<<<1, M - 1>>> (false,isU, start_idx, end_idx, jump_step, 2 * N + 1, d_arg_ptr, d_arr_ptr);
+ 		tridiagSolver<<<grid, 32>>> (false,isU, start_idx, end_idx, jump_step, 2 * N + 1, d_arg_ptr, d_arr_ptr);
 		synch_and_check();
 
 

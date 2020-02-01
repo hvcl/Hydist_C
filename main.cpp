@@ -300,8 +300,9 @@ int main (int argc, char ** argv){
 
 
 	// set memory heap limit for new tridiag
-	size_t size = sizeof (DOUBLE) * (2 * M * N + 4 * max(M, N)) * 7;
+	size_t size = sizeof(DOUBLE) * (2 * M * N + 4 * max(M, N)) * 7;
 	cudaDeviceSetLimit(cudaLimitMallocHeapSize, size);
+    cout << "heap size = " << size << endl;
 
 	// enter main loop here
 

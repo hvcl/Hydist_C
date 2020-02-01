@@ -46,7 +46,7 @@ __device__ void tridiag(int sn, DOUBLE* AA, DOUBLE* BB, DOUBLE* CC, DOUBLE*DD, D
 
 __global__ void  tridiagSolver_v2(bool print, bool isU, int startidx, int endidx, int jumpstep, int tridiag_coeff_width, Argument_Pointers* arg, Array_Pointers * arr){
 
-    int i = blockIdx.x +  startidx;
+    int i = threadIdx.x +  startidx;
     if (i > endidx) return;
     int number_of_segments;
     int *dau, *cuoi;

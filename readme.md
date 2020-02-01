@@ -35,7 +35,7 @@
   - bienphai.txt: boundary condition for right side boundary
   - boundary_type.txt: boundary type of each side (solid type or water type) 
  3. Run standardize_inp.py to transpose inputs into Python-style coordinates
- 4. run command:  ```console ~$ make ``` to compile changes
+ 4. run command:  ```~$ make ``` to compile changes
  5. input arguments in args.txt with following options: 
   - -f Directory that contains input files 
     -h Number of running hour
@@ -43,4 +43,4 @@
     -s number of running seconds
     -i time interval in which output is saved
     -b time, in second, at which Sediment transport is started to be computed
- 6. run command: ``` console ./rep `cat args.txt` ``` to run rep file with the specified arguments in args.txt
+ 6. run command: ``` $ ./rep `cat args.txt` ``` to run rep file with the specified arguments in args.txt
